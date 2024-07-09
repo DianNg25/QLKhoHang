@@ -7,10 +7,13 @@ package com.inventory.swing;
 import com.inventory.form.Model_Menu;
 import java.awt.Component;
 import java.awt.MenuItem;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -19,9 +22,29 @@ import javax.swing.ListCellRenderer;
 public class ListMenu<E extends Object> extends JList<E> {
 
     private final DefaultListModel model;
+    private int selectedIndex = -1;
+
     public ListMenu() {
         model = new DefaultListModel();
         setModel(model);
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent me) {
+                if (SwingUtilities.isLeftMouseButton(me)) {
+                    int index = locationToIndex(me.getPoint());
+                    Object o = model.getElementAt(index);
+                    if (o instanceof Model_Menu) {
+                        Model_Menu menu = (Model_Menu) o;
+                        if (menu.getType() == Model_Menu.MenuType.MENU) {
+                            selectedIndex = index;
+                        }
+                    } else {
+                        selectedIndex = index;
+                    }
+                    repaint();
+                }
+            }
+        });
     }
 
     @Override
@@ -38,12 +61,15 @@ public class ListMenu<E extends Object> extends JList<E> {
                     data = new Model_Menu("", value + "", Model_Menu.MenuType.EMPTY);
                 }
                 MenuItems item = new MenuItems(data);
+                item.setSelected(selectedIndex == index);
+
                 return item;
             }
 
         };
     }
-    public void addItem(Model_Menu data){
+
+    public void addItem(Model_Menu data) {
         model.addElement(data);
     }
 }

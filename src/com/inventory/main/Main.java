@@ -17,8 +17,14 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
-        setBackground(new Color(0,0,0,0));
+        setBackground(new Color(0, 0, 0, 0));
         menu2.initMoving(Main.this);
+
+    }
+
+     public static void showMainPage() {
+        Main main = new Main();
+        main.setVisible(true);
     }
 
     /**
@@ -36,7 +42,7 @@ public class Main extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
 
-        panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
+        panelBorder1.setBackground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
         panelBorder1.setLayout(panelBorder1Layout);
@@ -44,7 +50,7 @@ public class Main extends javax.swing.JFrame {
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBorder1Layout.createSequentialGroup()
                 .addComponent(menu2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 899, Short.MAX_VALUE))
+                .addContainerGap(901, Short.MAX_VALUE))
         );
         panelBorder1Layout.setVerticalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,4 +113,5 @@ public class Main extends javax.swing.JFrame {
     private com.inventory.component.Menu menu2;
     private com.inventory.swing.PanelBorder panelBorder1;
     // End of variables declaration//GEN-END:variables
+
 }

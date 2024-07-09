@@ -32,20 +32,23 @@ public class Menu extends javax.swing.JPanel {
     }
 
     private void init() {
-        listMenu1.addItem(new Model_Menu("1", "Dashboard", Model_Menu.MenuType.MENU));
-//        listMenu1.addItem(new Model_Menu("2", "UI Elements", Model_Menu.MenuType.MENU));
-//        listMenu1.addItem(new Model_Menu("3", "Components", Model_Menu.MenuType.MENU));
-//        listMenu1.addItem(new Model_Menu("4", "Forms Stuff", Model_Menu.MenuType.MENU));
-//        listMenu1.addItem(new Model_Menu("5", "Date Table", Model_Menu.MenuType.MENU));
-//        listMenu1.addItem(new Model_Menu("6", "", Model_Menu.MenuType.EMPTY));
-//        listMenu1.addItem(new Model_Menu("7", "My Data", Model_Menu.MenuType.TITLE));
-//        listMenu1.addItem(new Model_Menu("8", "", Model_Menu.MenuType.EMPTY));
-//        listMenu1.addItem(new Model_Menu("9", "Icons", Model_Menu.MenuType.MENU));
-//        listMenu1.addItem(new Model_Menu("10", "Sample Page", Model_Menu.MenuType.MENU));
-//        listMenu1.addItem(new Model_Menu("11", "Extra", Model_Menu.MenuType.MENU));
-//        listMenu1.addItem(new Model_Menu("12", "More", Model_Menu.MenuType.MENU));
-//        listMenu1.addItem(new Model_Menu("13", "Logout", Model_Menu.MenuType.MENU));
-//        listMenu1.addItem(new Model_Menu("14", "", Model_Menu.MenuType.EMPTY));
+        listMenu1.addItem(new Model_Menu("1", "Tổng quan", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("1", "Quản lý hệ thống", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("2", "Quản lý sản phẩm", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("3", "Quản lý nhập hàng", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("4", "Quản lý xuất hàng", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("5", "Quản lý hủy hàng", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("6", "Quản lý nhà cung cấp", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
+
+        listMenu1.addItem(new Model_Menu("", "Hệ thống kho hàng", Model_Menu.MenuType.TITLE));
+        listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
+
+        listMenu1.addItem(new Model_Menu("7", "Quả lý báo cáo, thống kê", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("9", "Quản lý hàng tồn kho", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("8", "Quản lý nhân viên", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("10", "Đăng xuất", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));
     }
 
     /**
@@ -63,18 +66,18 @@ public class Menu extends javax.swing.JPanel {
 
         panelMoving.setOpaque(false);
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/inventory/icon/logo_sg_1 (1).png"))); // NOI18N
-        jLabel2.setText("SmartGas");
+        jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
 
         javax.swing.GroupLayout panelMovingLayout = new javax.swing.GroupLayout(panelMoving);
         panelMoving.setLayout(panelMovingLayout);
         panelMovingLayout.setHorizontalGroup(
             panelMovingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMovingLayout.createSequentialGroup()
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelMovingLayout.setVerticalGroup(
             panelMovingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
