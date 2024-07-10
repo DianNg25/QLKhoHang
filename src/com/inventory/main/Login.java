@@ -14,6 +14,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -112,17 +114,36 @@ public class Login extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 String username = userTextField.getText();
                 String password = new String(passwordField.getPassword());
+
+                // Kiểm tra nếu tên đăng nhập hoặc mật khẩu bị bỏ trống
+                if (username.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(Login.this, "Vui lòng điền đầy đủ tên đăng nhập và mật khẩu", "Lỗi nhập liệu", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
                 // Kiểm tra đăng nhập từ SQL
                 boolean loginSuccess = checkLogin(username, password);
                 if (loginSuccess) {
                     // Chuyển trang hoặc hiển thị progress bar
-                openMainPage();
+                    openMainPage();
                 } else {
                     // Hiển thị thông báo lỗi
                     JOptionPane.showMessageDialog(Login.this, "Tên đăng nhập hoặc mật khẩu không đúng", "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+
+        // Thêm sự kiện khi nhấn Enter trong các trường nhập liệu
+        KeyAdapter enterKeyAdapter = new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    loginButton.doClick();
+                }
+            }
+        };
+        userTextField.addKeyListener(enterKeyAdapter);
+        passwordField.addKeyListener(enterKeyAdapter);
 
         // Thêm các panel vào PanelBorder
         panelBorder.add(imagePanel, BorderLayout.WEST);
@@ -148,19 +169,16 @@ public class Login extends javax.swing.JFrame {
         return isValidUser;
     }
 
-    // Phương thức hiển thị progress bar
-    
     // Phương thức mở trang chính
     private void openMainPage() {
         try {
-            com.inventory.main.Main main = new com.inventory.main.Main();
-            main.showMainPage();
+            LoadingScreen loadingScreen = new LoadingScreen();
+            loadingScreen.setVisible(true);
             dispose(); // Đóng cửa sổ đăng nhập
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Không thể mở trang chính: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     /**
