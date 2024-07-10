@@ -13,8 +13,9 @@ import javax.swing.JOptionPane;
  * @author Nguyen
  */
 public class LoadingScreen extends javax.swing.JFrame {
-    
+
     private boolean mainPageOpened = false;
+
     /**
      * Creates new form LoadingScreen
      */
@@ -58,12 +59,12 @@ public class LoadingScreen extends javax.swing.JFrame {
         curvesPanel1Layout.setHorizontalGroup(
             curvesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(curvesPanel1Layout.createSequentialGroup()
-                .addContainerGap(280, Short.MAX_VALUE)
-                .addGroup(curvesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addContainerGap(247, Short.MAX_VALUE)
+                .addGroup(curvesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(pro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                     .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(280, Short.MAX_VALUE))
+                .addContainerGap(247, Short.MAX_VALUE))
         );
         curvesPanel1Layout.setVerticalGroup(
             curvesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,17 +104,54 @@ public class LoadingScreen extends javax.swing.JFrame {
             @Override
             public void run() {
                 try {
-                    doTask("Connect To Database ...", 10);
-                    doTask("Task 1 ...", 20);
-                    doTask("Task 2 ...", 30);
-                    doTask("Task 3 ...", 40);
-                    doTask("Task 4 ...", 50);
-                    doTask("Task 5 ...", 60);
-                    doTask("Task 6 ...", 70);
-                    doTask("Task 7 ...", 80);
-                    doTask("Task 8 ...", 90);
-                    doTask("Task 9 ...", 100);
-                    doTask("Done ...", 100);
+                    doTask("Đang kết nối SQL Server.", 10);
+                    doTask("Đang kết nối SQL Server..", 12);
+                    doTask("Đang kết nối SQL Server...", 14);
+                    doTask("Đang kết nối SQL Server....", 18);
+
+                    doTask("Đang kiểm tra tồn kho.", 20);
+                    doTask("Đang kiểm tra tồn kho..", 22);
+                    doTask("Đang kiểm tra tồn kho...", 24);
+                    doTask("Đang kiểm tra tồn kho....", 28);
+
+                    doTask("Đang nhận đơn hàng mới.", 30);
+                    doTask("Đang nhận đơn hàng mới..", 32);
+                    doTask("Đang nhận đơn hàng mới...", 34);
+                    doTask("Đang nhận đơn hàng mới....", 38);
+
+                    doTask("Đang cập nhật trạng thái đơn hàng.", 40);
+                    doTask("Đang cập nhật trạng thái đơn hàng..", 42);
+                    doTask("Đang cập nhật trạng thái đơn hàng...", 44);
+                    doTask("Đang cập nhật trạng thái đơn hàng....", 48);
+
+                    doTask("Đang kiểm tra mức độ tồn kho.", 50);
+                    doTask("Đang kiểm tra mức độ tồn kho..", 52);
+                    doTask("Đang kiểm tra mức độ tồn kho...", 54);
+                    doTask("Đang kiểm tra mức độ tồn kho...", 58);
+
+                    doTask("Đang tạo báo cáo tồn kho.", 60);
+                    doTask("Đang tạo báo cáo tồn kho..", 62);
+                    doTask("Đang tạo báo cáo tồn kho...", 64);
+                    doTask("Đang tạo báo cáo tồn kho...", 68);
+
+                    doTask("Đang kiểm tra lịch sử giao dịch.", 70);
+                    doTask("Đang kiểm tra lịch sử giao dịch..", 72);
+                    doTask("Đang kiểm tra lịch sử giao dịch...", 74);
+                    doTask("Đang kiểm tra lịch sử giao dịch...", 78);
+
+                    doTask("Đang tối ưu hóa kho hàng.", 80);
+                    doTask("Đang tối ưu hóa kho hàng..", 82);
+                    doTask("Đang tối ưu hóa kho hàng...", 84);
+                    doTask("Đang tối ưu hóa kho hàng...", 88);
+
+                    doTask("Đang kiểm tra và bảo trì hệ thống.", 90);
+                    doTask("Đang kiểm tra và bảo trì hệ thống..", 92);
+                    doTask("Đang kiểm tra và bảo trì hệ thống...", 94);
+                    doTask("Đang kiểm tra và bảo trì hệ thống...", 98);
+
+                    doTask("Hoàn tất công việc...", 99);
+                    doTask("Mở ứng dụng", 100);
+
                     dispose();
                     curvesPanel1.stop();
                 } catch (Exception e) {
@@ -125,7 +163,7 @@ public class LoadingScreen extends javax.swing.JFrame {
 
     private void doTask(String taskName, int progress) throws Exception {
         lblStatus.setText(taskName);
-        Thread.sleep(500); //  For Test
+        Thread.sleep(170); //  For Test
         pro.setValue(progress);
 
         if (progress == 100 && !mainPageOpened) {
