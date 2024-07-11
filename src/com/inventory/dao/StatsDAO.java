@@ -6,8 +6,8 @@ package com.inventory.dao;
 
 /**
  *
- * @author WINDOWS
+ * @author Nguyen
  */
-public class nhanvien {
+public class StatsDAO {
     
 }

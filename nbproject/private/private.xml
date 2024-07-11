@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="DuAnMau">
-            <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/main/LoadingScreen.java</file>
-            <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/main/Login.java</file>
-            <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/swing/CurvesPanel.java</file>
-            <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/main/Main.java</file>
+            <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/dao/StatsDAO.java</file>
+            <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/dao/EmployeesDAO.java</file>
+            <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/dao/InvenDAO.java</file>
+            <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/dao/ProductsDAO.java</file>
+            <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/dao/SuppliersDAO.java</file>
         </group>
         <group>
             <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/main/LoadingScreen.java</file>

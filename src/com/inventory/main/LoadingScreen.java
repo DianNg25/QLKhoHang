@@ -127,27 +127,27 @@ public class LoadingScreen extends javax.swing.JFrame {
                     doTask("Đang kiểm tra mức độ tồn kho.", 50);
                     doTask("Đang kiểm tra mức độ tồn kho..", 52);
                     doTask("Đang kiểm tra mức độ tồn kho...", 54);
-                    doTask("Đang kiểm tra mức độ tồn kho...", 58);
+                    doTask("Đang kiểm tra mức độ tồn kho....", 58);
 
                     doTask("Đang tạo báo cáo tồn kho.", 60);
                     doTask("Đang tạo báo cáo tồn kho..", 62);
                     doTask("Đang tạo báo cáo tồn kho...", 64);
-                    doTask("Đang tạo báo cáo tồn kho...", 68);
+                    doTask("Đang tạo báo cáo tồn kho....", 68);
 
                     doTask("Đang kiểm tra lịch sử giao dịch.", 70);
                     doTask("Đang kiểm tra lịch sử giao dịch..", 72);
                     doTask("Đang kiểm tra lịch sử giao dịch...", 74);
-                    doTask("Đang kiểm tra lịch sử giao dịch...", 78);
+                    doTask("Đang kiểm tra lịch sử giao dịch....", 78);
 
                     doTask("Đang tối ưu hóa kho hàng.", 80);
                     doTask("Đang tối ưu hóa kho hàng..", 82);
                     doTask("Đang tối ưu hóa kho hàng...", 84);
-                    doTask("Đang tối ưu hóa kho hàng...", 88);
+                    doTask("Đang tối ưu hóa kho hàng....", 88);
 
                     doTask("Đang kiểm tra và bảo trì hệ thống.", 90);
                     doTask("Đang kiểm tra và bảo trì hệ thống..", 92);
                     doTask("Đang kiểm tra và bảo trì hệ thống...", 94);
-                    doTask("Đang kiểm tra và bảo trì hệ thống...", 98);
+                    doTask("Đang kiểm tra và bảo trì hệ thống....", 98);
 
                     doTask("Hoàn tất công việc...", 99);
                     doTask("Mở ứng dụng", 100);
