@@ -32,7 +32,7 @@ public class Menu extends javax.swing.JPanel {
     }
 
     private void init() {
-        listMenu1.addItem(new Model_Menu("1", "Tổng quan", Model_Menu.MenuType.MENU));
+        
         listMenu1.addItem(new Model_Menu("1", "Quản lý hệ thống", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("2", "Quản lý sản phẩm", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("3", "Quản lý nhập hàng", Model_Menu.MenuType.MENU));
@@ -41,7 +41,6 @@ public class Menu extends javax.swing.JPanel {
         listMenu1.addItem(new Model_Menu("6", "Quản lý nhà cung cấp", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
 
-        listMenu1.addItem(new Model_Menu("", "Hệ thống kho hàng", Model_Menu.MenuType.TITLE));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
 
         listMenu1.addItem(new Model_Menu("7", "Quả lý báo cáo, thống kê", Model_Menu.MenuType.MENU));

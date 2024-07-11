@@ -2,20 +2,18 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/main/Login.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/utils/XJdbc.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/form/Model_Menu.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/main/Main.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/component/Menu.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/swing/ListMenu.java</file>
-            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/swing/PanelBorder.java</file>
-        </group>
         <group name="DuAnMau">
             <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/main/LoadingScreen.java</file>
             <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/main/Login.java</file>
             <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/swing/CurvesPanel.java</file>
             <file>file:/D:/FPT_Polytechnic/DuAn1/QLKhoHang/src/com/inventory/main/Main.java</file>
+        </group>
+        <group>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/main/LoadingScreen.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/main/Main.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/dao/nhanvien.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/swing/PanelBorder.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/swing/CurvesPanel.java</file>
         </group>
     </open-files>
 </project-private>
