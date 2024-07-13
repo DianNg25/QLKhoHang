@@ -10,21 +10,25 @@ package com.inventory.entity;
  */
 public class Employees {
 
-    private String Name;
-    private int Phone;
-    private String Email;
-    private String Position;
-    private String Image;
-
     public Employees() {
     }
 
-    public Employees(String Name, int Phone, String Email, String Position, String Image) {
+    public Employees(String EmployeeID, String Name, int Phone, String Email, String Position, String Image, String Password) {
+        this.EmployeeID = EmployeeID;
         this.Name = Name;
         this.Phone = Phone;
         this.Email = Email;
         this.Position = Position;
         this.Image = Image;
+        this.Password = Password;
+    }
+
+    public String getEmployeeID() {
+        return EmployeeID;
+    }
+
+    public void setEmployeeID(String EmployeeID) {
+        this.EmployeeID = EmployeeID;
     }
 
     public String getName() {
@@ -66,6 +70,25 @@ public class Employees {
     public void setImage(String Image) {
         this.Image = Image;
     }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public void setPassword(String Password) {
+        this.Password = Password;
+    }
+
+  
+    private String EmployeeID;
+    private String Name;
+    private int Phone;
+    private String Email;
+    private String Position;
+    private String Image;
+    private String Password;
+
+   
     
 
 }

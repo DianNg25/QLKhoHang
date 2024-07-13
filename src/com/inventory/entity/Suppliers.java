@@ -10,19 +10,18 @@ package com.inventory.entity;
  */
 public class Suppliers {
 
+    private String SupplierID;
     private String SupplierName;
     private String Address;
     private int Phone;
     private String Email;
 
-    public Suppliers(String SupplierName, String Address, int Phone, String Email) {
-        this.SupplierName = SupplierName;
-        this.Address = Address;
-        this.Phone = Phone;
-        this.Email = Email;
+    public String getSupplierID() {
+        return SupplierID;
     }
 
-    public Suppliers() {
+    public void setSupplierID(String SupplierID) {
+        this.SupplierID = SupplierID;
     }
 
     public String getSupplierName() {
@@ -55,6 +54,17 @@ public class Suppliers {
 
     public void setEmail(String Email) {
         this.Email = Email;
+    }
+
+    public Suppliers(String SupplierID, String SupplierName, String Address, int Phone, String Email) {
+        this.SupplierID = SupplierID;
+        this.SupplierName = SupplierName;
+        this.Address = Address;
+        this.Phone = Phone;
+        this.Email = Email;
+    }
+
+    public Suppliers() {
     }
 
 }

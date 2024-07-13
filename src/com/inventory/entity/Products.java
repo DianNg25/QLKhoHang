@@ -10,19 +10,34 @@ package com.inventory.entity;
  */
 public class Products {
 
-    private String ProductName;
-    private String Type;
-    private int Quantity;
-    private Double price;
-
-    public Products(String ProductName, String Type, int Quantity, Double price) {
-        this.ProductName = ProductName;
-        this.Type = Type;
-        this.Quantity = Quantity;
-        this.price = price;
+    public Products() {
     }
 
-    public Products() {
+    public Products(String ProductID, String SupplierID, String ProductName, String Color, String Weight, int Quantity, Double price, String Status) {
+        this.ProductID = ProductID;
+        this.SupplierID = SupplierID;
+        this.ProductName = ProductName;
+        this.Color = Color;
+        this.Weight = Weight;
+        this.Quantity = Quantity;
+        this.price = price;
+        this.Status = Status;
+    }
+
+    public String getProductID() {
+        return ProductID;
+    }
+
+    public void setProductID(String ProductID) {
+        this.ProductID = ProductID;
+    }
+
+    public String getSupplierID() {
+        return SupplierID;
+    }
+
+    public void setSupplierID(String SupplierID) {
+        this.SupplierID = SupplierID;
     }
 
     public String getProductName() {
@@ -33,12 +48,20 @@ public class Products {
         this.ProductName = ProductName;
     }
 
-    public String getType() {
-        return Type;
+    public String getColor() {
+        return Color;
     }
 
-    public void setType(String Type) {
-        this.Type = Type;
+    public void setColor(String Color) {
+        this.Color = Color;
+    }
+
+    public String getWeight() {
+        return Weight;
+    }
+
+    public void setWeight(String Weight) {
+        this.Weight = Weight;
     }
 
     public int getQuantity() {
@@ -56,5 +79,24 @@ public class Products {
     public void setPrice(Double price) {
         this.price = price;
     }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String Status) {
+        this.Status = Status;
+    }
+
+    
+    private String ProductID;
+    private String SupplierID;
+    private String ProductName;
+    private String Color;
+    private String Weight;
+    private int Quantity;
+    private Double price;
+    private String Status;
+   
     
 }
