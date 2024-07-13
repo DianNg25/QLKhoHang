@@ -149,17 +149,16 @@ public class Card_XK extends javax.swing.JPanel {
     }//GEN-LAST:event_lblValueAncestorAdded
 
     @Override
-    protected void paintComponent(Graphics graphics) {
-        Graphics2D g2 = (Graphics2D) graphics;
+    protected void paintComponent(Graphics grphcs) {
+        Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         GradientPaint g = new GradientPaint(0, 0, color1, 0, getHeight(), color2);
         g2.setPaint(g);
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
-        g2.fillRect(getWidth() - 20, 0, getWidth(), getHeight());
         g2.setColor(new Color(255, 255, 255, 50));
         g2.fillOval(getWidth() - (getHeight() / 2), 10, getHeight(), getHeight());
         g2.fillOval(getWidth() - (getHeight() / 2) - 20, getHeight() / 2 + 20, getHeight(), getHeight());
-        super.paintComponent(graphics);        
+        super.paintComponent(grphcs);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -11,20 +11,20 @@ public class EmployeesDAO extends InvenDAO<Employees, String> {
     
     public void insert(Employees model) {
         String sql = "INSERT INTO NhanVien (MaNV, MatKhau, HoTen, VaiTro) VALUES (?, ?, ?, ?)";
-        XJdbc.update(sql,
-                model.getMaNV(),
-                model.getMatKhau(),
-                model.getHoTen(),
-                model.getVaiTro());
+//        XJdbc.update(sql,
+//                model.getMaNV(),
+//                model.getMatKhau(),
+//                model.getHoTen(),
+//                model.getVaiTro());
     }
 
     public void update(Employees model) {
         String sql = "UPDATE NhanVien SET MatKhau=?, HoTen=?, VaiTro=? WHERE MaNV=?";
-        XJdbc.update(sql,
-                model.getMatKhau(),
-                model.getHoTen(),
-                model.getVaiTro(),
-                model.getMaNV());
+//        XJdbc.update(sql,
+//                model.getMatKhau(),
+//                model.getHoTen(),
+//                model.getVaiTro(),
+//                model.getMaNV());
     }
 
     public void delete(String MaNV) {
@@ -49,14 +49,14 @@ public class EmployeesDAO extends InvenDAO<Employees, String> {
             ResultSet rs = null;
             try {
                 rs = XJdbc.query(sql, args);
-                while (rs.next()) {
-                    Employees entity = new Employees();
-                    entity.setMaNV(rs.getString("MaNV"));
-                    entity.setMatKhau(rs.getString("MatKhau"));
-                    entity.setHoTen(rs.getString("HoTen"));
-                    entity.setVaiTro(rs.getBoolean("VaiTro"));
-                    list.add(entity);
-                }
+//                while (rs.next()) {
+//                    Employees entity = new Employees();
+//                    entity.setMaNV(rs.getString("MaNV"));
+//                    entity.setMatKhau(rs.getString("MatKhau"));
+//                    entity.setHoTen(rs.getString("HoTen"));
+//                    entity.setVaiTro(rs.getBoolean("VaiTro"));
+//                    list.add(entity);
+//                }
             } finally {
                 if (rs != null) {
                     rs.getStatement().getConnection().close();

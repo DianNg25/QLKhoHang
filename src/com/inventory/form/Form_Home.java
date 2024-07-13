@@ -40,6 +40,8 @@ public class Form_Home extends javax.swing.JPanel {
         card3 = new com.inventory.component.Card_XK();
         panelBorder1 = new com.inventory.swing.PanelBorder();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+
         jLayeredPane1.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
         card1.setColor1(new java.awt.Color(35, 67, 82));
@@ -70,11 +72,11 @@ public class Form_Home extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 865, Short.MAX_VALUE)
                     .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
