@@ -47,7 +47,7 @@
               <Group type="102" attributes="0">
                   <Component id="menu" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                  <Component id="mainPanel" pref="893" max="32767" attributes="0"/>
+                  <Component id="mainPanel" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -57,8 +57,11 @@
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="menu" max="32767" attributes="0"/>
-                      <Component id="mainPanel" max="32767" attributes="0"/>
+                      <Component id="menu" min="-2" pref="655" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="mainPanel" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
               </Group>
           </Group>
@@ -68,13 +71,10 @@
         <Component class="com.inventory.component.Menu" name="menu">
         </Component>
         <Container class="javax.swing.JPanel" name="mainPanel">
-          <Properties>
-            <Property name="opaque" type="boolean" value="false"/>
-          </Properties>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
           <SubComponents>
-            <Component class="com.inventory.form.Form_Home" name="form_Home2">
+            <Component class="com.inventory.form.Form_Home" name="form_Home1">
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
                   <BorderConstraints direction="Center"/>
