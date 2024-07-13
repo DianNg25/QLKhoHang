@@ -4,10 +4,14 @@
  */
 package com.inventory.form;
 
+import com.inventory.swing.ScrollBar;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -23,6 +27,46 @@ public class Form_Home extends javax.swing.JPanel {
         card1.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/stock.png")), "Tổng số hàng tồn kho", "", "Increased by 60%"));
         card2.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/profit.png")), "Tổng doanh thu", "15000", "Increased by 25%"));
         card3.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/flag.png")), "Tổng số hàng xuất kho", "30000", "Increased by 70%"));
+
+        
+        
+        spTable.setVerticalScrollBar(new ScrollBar());
+        spTable.getVerticalScrollBar().setBackground(Color.WHITE);
+        spTable.getViewport().setBackground(Color.WHITE);
+        JPanel p = new JPanel();
+        p.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        
+        
+        
+        table.addRow(new Object[]{
+           "GS001", 
+            "Gas Phú Quốc", 
+            "Phú Quốc", 
+            "6", 
+            "100000", 
+            "Đã xóa", 
+            com.inventory.form.StatusType.PENDING
+        });
+table.addRow(new Object[]{
+           "GS001", 
+            "Gas Phú Quốc", 
+            "Phú Quốc", 
+            "6", 
+            "100000", 
+            "Đã xóa", 
+            com.inventory.form.StatusType.APPROVED
+        });table.addRow(new Object[]{
+           "GS001", 
+            "Gas Phú Quốc", 
+            "Phú Quốc", 
+            "6", 
+            "100000", 
+            "Đã xóa", 
+            com.inventory.form.StatusType.PENDING
+        });
+// Thêm hàng thứ hai
+      
     }
 
     /**
@@ -39,6 +83,8 @@ public class Form_Home extends javax.swing.JPanel {
         card2 = new com.inventory.component.Card_TK();
         card3 = new com.inventory.component.Card_XK();
         panelBorder1 = new com.inventory.swing.PanelBorder();
+        spTable = new javax.swing.JScrollPane();
+        table = new com.inventory.swing.Table();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -56,15 +102,33 @@ public class Form_Home extends javax.swing.JPanel {
         card3.setColor2(new java.awt.Color(58, 110, 133));
         jLayeredPane1.add(card3);
 
+        panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
+
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Mã sản phẩm", "Tên sản phẩm", "Nhà cung cấp", "Khối lượng", "Giá", "Màu sắc", "Trạng thái"
+            }
+        ));
+        spTable.setViewportView(table);
+
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
         panelBorder1.setLayout(panelBorder1Layout);
         panelBorder1Layout.setHorizontalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(panelBorder1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(spTable)
+                .addContainerGap())
         );
         panelBorder1Layout.setVerticalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 410, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -81,10 +145,11 @@ public class Form_Home extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(17, Short.MAX_VALUE)
                 .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 @Override
@@ -104,5 +169,7 @@ public class Form_Home extends javax.swing.JPanel {
     private com.inventory.component.Card_XK card3;
     private javax.swing.JLayeredPane jLayeredPane1;
     private com.inventory.swing.PanelBorder panelBorder1;
+    private javax.swing.JScrollPane spTable;
+    private com.inventory.swing.Table table;
     // End of variables declaration//GEN-END:variables
 }

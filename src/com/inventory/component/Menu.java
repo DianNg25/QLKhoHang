@@ -4,6 +4,7 @@
  */
 package com.inventory.component;
 
+import com.inventory.event.EventMenuSelected;
 import com.inventory.form.Model_Menu;
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -21,6 +22,13 @@ import javax.swing.JFrame;
  */
 public class Menu extends javax.swing.JPanel {
 
+    private EventMenuSelected event;
+
+    public void addEventMenuSelected(EventMenuSelected event) {
+        this.event = event;
+        listMenu1.addEventMenuSelected(event);
+    }
+
     /**
      * Creates new form Menu
      */
@@ -32,7 +40,7 @@ public class Menu extends javax.swing.JPanel {
     }
 
     private void init() {
-        
+
         listMenu1.addItem(new Model_Menu("1", "Quản lý hệ thống", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("2", "Quản lý sản phẩm", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("3", "Quản lý nhập hàng", Model_Menu.MenuType.MENU));
