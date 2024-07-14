@@ -146,6 +146,8 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        
+        
         // Thêm sự kiện khi nhấn Enter trong các trường nhập liệu
         KeyAdapter enterKeyAdapter = new KeyAdapter() {
             @Override
@@ -235,6 +237,8 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    
 
     /**
      * @param args the command line arguments

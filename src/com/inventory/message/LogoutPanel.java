@@ -6,10 +6,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
+import javax.swing.SwingUtilities;
 
-public class LoginError extends javax.swing.JPanel {
+public class LogoutPanel extends javax.swing.JPanel {
 
-    public LoginError() {
+    public LogoutPanel() {
         initComponents();
         setOpaque(false);
         txt.setBackground(new Color(0, 0, 0, 0));
@@ -40,11 +41,11 @@ public class LoginError extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(80, 80, 80));
-        jLabel1.setText("Lỗi đăng nhập");
+        jLabel1.setText("Thông báo");
 
         txt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         txt.setForeground(new java.awt.Color(133, 133, 133));
-        txt.setText("Tên tài khoản hoặc mật khẩu không chính xác.");
+        txt.setText("Bạn có muốn đăng xuất?");
         txt.setToolTipText("");
         txt.setAutoscrolls(false);
         txt.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -55,7 +56,7 @@ public class LoginError extends javax.swing.JPanel {
         btnOK.setText("Đồng ý");
 
         btnCancel.setBackground(new java.awt.Color(214, 217, 223));
-        btnCancel.setText("Hủy bỏ");
+        btnCancel.setText("Cancel");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
@@ -96,7 +97,7 @@ public class LoginError extends javax.swing.JPanel {
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
-        GlassPanePopup.closePopupLast();
+        SwingUtilities.getWindowAncestor(this).dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     public void eventOK(ActionListener event) {

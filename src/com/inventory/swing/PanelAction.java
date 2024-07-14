@@ -43,9 +43,9 @@ public class PanelAction extends javax.swing.JPanel {
         btnEdit = new com.inventory.swing.AcitonButton();
         btnDelete = new com.inventory.swing.AcitonButton();
 
-        btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/inventory/icon/Edit1.png"))); // NOI18N
+        btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/inventory/icon/pencil (1).png"))); // NOI18N
 
-        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/inventory/icon/delete1.png"))); // NOI18N
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/inventory/icon/trash-bin.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

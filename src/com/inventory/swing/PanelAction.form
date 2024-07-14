@@ -42,14 +42,14 @@
     <Component class="com.inventory.swing.AcitonButton" name="btnEdit">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/com/inventory/icon/Edit1.png"/>
+          <Image iconType="3" name="/com/inventory/icon/pencil (1).png"/>
         </Property>
       </Properties>
     </Component>
     <Component class="com.inventory.swing.AcitonButton" name="btnDelete">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/com/inventory/icon/delete1.png"/>
+          <Image iconType="3" name="/com/inventory/icon/trash-bin.png"/>
         </Property>
       </Properties>
     </Component>

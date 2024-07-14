@@ -69,7 +69,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="50" green="50" red="50" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="L&#x1ed7;i &#x111;&#x103;ng nh&#x1ead;p"/>
+        <Property name="text" type="java.lang.String" value="Th&#xf4;ng b&#xe1;o"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextPane" name="txt">
@@ -80,7 +80,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="85" green="85" red="85" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="T&#xea;n t&#xe0;i kho&#x1ea3;n ho&#x1eb7;c m&#x1ead;t kh&#x1ea9;u kh&#xf4;ng ch&#xed;nh x&#xe1;c."/>
+        <Property name="text" type="java.lang.String" value="B&#x1ea1;n c&#xf3; mu&#x1ed1;n &#x111;&#x103;ng xu&#x1ea5;t?"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
         <Property name="autoscrolls" type="boolean" value="false"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -105,7 +105,7 @@
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="df" green="d9" red="d6" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="H&#x1ee7;y b&#x1ecf;"/>
+        <Property name="text" type="java.lang.String" value="Cancel"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelActionPerformed"/>

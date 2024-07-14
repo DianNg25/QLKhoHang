@@ -8,9 +8,15 @@ import com.inventory.event.EventMenuSelected;
 import com.inventory.form.*;
 
 import com.inventory.form.Form_Home;
+import com.inventory.message.InputError;
+import com.inventory.message.LogoutPanel;
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
 import com.sun.jdi.connect.Connector;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JScrollBar;
 
 /**
@@ -37,16 +43,18 @@ public class Main extends javax.swing.JFrame {
                     setForm(new Form_2());
                 } else if (index == 3) {
                     setForm(new Form_3());
-                }else if (index == 4) {
+                } else if (index == 4) {
                     setForm(new Form_4());
-                }else if (index == 5) {
+                } else if (index == 5) {
                     setForm(new Form_5());
-                }else if (index == 6) {
+                } else if (index == 6) {
                     setForm(new Form_6());
-                }else if (index == 7) {
+                } else if (index == 7) {
                     setForm(new Form_7());
-                }else if (index == 8) {
+                } else if (index == 8) {
                     setForm(new Form_8());
+                } else {
+                    logoutForm();
                 }
                 System.out.println("cho: " + index);
             }
@@ -54,12 +62,29 @@ public class Main extends javax.swing.JFrame {
         });
     }
 
+    private void logoutForm() {
+
+        JDialog logoutDialog = new JDialog(this, "Đăng xuất", true);
+        LogoutPanel logoutPanel = new LogoutPanel();
+        logoutPanel.eventOK(evt -> {
+            logoutDialog.dispose();
+            dispose();
+            new Login().setVisible(true);
+        });
+        
+        logoutDialog.setUndecorated(true);
+        logoutDialog.getContentPane().add(logoutPanel);
+        logoutDialog.pack();
+        logoutDialog.setLocationRelativeTo(this);
+        logoutDialog.setVisible(true);
+    }
+
     private void setForm(JComponent com) {
         mainPanel.removeAll();
         mainPanel.add(com);
         mainPanel.repaint();
         mainPanel.revalidate();
-                
+
     }
 
     public static void showMainPage() {
@@ -164,6 +189,5 @@ public class Main extends javax.swing.JFrame {
     private com.inventory.component.Menu menu;
     private com.inventory.swing.PanelBorder panelBorder1;
     // End of variables declaration//GEN-END:variables
-
 
 }

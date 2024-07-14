@@ -52,10 +52,10 @@ public class InputError extends javax.swing.JPanel {
 
         btnOK.setBackground(new java.awt.Color(52, 99, 120));
         btnOK.setForeground(new java.awt.Color(255, 255, 255));
-        btnOK.setText("OK");
+        btnOK.setText("Đồng ý");
 
         btnCancel.setBackground(new java.awt.Color(214, 217, 223));
-        btnCancel.setText("Cancel");
+        btnCancel.setText("Hủy bỏ");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
