@@ -6,19 +6,15 @@ package com.inventory.main;
 
 import com.inventory.utils.XJdbc;
 import com.inventory.form.Model_Menu;
-import com.inventory.main.Main;
+import com.inventory.message.*;
 import com.inventory.swing.PanelBorder;
-import com.inventory.swing.PanelBorder;
-
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -28,6 +24,7 @@ public class Login extends javax.swing.JFrame {
     private JPasswordField passwordField;
 
     public Login() {
+        GlassPanePopup.install(this);
         // Thiết lập JFrame
         setTitle("Đăng Nhập");
         setSize(800, 400);
@@ -49,7 +46,7 @@ public class Login extends javax.swing.JFrame {
         JLabel imageLabel = new JLabel();
 
         // Sử dụng Model_Menu để lấy icon
-        Model_Menu menu = new Model_Menu("KhoHang_1", "Tổng quan", Model_Menu.MenuType.MENU);
+        Model_Menu menu = new Model_Menu("KhoHang-400x400", "Tổng quan", Model_Menu.MenuType.MENU);
         ImageIcon imageIcon = (ImageIcon) menu.toIcon();
         if (imageIcon.getIconWidth() == -1) {
             System.out.println("Hình ảnh không tồn tại hoặc đường dẫn không đúng: " + "/com/inventory/icon/Login_bg.png");
@@ -117,7 +114,15 @@ public class Login extends javax.swing.JFrame {
 
                 // Kiểm tra nếu tên đăng nhập hoặc mật khẩu bị bỏ trống
                 if (username.isEmpty() || password.isEmpty()) {
-                    JOptionPane.showMessageDialog(Login.this, "Vui lòng điền đầy đủ tên đăng nhập và mật khẩu", "Lỗi nhập liệu", JOptionPane.WARNING_MESSAGE);
+//                    JOptionPane.showMessageDialog(Login.this, "Vui lòng điền đầy đủ tên đăng nhập và mật khẩu", "Lỗi nhập liệu", JOptionPane.WARNING_MESSAGE);
+                    InputError obj = new InputError();
+                    obj.eventOK(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {
+                            GlassPanePopup.closePopupLast();
+                        }
+                    });
+                    GlassPanePopup.showPopup(obj);
                     return;
                 }
 
@@ -128,7 +133,15 @@ public class Login extends javax.swing.JFrame {
                     openMainPage();
                 } else {
                     // Hiển thị thông báo lỗi
-                    JOptionPane.showMessageDialog(Login.this, "Tên đăng nhập hoặc mật khẩu không đúng", "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
+//                    JOptionPane.showMessageDialog(Login.this, "Tên đăng nhập hoặc mật khẩu không đúng", "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
+                    LoginError obj = new LoginError();
+                    obj.eventOK(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {
+                            GlassPanePopup.closePopupLast();
+                        }
+                    });
+                    GlassPanePopup.showPopup(obj);
                 }
             }
         });
@@ -223,7 +236,6 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
     /**
      * @param args the command line arguments
      */
