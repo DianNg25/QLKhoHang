@@ -4,13 +4,17 @@
  */
 package com.inventory.form;
 
+import com.inventory.main.Login;
+import com.inventory.message.LogoutPanel;
 import com.inventory.swing.TableActionCellEditor;
 import com.inventory.swing.TableActionCellRender;
 import com.inventory.swing.TableActionEvent;
 import java.awt.Color;
 import java.awt.Component;
+import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -120,7 +124,7 @@ public class Form_1 extends javax.swing.JPanel {
 
         button2.setBackground(new java.awt.Color(153, 204, 255));
         button2.setText("Tìm kiếm");
-        button2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        button2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         button2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         button2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,7 +178,12 @@ public class Form_1 extends javax.swing.JPanel {
         button1.setBackground(new java.awt.Color(51, 51, 255));
         button1.setForeground(new java.awt.Color(255, 255, 255));
         button1.setText("Thêm hàng hóa");
-        button1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        button1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -233,6 +242,17 @@ public class Form_1 extends javax.swing.JPanel {
     private void txtMaSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaSPActionPerformed
      
     }//GEN-LAST:event_txtMaSPActionPerformed
+
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        // TODO add your handling code here:
+        JDialog add = new JDialog();
+        Model_Add_Product model = new Model_Add_Product();
+        add.setUndecorated(true);
+        add.getContentPane().add(model);
+        add.pack();
+        add.setLocationRelativeTo(this);
+        add.setVisible(true);
+    }//GEN-LAST:event_button1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
