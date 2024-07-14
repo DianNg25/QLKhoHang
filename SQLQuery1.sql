@@ -1,6 +1,6 @@
 CREATE DATABASE QuanLyKhoHang;
 USE QuanLyKhoHang;
-
+GO
 -- Bảng Người Dùng
 CREATE TABLE Users (
     UserID INT PRIMARY KEY IDENTITY(1,1),
@@ -8,124 +8,171 @@ CREATE TABLE Users (
     Password VARCHAR(255) NOT NULL,
     Role VARCHAR(50) NOT NULL DEFAULT 'User'
 );
-
+GO
 -- Bảng Nhân Viên
 CREATE TABLE Employees (
-    EmployeeID INT PRIMARY KEY IDENTITY(1,1),
-    Name VARCHAR(100) NOT NULL,
+    EmployeeID CHAR(10) PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
     Phone VARCHAR(15),
     Email VARCHAR(100),
+	Password VARCHAR(255) NOT NULL,
     Position VARCHAR(50),
     Image VARCHAR(MAX)
 );
-
+GO
 -- Bảng Nhà Cung Cấp
 CREATE TABLE Suppliers (
-    SupplierID INT PRIMARY KEY IDENTITY(1,1),
+    SupplierID CHAR(10) PRIMARY KEY,
     SupplierName VARCHAR(100) NOT NULL,
     Address VARCHAR(255),
     Phone VARCHAR(15),
     Email VARCHAR(100)
 );
-
+GO
 -- Bảng Sản Phẩm
 CREATE TABLE Products (
-    ProductID INT PRIMARY KEY IDENTITY(1,1),
+    ProductID CHAR(10) PRIMARY KEY,
     ProductName VARCHAR(100) NOT NULL,
-    SupplierID INT,
-    Type VARCHAR(50),
+    SupplierID CHAR(10),
+    Weight VARCHAR(50),
+	Color NVARCHAR(50),
     Quantity INT,
     Price DECIMAL(10, 2),
+	Status NVARCHAR(255) NOT NULL
     FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID)
 );
-
+GO
 -- Bảng Phiếu Xuất
 CREATE TABLE ExportForms (
-    ExportFormID INT PRIMARY KEY IDENTITY(1,1),
-    EmployeeID INT,
+    ExportFormID CHAR(10) PRIMARY KEY,
+    EmployeeID CHAR(10),
     ExportDate DATE NOT NULL,
     TotalAmount DECIMAL(10, 2),
+	Status NVARCHAR(255) NOT NULL
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
-
+GO
 -- Bảng Chi Tiết Phiếu Xuất
 CREATE TABLE ExportFormDetails (
-    ExportFormDetailID INT PRIMARY KEY IDENTITY(1,1),
-    ExportFormID INT,
-    ProductID INT,
+    ExportFormDetailID CHAR(10) PRIMARY KEY,
+    ExportFormID CHAR(10),
+    ProductID CHAR(10),
     Quantity INT,
     Price DECIMAL(10, 2),
     FOREIGN KEY (ExportFormID) REFERENCES ExportForms(ExportFormID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
-
+GO
 -- Bảng Phiếu Nhập
 CREATE TABLE ImportForms (
-    ImportFormID INT PRIMARY KEY IDENTITY(1,1),
-    EmployeeID INT,
+    ImportFormID CHAR(10) PRIMARY KEY,
+    EmployeeID CHAR(10),
     ImportDate DATE NOT NULL,
     TotalAmount DECIMAL(10, 2),
+	Status NVARCHAR(255) NOT NULL
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
-
+GO
 -- Bảng Chi Tiết Phiếu Nhập
 CREATE TABLE ImportFormDetails (
-    ImportFormDetailID INT PRIMARY KEY IDENTITY(1,1),
-    ImportFormID INT,
-    ProductID INT,
+    ImportFormDetailID CHAR(10) PRIMARY KEY,
+    ImportFormID CHAR(10),
+    ProductID CHAR(10),
     Quantity INT,
     Price DECIMAL(10, 2),
     FOREIGN KEY (ImportFormID) REFERENCES ImportForms(ImportFormID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
-
+GO
 -- Bảng Phiếu Hủy Hàng
 CREATE TABLE DestroyForms (
-    DestroyFormID INT PRIMARY KEY IDENTITY(1,1),
-    EmployeeID INT,
+    DestroyFormID CHAR(10) PRIMARY KEY,
+    EmployeeID CHAR(10),
     DestroyDate DATE NOT NULL,
     TotalAmount DECIMAL(10, 2),
+	Status NVARCHAR(255) NOT NULL
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
-
+GO
 -- Bảng Chi Tiết Phiếu Hủy Hàng
 CREATE TABLE DestroyFormDetails (
-    DestroyFormDetailID INT PRIMARY KEY IDENTITY(1,1),
-    DestroyFormID INT,
-    ProductID INT,
+    DestroyFormDetailID CHAR(10) PRIMARY KEY,
+    DestroyFormID CHAR(10),
+    ProductID CHAR(10),
     Quantity INT,
-    Reason VARCHAR(255),
+    Reason NVARCHAR(255),
     FOREIGN KEY (DestroyFormID) REFERENCES DestroyForms(DestroyFormID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
-
+GO
 -- Bảng Báo Cáo
 CREATE TABLE Reports (
-    ReportID INT PRIMARY KEY IDENTITY(1,1),
-    EmployeeID INT,
-    ReportType VARCHAR(50) NOT NULL,
+    ReportID CHAR(10) PRIMARY KEY,
+    EmployeeID CHAR(10),
+    ReportType NVARCHAR(50) NOT NULL,
     GeneratedDate DATE NOT NULL,
     StartDate DATE NOT NULL,
     EndDate DATE NOT NULL,
-    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID),
-    CONSTRAINT chk_report_type CHECK (ReportType IN ('Nhập', 'Xuất', 'Hàng hủy'))
-);
-
--- Bảng Kiểm Kho
-CREATE TABLE InventoryChecks (
-    InventoryCheckID INT PRIMARY KEY IDENTITY(1,1),
-    EmployeeID INT,
-    CheckDate DATE NOT NULL,
-    Notes VARCHAR(255),
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
-
+GO
+-- Bảng Kiểm Kho
+CREATE TABLE InventoryChecks (
+    InventoryCheckID CHAR(10) PRIMARY KEY,
+    EmployeeID CHAR(10),
+    CheckDate DATE NOT NULL,
+    Notes NVARCHAR(255),
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+);
+GO
 -- Bảng Chi Tiết Kiểm Kho
 CREATE TABLE InventoryCheckDetails (
-    InventoryCheckDetailID INT PRIMARY KEY IDENTITY(1,1),
-    InventoryCheckID INT,
-    ProductID INT,
+    InventoryCheckDetailID CHAR(10) PRIMARY KEY,
+    InventoryCheckID CHAR(10),
+    ProductID CHAR(10),
     Quantity INT,
     FOREIGN KEY (InventoryCheckID) REFERENCES InventoryChecks(InventoryCheckID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
+GO
+
+-- Stored Procedure for Revenue Statistics within a Date Range
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE sp_ThongKeDoanhThuTuNgayDenNgay
+    @StartDate DATE,
+    @EndDate DATE
+AS
+BEGIN
+    SELECT
+        YEAR(ExportDate) AS Nam,
+        SUM(TotalAmount) AS DoanhThu
+    FROM ExportForms
+    WHERE ExportDate BETWEEN @StartDate AND @EndDate
+    GROUP BY YEAR(ExportDate)
+END;
+GO
+
+-- Stored Procedure for Inventory Statistics
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE sp_ThongKeHangTonKho
+AS
+BEGIN
+    SELECT
+        p.ProductID,
+        p.ProductName,
+        p.Quantity,
+        SUM(e.Quantity) AS SoLuongDaXuat,
+        SUM(i.Quantity) AS SoLuongDaNhap,
+        (p.Quantity + SUM(i.Quantity) - SUM(e.Quantity)) AS SoLuongTonKho
+    FROM Products p
+    LEFT JOIN ExportFormDetails e ON p.ProductID = e.ProductID
+    LEFT JOIN ImportFormDetails i ON p.ProductID = i.ProductID
+    GROUP BY p.ProductID, p.ProductName, p.Quantity
+END;
+GO

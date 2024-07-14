@@ -4,6 +4,16 @@
  */
 package com.inventory.form;
 
+import com.inventory.swing.TableActionCellEditor;
+import com.inventory.swing.TableActionCellRender;
+import com.inventory.swing.TableActionEvent;
+import java.awt.Color;
+import java.awt.Component;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ADMIN
@@ -15,6 +25,46 @@ public class Form_1 extends javax.swing.JPanel {
      */
     public Form_1() {
         initComponents();
+        TableActionEvent event = new TableActionEvent() {
+            @Override
+            public void onEdit(int row) {
+                System.out.println("Edit row : " + row);
+            }
+
+            @Override
+            public void onDelete(int row) {
+                if (table.isEditing()) {
+                    table.getCellEditor().stopCellEditing();
+                }
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                model.removeRow(row);
+            }
+
+        };
+        String[] columnNames = {"Mã sản phẩm", "Tên sản phẩm", "Loại", "Màu", "Số lượng", "Giá", "Trạng thái", "Thao tác"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        table.setModel(model);
+
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer());
+        }
+
+        table.getColumnModel().getColumn(7).setCellRenderer(new TableActionCellRender());
+        table.getColumnModel().getColumn(7).setCellEditor(new TableActionCellEditor(event));
+
+        addMultipleRows(model);
+    }
+
+    public void addMultipleRows(DefaultTableModel model) {
+        Object[][] rowData = {
+            {"SP001", "Điện thoại samsung", "mini", "Đỏ", "15", "120000", "bình thường", ""},
+            {"SP002", "Điện thoại nokia", "classic", "Xanh", "10", "90000", "tốt", ""},
+            {"SP003", "Điện thoại iphone", "pro", "Đen", "20", "200000", "mới", ""},
+        };
+
+        for (Object[] row : rowData) {
+            model.addRow(row);
+        }
     }
 
     /**
@@ -26,33 +76,169 @@ public class Form_1 extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        txtMaSP = new javax.swing.JTextField();
+        txtTenSP = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        button2 = new com.inventory.swing.Button();
+        jPanel4 = new javax.swing.JPanel();
+        button1 = new com.inventory.swing.Button();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table = new com.inventory.swing.Table();
 
-        setBackground(new java.awt.Color(255, 51, 51));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setText("Form 1");
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(905, 200));
+        jPanel1.setLayout(new java.awt.BorderLayout());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(152, 152, 152)
-                .addComponent(jLabel1)
-                .addContainerGap(188, Short.MAX_VALUE))
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setPreferredSize(new java.awt.Dimension(905, 130));
+
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel1.setText("Mã sản phẩm");
+
+        txtMaSP.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtMaSP.setMinimumSize(new java.awt.Dimension(60, 20));
+        txtMaSP.setPreferredSize(new java.awt.Dimension(60, 20));
+        txtMaSP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMaSPActionPerformed(evt);
+            }
+        });
+
+        txtTenSP.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtTenSP.setMinimumSize(new java.awt.Dimension(60, 20));
+        txtTenSP.setPreferredSize(new java.awt.Dimension(60, 20));
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel2.setText("Tên sản phẩm");
+
+        button2.setBackground(new java.awt.Color(153, 204, 255));
+        button2.setText("Tìm kiếm");
+        button2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        button2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        button2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button2ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(82, 82, 82)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(48, 48, 48)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(txtMaSP, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(txtTenSP, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+                        .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(48, 48, 48))))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(jLabel1)
-                .addContainerGap(230, Short.MAX_VALUE))
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtMaSP, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTenSP, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())))
         );
+
+        jPanel1.add(jPanel3, java.awt.BorderLayout.PAGE_START);
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        button1.setBackground(new java.awt.Color(51, 51, 255));
+        button1.setForeground(new java.awt.Color(255, 255, 255));
+        button1.setText("Thêm hàng hóa");
+        button1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(699, Short.MAX_VALUE)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
+
+        add(jPanel1, java.awt.BorderLayout.PAGE_START);
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(table);
+
+        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        add(jPanel2, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button2ActionPerformed
+
+    private void txtMaSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaSPActionPerformed
+     
+    }//GEN-LAST:event_txtMaSPActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.inventory.swing.Button button1;
+    private com.inventory.swing.Button button2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private com.inventory.swing.Table table;
+    private javax.swing.JTextField txtMaSP;
+    private javax.swing.JTextField txtTenSP;
     // End of variables declaration//GEN-END:variables
 }
