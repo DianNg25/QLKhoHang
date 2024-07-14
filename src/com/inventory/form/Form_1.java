@@ -33,24 +33,24 @@ public class Form_1 extends javax.swing.JPanel {
 
             @Override
             public void onDelete(int row) {
-                if (table.isEditing()) {
-                    table.getCellEditor().stopCellEditing();
+                if (tblAddSP.isEditing()) {
+                    tblAddSP.getCellEditor().stopCellEditing();
                 }
-                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                DefaultTableModel model = (DefaultTableModel) tblAddSP.getModel();
                 model.removeRow(row);
             }
 
         };
         String[] columnNames = {"Mã sản phẩm", "Tên sản phẩm", "Loại", "Màu", "Số lượng", "Giá", "Trạng thái", "Thao tác"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        table.setModel(model);
+        tblAddSP.setModel(model);
 
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer());
+        for (int i = 0; i < tblAddSP.getColumnCount(); i++) {
+            tblAddSP.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer());
         }
 
-        table.getColumnModel().getColumn(7).setCellRenderer(new TableActionCellRender());
-        table.getColumnModel().getColumn(7).setCellEditor(new TableActionCellEditor(event));
+        tblAddSP.getColumnModel().getColumn(7).setCellRenderer(new TableActionCellRender());
+        tblAddSP.getColumnModel().getColumn(7).setCellEditor(new TableActionCellEditor(event));
 
         addMultipleRows(model);
     }
@@ -87,7 +87,7 @@ public class Form_1 extends javax.swing.JPanel {
         button1 = new com.inventory.swing.Button();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table = new com.inventory.swing.Table();
+        tblAddSP = new com.inventory.swing.Table();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new java.awt.BorderLayout());
@@ -97,7 +97,7 @@ public class Form_1 extends javax.swing.JPanel {
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setPreferredSize(new java.awt.Dimension(905, 130));
+        jPanel3.setPreferredSize(new java.awt.Dimension(905, 150));
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel1.setText("Mã sản phẩm");
@@ -181,16 +181,16 @@ public class Form_1 extends javax.swing.JPanel {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(699, Short.MAX_VALUE)
+                .addContainerGap(710, Short.MAX_VALUE)
                 .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+                .addContainerGap()
                 .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
@@ -200,7 +200,7 @@ public class Form_1 extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        table.setModel(new javax.swing.table.DefaultTableModel(
+        tblAddSP.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -210,8 +210,16 @@ public class Form_1 extends javax.swing.JPanel {
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ));
-        jScrollPane1.setViewportView(table);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblAddSP);
 
         jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -237,7 +245,7 @@ public class Form_1 extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private com.inventory.swing.Table table;
+    private com.inventory.swing.Table tblAddSP;
     private javax.swing.JTextField txtMaSP;
     private javax.swing.JTextField txtTenSP;
     // End of variables declaration//GEN-END:variables
