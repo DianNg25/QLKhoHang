@@ -5,9 +5,8 @@
 package com.inventory.main;
 
 import com.inventory.event.EventMenuSelected;
-import com.inventory.form.Form_1;
-import com.inventory.form.Form_2;
-import com.inventory.form.Form_3;
+import com.inventory.form.*;
+
 import com.inventory.form.Form_Home;
 import com.sun.jdi.connect.Connector;
 import java.awt.Color;
@@ -38,8 +37,18 @@ public class Main extends javax.swing.JFrame {
                     setForm(new Form_2());
                 } else if (index == 3) {
                     setForm(new Form_3());
+                }else if (index == 4) {
+                    setForm(new Form_4());
+                }else if (index == 5) {
+                    setForm(new Form_5());
+                }else if (index == 6) {
+                    setForm(new Form_6());
+                }else if (index == 7) {
+                    setForm(new Form_7());
+                }else if (index == 8) {
+                    setForm(new Form_8());
                 }
-                //thêm panel
+                System.out.println("cho: " + index);
             }
 
         });
@@ -70,7 +79,7 @@ public class Main extends javax.swing.JFrame {
         panelBorder1 = new com.inventory.swing.PanelBorder();
         menu = new com.inventory.component.Menu();
         mainPanel = new javax.swing.JPanel();
-        form_Home1 = new com.inventory.form.Form_Home();
+        form_Home2 = new com.inventory.form.Form_Home();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -78,7 +87,7 @@ public class Main extends javax.swing.JFrame {
         panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
 
         mainPanel.setLayout(new java.awt.BorderLayout());
-        mainPanel.add(form_Home1, java.awt.BorderLayout.CENTER);
+        mainPanel.add(form_Home2, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
         panelBorder1.setLayout(panelBorder1Layout);
@@ -96,9 +105,7 @@ public class Main extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(menu, javax.swing.GroupLayout.PREFERRED_SIZE, 655, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelBorder1Layout.createSequentialGroup()
-                        .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(0, 0, 0))))
+                    .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -152,7 +159,7 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.inventory.form.Form_Home form_Home1;
+    private com.inventory.form.Form_Home form_Home2;
     private javax.swing.JPanel mainPanel;
     private com.inventory.component.Menu menu;
     private com.inventory.swing.PanelBorder panelBorder1;

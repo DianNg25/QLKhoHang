@@ -32,16 +32,15 @@ public class TableStatus extends JLabel {
             Graphics2D g2 = (Graphics2D) grphcs;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             GradientPaint g;
-            if (type == StatusType.PENDING) {
-                g = new GradientPaint(0, 0, new Color(186, 123, 247), 0, getHeight(), new Color(167, 94, 236));
-            } else if (type == StatusType.APPROVED) {
-                g = new GradientPaint(0, 0, new Color(142, 142, 250), 0, getHeight(), new Color(123, 123, 245));
+            if (type == StatusType.DA_XOA) {
+                g = new GradientPaint(0, 0, new Color(255, 0, 0), 0, getHeight(), new Color(255, 100, 100)); // Màu đỏ
             } else {
-                g = new GradientPaint(0, 0, new Color(241, 208, 62), 0, getHeight(), new Color(211, 184, 61));
+                g = new GradientPaint(0, 0, new Color(0, 128, 0), 0, getHeight(), new Color(144, 238, 144)); // Màu xanh lá
             }
             g2.setPaint(g);
             g2.fillRoundRect(0, 0, getWidth(), getHeight(), 1, 1);
         }
         super.paintComponent(grphcs);
     }
+
 }

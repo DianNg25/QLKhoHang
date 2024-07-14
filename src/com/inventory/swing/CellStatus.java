@@ -1,20 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
+
 package com.inventory.swing;
 
 import com.inventory.form.StatusType;
 
-/**
- *
- * @author ADMIN
- */
 public class CellStatus extends javax.swing.JPanel {
 
-    /**
-     * Creates new form CellStatus
-     */
     public CellStatus(StatusType type) {
         initComponents();
         status.setType(type);
@@ -31,6 +21,7 @@ public class CellStatus extends javax.swing.JPanel {
 
         status = new com.inventory.swing.TableStatus();
 
+        status.setBackground(new java.awt.Color(255, 255, 255));
         status.setText("tableStatus1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

@@ -6,12 +6,15 @@ package com.inventory.form;
 
 import com.inventory.swing.ScrollBar;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 
 /**
  *
@@ -19,54 +22,59 @@ import javax.swing.JScrollPane;
  */
 public class Form_Home extends javax.swing.JPanel {
 
+    
+    
+    
+
+        // Sử dụng TableHeaderRenderer cho tiêu đề bảng
+        
     /**
      * Creates new form Form_Home
      */
     public Form_Home() {
         initComponents();
-        card1.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/stock.png")), "Tổng số hàng tồn kho", "", "Increased by 60%"));
-        card2.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/profit.png")), "Tổng doanh thu", "15000", "Increased by 25%"));
-        card3.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/flag.png")), "Tổng số hàng xuất kho", "30000", "Increased by 70%"));
+        
+        
+        card1.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/stock.png")), "Tổng doanh thu", "", "Increased by 60%"));
+        card2.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/profit.png")), "Tổng số hàng tồn kho", "", "Increased by 25%"));
+        card3.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/flag.png")), "Tổng số hàng xuất kho", "", "Increased by 70%"));
 
-        
-        
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
         JPanel p = new JPanel();
         p.setBackground(Color.WHITE);
         spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        
-        
-        
+
         table.addRow(new Object[]{
-           "GS001", 
-            "Gas Phú Quốc", 
-            "Phú Quốc", 
-            "6", 
-            "100000", 
-            "Đã xóa", 
-            com.inventory.form.StatusType.PENDING
+            "GS001",
+            "Gas Phú Quốc",
+            "Phú Quốc",
+            "6",
+            "100000",
+            "Đã xóa",
+            com.inventory.form.StatusType.DA_XOA
         });
-table.addRow(new Object[]{
-           "GS001", 
-            "Gas Phú Quốc", 
-            "Phú Quốc", 
-            "6", 
-            "100000", 
-            "Đã xóa", 
-            com.inventory.form.StatusType.APPROVED
-        });table.addRow(new Object[]{
-           "GS001", 
-            "Gas Phú Quốc", 
-            "Phú Quốc", 
-            "6", 
-            "100000", 
-            "Đã xóa", 
-            com.inventory.form.StatusType.PENDING
+        table.addRow(new Object[]{
+            "GS001",
+            "Gas Phú Quốc",
+            "Phú Quốc",
+            "6",
+            "100000",
+            "Đã xóa",
+            com.inventory.form.StatusType.BINH_THUONG
+        });
+        table.addRow(new Object[]{
+            "GS001",
+            "Gas Phú Quốc",
+            "Phú Quốc",
+            "6",
+            "100000",
+            "Đã xóa",
+            com.inventory.form.StatusType.DA_XOA
         });
 // Thêm hàng thứ hai
-      
+
     }
 
     /**
@@ -85,6 +93,7 @@ table.addRow(new Object[]{
         panelBorder1 = new com.inventory.swing.PanelBorder();
         spTable = new javax.swing.JScrollPane();
         table = new com.inventory.swing.Table();
+        jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -111,8 +120,29 @@ table.addRow(new Object[]{
             new String [] {
                 "Mã sản phẩm", "Tên sản phẩm", "Nhà cung cấp", "Khối lượng", "Giá", "Màu sắc", "Trạng thái"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         spTable.setViewportView(table);
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel1.setText("Thông tin sản phẩm");
+        jLabel1.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                jLabel1AncestorAdded(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
 
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
         panelBorder1.setLayout(panelBorder1Layout);
@@ -120,14 +150,20 @@ table.addRow(new Object[]{
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBorder1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(spTable)
+                .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spTable, javax.swing.GroupLayout.DEFAULT_SIZE, 854, Short.MAX_VALUE)
+                    .addGroup(panelBorder1Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelBorder1Layout.setVerticalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -136,9 +172,9 @@ table.addRow(new Object[]{
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 865, Short.MAX_VALUE)
+                    .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 866, Short.MAX_VALUE)
                     .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
@@ -152,7 +188,14 @@ table.addRow(new Object[]{
                 .addContainerGap(11, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-@Override
+
+    private void jLabel1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jLabel1AncestorAdded
+        // TODO add your handling code here:
+
+      
+
+    }//GEN-LAST:event_jLabel1AncestorAdded
+    @Override
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -167,6 +210,7 @@ table.addRow(new Object[]{
     private com.inventory.component.Card_DT card1;
     private com.inventory.component.Card_TK card2;
     private com.inventory.component.Card_XK card3;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLayeredPane jLayeredPane1;
     private com.inventory.swing.PanelBorder panelBorder1;
     private javax.swing.JScrollPane spTable;
