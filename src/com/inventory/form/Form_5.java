@@ -47,6 +47,11 @@ private JTextField tfProductCode;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         table1 = new com.inventory.swing.Table();
+        jPanel1 = new javax.swing.JPanel();
+        header2 = new com.inventory.component.Header();
+        jPanel5 = new javax.swing.JPanel();
+        button3 = new com.inventory.swing.Button();
+        panelForm51 = new com.inventory.swing.PanelForm4();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new java.awt.BorderLayout());
@@ -65,11 +70,64 @@ private JTextField tfProductCode;
         jScrollPane1.setViewportView(table1);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel1.add(header2, java.awt.BorderLayout.PAGE_START);
+
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+
+        button3.setBackground(new java.awt.Color(102, 102, 255));
+        button3.setText("Thêm nhà cung cấp");
+        button3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        button3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(661, Short.MAX_VALUE)
+                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(58, 58, 58))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jPanel1.add(jPanel5, java.awt.BorderLayout.PAGE_END);
+        jPanel1.add(panelForm51, java.awt.BorderLayout.CENTER);
+
+        add(jPanel1, java.awt.BorderLayout.PAGE_START);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
+        // TODO add your handling code here:
+        JDialog add = new JDialog();
+        Model_Add_Product model = new Model_Add_Product();
+        add.setUndecorated(true);
+        add.getContentPane().add(model);
+        add.pack();
+        add.setLocationRelativeTo(this);
+        add.setVisible(true);
+    }//GEN-LAST:event_button3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.inventory.swing.Button button3;
+    private com.inventory.component.Header header2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private com.inventory.swing.PanelForm4 panelForm51;
     private com.inventory.swing.Table table1;
     // End of variables declaration//GEN-END:variables
 }

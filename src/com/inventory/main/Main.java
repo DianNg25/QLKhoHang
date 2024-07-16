@@ -51,8 +51,6 @@ public class Main extends javax.swing.JFrame {
                     setForm(new Form_6());
                 } else if (index == 7) {
                     setForm(new Form_7());
-                } else if (index == 8) {
-                    setForm(new Form_8());
                 } else {
                     logoutForm();
                 }
