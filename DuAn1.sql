@@ -1,4 +1,5 @@
 CREATE DATABASE QuanLyKhoHang;
+GO
 USE QuanLyKhoHang;
 GO
 -- Bảng Người Dùng
@@ -48,7 +49,9 @@ CREATE TABLE ExportForms (
     EmployeeID CHAR(10),
     ExportDate DATE NOT NULL,
     TotalAmount DECIMAL(10, 2),
-	Status NVARCHAR(255) NOT NULL
+    CommissionFee DECIMAL(10, 2),
+    ShippingFee DECIMAL(10, 2),
+    Status NVARCHAR(255) NOT NULL,
     FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
 );
 GO
@@ -81,27 +84,6 @@ CREATE TABLE ImportFormDetails (
     Quantity INT,
     Price DECIMAL(10, 2),
     FOREIGN KEY (ImportFormID) REFERENCES ImportForms(ImportFormID),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
-);
-GO
--- Bảng Phiếu Hủy Hàng
-CREATE TABLE DestroyForms (
-    DestroyFormID CHAR(10) PRIMARY KEY,
-    EmployeeID CHAR(10),
-    DestroyDate DATE NOT NULL,
-    TotalAmount DECIMAL(10, 2),
-	Status NVARCHAR(255) NOT NULL
-    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
-);
-GO
--- Bảng Chi Tiết Phiếu Hủy Hàng
-CREATE TABLE DestroyFormDetails (
-    DestroyFormDetailID CHAR(10) PRIMARY KEY,
-    DestroyFormID CHAR(10),
-    ProductID CHAR(10),
-    Quantity INT,
-    Reason NVARCHAR(255),
-    FOREIGN KEY (DestroyFormID) REFERENCES DestroyForms(DestroyFormID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 GO
