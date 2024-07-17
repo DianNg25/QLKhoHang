@@ -4,9 +4,16 @@
  */
 package com.inventory.component;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import com.inventory.utils.XJdbc;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import javax.swing.JLabel;
 
 /**
  *
@@ -14,12 +21,14 @@ import java.awt.RenderingHints;
  */
 public class Header extends javax.swing.JPanel {
 
+
     /**
      * Creates new form Header
      */
     public Header() {
         initComponents();
         setOpaque(false);
+
     }
 
     /**
@@ -31,27 +40,70 @@ public class Header extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        userName = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(255, 255, 255));
+        setBackground(new java.awt.Color(0, 0, 0));
 
-        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        jLabel1.setText("USER");
+        userName.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        userName.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                userNameAncestorAdded(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 328, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 243, Short.MAX_VALUE)
+                .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+            .addComponent(userName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-@Override
+
+
+    private void userNameAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_userNameAncestorAdded
+        String username = getCurrentUsername(); // Lấy username hiện tại (bạn cần triển khai hàm này)
+        String fullName = getFullNameByUsername(username);
+
+        // Cập nhật tên lên JLabel
+        userName.setText(fullName);
+    }//GEN-LAST:event_userNameAncestorAdded
+
+    private String getFullNameByUsername(String username) {
+        String fullName = "";
+        String query = "SELECT FullName FROM Employees WHERE EmployeeID = ?";
+
+        try (Connection conn = (Connection) XJdbc.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                fullName = rs.getString("FullName");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Xử lý lỗi nếu có
+        }
+
+        return fullName;
+    }
+
+    private String getCurrentUsername() {
+        // Giả sử bạn lưu username trong một biến toàn cục hoặc session
+        return "currentUsername"; // Thay bằng cách lấy username thực tế từ nguồn dữ liệu của bạn
+    }
+
+    @Override
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -63,6 +115,6 @@ public class Header extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel userName;
     // End of variables declaration//GEN-END:variables
 }

@@ -50,7 +50,7 @@ public class Form_Home extends javax.swing.JPanel {
             "Phú Quốc",
             "6",
             "100000",
-            "Đã xóa",
+            "Đỏ",
             com.inventory.form.StatusType.DA_XOA
         });
         table.addRow(new Object[]{
@@ -59,7 +59,7 @@ public class Form_Home extends javax.swing.JPanel {
             "Phú Quốc",
             "6",
             "100000",
-            "Đã xóa",
+            "Xám",
             com.inventory.form.StatusType.BINH_THUONG
         });
         table.addRow(new Object[]{
@@ -68,7 +68,7 @@ public class Form_Home extends javax.swing.JPanel {
             "Phú Quốc",
             "6",
             "100000",
-            "Đã xóa",
+            "Cam",
             com.inventory.form.StatusType.DA_XOA
         });
 // Thêm hàng thứ hai
@@ -91,7 +91,6 @@ public class Form_Home extends javax.swing.JPanel {
         card1 = new com.inventory.component.Card_DT();
         card2 = new com.inventory.component.Card_TK();
         card3 = new com.inventory.component.Card_XK();
-        header1 = new com.inventory.component.Header();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -156,20 +155,15 @@ public class Form_Home extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, 906, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     @Override
@@ -187,7 +181,6 @@ public class Form_Home extends javax.swing.JPanel {
     private com.inventory.component.Card_DT card1;
     private com.inventory.component.Card_TK card2;
     private com.inventory.component.Card_XK card3;
-    private com.inventory.component.Header header1;
     private javax.swing.JLayeredPane jLayeredPane1;
     private com.inventory.swing.PanelBorder panelBorder1;
     private javax.swing.JScrollPane spTable;
