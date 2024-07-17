@@ -29,7 +29,9 @@ public class Form_1 extends javax.swing.JPanel {
      */
     public Form_1() {
         initComponents();
+        
         TableActionEvent event = new TableActionEvent() {
+            
             @Override
             public void onEdit(int row) {
                 System.out.println("Edit row : " + row);
@@ -37,25 +39,25 @@ public class Form_1 extends javax.swing.JPanel {
 
             @Override
             public void onDelete(int row) {
-                if (tblAddSP.isEditing()) {
-                    tblAddSP.getCellEditor().stopCellEditing();
+                if (table1.isEditing()) {
+                    table1.getCellEditor().stopCellEditing();
                 }
-                DefaultTableModel model = (DefaultTableModel) tblAddSP.getModel();
+                DefaultTableModel model = (DefaultTableModel) table1.getModel();
                 model.removeRow(row);
             }
 
         };
         String[] columnNames = {"Mã sản phẩm", "Tên sản phẩm", "Loại", "Màu", "Số lượng", "Giá", "Trạng thái", "Thao tác"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        tblAddSP.setModel(model);
+        table1.setModel(model);
 
-        for (int i = 0; i < tblAddSP.getColumnCount(); i++) {
-            tblAddSP.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer());
+        for (int i = 0; i < table1.getColumnCount(); i++) {
+            table1.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer());
         }
 
-        tblAddSP.getColumnModel().getColumn(7).setCellRenderer(new TableActionCellRender());
-        tblAddSP.getColumnModel().getColumn(7).setCellEditor(new TableActionCellEditor(event));
-
+        table1.getColumnModel().getColumn(7).setCellRenderer(new TableActionCellRender());
+        table1.getColumnModel().getColumn(7).setCellEditor(new TableActionCellEditor(event));
+        
         addMultipleRows(model);
     }
 
@@ -84,13 +86,11 @@ public class Form_1 extends javax.swing.JPanel {
         panelproduct1 = new com.inventory.swing.Panelproduct();
         jPanel5 = new javax.swing.JPanel();
         button3 = new com.inventory.swing.Button();
-        header2 = new com.inventory.component.Header();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblAddSP = new com.inventory.swing.Table();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        table1 = new com.inventory.swing.Table();
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(905, 200));
@@ -100,6 +100,7 @@ public class Form_1 extends javax.swing.JPanel {
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
         button3.setBackground(new java.awt.Color(102, 102, 255));
+        button3.setForeground(new java.awt.Color(255, 255, 255));
         button3.setText("Thêm sản phẩm");
         button3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         button3.addActionListener(new java.awt.event.ActionListener() {
@@ -113,9 +114,9 @@ public class Form_1 extends javax.swing.JPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(661, Short.MAX_VALUE)
+                .addContainerGap(629, Short.MAX_VALUE)
                 .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66))
+                .addGap(60, 60, 60))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,14 +127,13 @@ public class Form_1 extends javax.swing.JPanel {
         );
 
         jPanel1.add(jPanel5, java.awt.BorderLayout.PAGE_END);
-        jPanel1.add(header2, java.awt.BorderLayout.PAGE_START);
-
-        add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        tblAddSP.setModel(new javax.swing.table.DefaultTableModel(
+        jScrollPane2.setBorder(null);
+
+        table1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -143,20 +143,31 @@ public class Form_1 extends javax.swing.JPanel {
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
+        ));
+        jScrollPane2.setViewportView(table1);
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tblAddSP);
+        jPanel2.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
-        add(jPanel2, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 867, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
@@ -173,12 +184,11 @@ public class Form_1 extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button button3;
-    private com.inventory.component.Header header2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private com.inventory.swing.Panelproduct panelproduct1;
-    private com.inventory.swing.Table tblAddSP;
+    private com.inventory.swing.Table table1;
     // End of variables declaration//GEN-END:variables
 }

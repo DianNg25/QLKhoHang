@@ -45,39 +45,23 @@ private JTextField tfProductCode;
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        table1 = new com.inventory.swing.Table();
         jPanel1 = new javax.swing.JPanel();
-        header2 = new com.inventory.component.Header();
         jPanel5 = new javax.swing.JPanel();
         button3 = new com.inventory.swing.Button();
         panelForm51 = new com.inventory.swing.PanelForm4();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        table2 = new com.inventory.swing.Table();
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setLayout(new java.awt.BorderLayout());
-
-        table1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(table1);
-
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new java.awt.BorderLayout());
-        jPanel1.add(header2, java.awt.BorderLayout.PAGE_START);
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
         button3.setBackground(new java.awt.Color(102, 102, 255));
+        button3.setForeground(new java.awt.Color(255, 255, 255));
         button3.setText("Thêm nhà cung cấp");
         button3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         button3.addActionListener(new java.awt.event.ActionListener() {
@@ -91,9 +75,9 @@ private JTextField tfProductCode;
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(655, Short.MAX_VALUE)
+                .addContainerGap(608, Short.MAX_VALUE)
                 .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51))
+                .addGap(60, 60, 60))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,7 +92,43 @@ private JTextField tfProductCode;
         panelForm51.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.add(panelForm51, java.awt.BorderLayout.CENTER);
 
-        add(jPanel1, java.awt.BorderLayout.PAGE_START);
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        table2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(table2);
+
+        jPanel2.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
@@ -125,11 +145,11 @@ private JTextField tfProductCode;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button button3;
-    private com.inventory.component.Header header2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private com.inventory.swing.PanelForm4 panelForm51;
-    private com.inventory.swing.Table table1;
+    private com.inventory.swing.Table table2;
     // End of variables declaration//GEN-END:variables
 }

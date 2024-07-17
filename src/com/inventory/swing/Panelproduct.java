@@ -49,6 +49,7 @@ public class Panelproduct extends javax.swing.JPanel {
         textField2.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
 
         button1.setBackground(new java.awt.Color(102, 102, 255));
+        button1.setForeground(new java.awt.Color(255, 255, 255));
         button1.setText("Tìm Kiếm");
         button1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
 

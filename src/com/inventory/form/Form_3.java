@@ -80,26 +80,24 @@ public class Form_3 extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        header1 = new com.inventory.component.Header();
         jPanel6 = new javax.swing.JPanel();
         button3 = new com.inventory.swing.Button();
         panelForm31 = new com.inventory.swing.PanelForm3();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         tblXuatKho = new com.inventory.swing.Table();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(905, 649));
-        setLayout(new java.awt.BorderLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(100, 200));
         jPanel1.setLayout(new java.awt.BorderLayout());
-        jPanel1.add(header1, java.awt.BorderLayout.PAGE_START);
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
 
         button3.setBackground(new java.awt.Color(102, 102, 255));
+        button3.setForeground(new java.awt.Color(255, 255, 255));
         button3.setText("Tạo phiếu xuất");
         button3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
 
@@ -108,9 +106,9 @@ public class Form_3 extends javax.swing.JPanel {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(658, Short.MAX_VALUE)
+                .addContainerGap(608, Short.MAX_VALUE)
                 .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(60, 60, 60))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,10 +123,10 @@ public class Form_3 extends javax.swing.JPanel {
         panelForm31.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.add(panelForm31, java.awt.BorderLayout.CENTER);
 
-        add(jPanel1, java.awt.BorderLayout.PAGE_START);
-
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane2.setBorder(null);
 
         tblXuatKho.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -141,21 +139,39 @@ public class Form_3 extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tblXuatKho);
+        jScrollPane2.setViewportView(tblXuatKho);
 
-        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanel2.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        add(jPanel2, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(24, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 856, Short.MAX_VALUE))
+                .addGap(27, 27, 27))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button button3;
-    private com.inventory.component.Header header1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private com.inventory.swing.PanelForm3 panelForm31;
     private com.inventory.swing.Table tblXuatKho;
     // End of variables declaration//GEN-END:variables
