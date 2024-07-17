@@ -110,30 +110,30 @@
             <Component class="com.inventory.component.Card_DT" name="card1">
               <Properties>
                 <Property name="color1" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="52" green="43" red="23" type="rgb"/>
+                  <Color blue="80" green="2a" red="1a" type="rgb"/>
                 </Property>
                 <Property name="color2" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="85" green="6e" red="3a" type="rgb"/>
+                  <Color blue="c2" green="b7" red="24" type="rgb"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="com.inventory.component.Card_TK" name="card2">
               <Properties>
                 <Property name="color1" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="52" green="43" red="23" type="rgb"/>
+                  <Color blue="80" green="2a" red="1a" type="rgb"/>
                 </Property>
                 <Property name="color2" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="85" green="6e" red="3a" type="rgb"/>
+                  <Color blue="c2" green="b7" red="24" type="rgb"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="com.inventory.component.Card_XK" name="card3">
               <Properties>
                 <Property name="color1" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="52" green="43" red="23" type="rgb"/>
+                  <Color blue="80" green="2a" red="1a" type="rgb"/>
                 </Property>
                 <Property name="color2" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="85" green="6e" red="3a" type="rgb"/>
+                  <Color blue="c2" green="b7" red="24" type="rgb"/>
                 </Property>
               </Properties>
             </Component>

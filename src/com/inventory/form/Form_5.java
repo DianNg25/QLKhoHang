@@ -48,7 +48,6 @@ private JTextField tfProductCode;
         jScrollPane1 = new javax.swing.JScrollPane();
         table1 = new com.inventory.swing.Table();
         jPanel1 = new javax.swing.JPanel();
-        header2 = new com.inventory.component.Header();
         jPanel5 = new javax.swing.JPanel();
         button3 = new com.inventory.swing.Button();
         panelForm51 = new com.inventory.swing.PanelForm4();
@@ -73,7 +72,6 @@ private JTextField tfProductCode;
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new java.awt.BorderLayout());
-        jPanel1.add(header2, java.awt.BorderLayout.PAGE_START);
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -123,7 +121,6 @@ private JTextField tfProductCode;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button button3;
-    private com.inventory.component.Header header2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
