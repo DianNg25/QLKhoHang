@@ -23,9 +23,11 @@ import javax.swing.JFrame;
  */
 public class Menu extends javax.swing.JPanel {
 
+    private static final int ROUND = 10;
     private EventMenuSelected event;
- private int menuY;
- private int selectedIndex = -1;
+    private int menuY;
+    private int selectedIndex = -1;
+
     public void addEventMenuSelected(EventMenuSelected event) {
         this.event = event;
         listMenu1.addEventMenuSelected(event);
@@ -127,17 +129,26 @@ public class Menu extends javax.swing.JPanel {
 //        g2.fillRect(getWidth() - 20, 0, getWidth(), getHeight());
 //        super.paintChildren(graphics);
 //    }
-    
-
-    
-    
-     @Override
+    @Override
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Background gradient
         GradientPaint g = new GradientPaint(0, 0, Color.decode("#1A2980"), 0, getHeight(), Color.decode("#26D0CE"));
         g2.setPaint(g);
-        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+
+        Path2D.Float path = new Path2D.Float();
+        path.moveTo(0, ROUND);           // Bắt đầu tại góc trên bên trái, hơi xuống dưới để tạo đường cong
+        path.quadTo(0, 0, ROUND, 0);      // Vẽ đường cong cho góc trên bên trái
+        path.lineTo(getWidth(), 0);      // Vẽ đường thẳng đến góc trên bên phải
+        path.lineTo(getWidth(), getHeight()); // Vẽ đường thẳng đến góc dưới bên phải
+        path.lineTo(ROUND, getHeight()); // Vẽ đường thẳng đến gần góc dưới bên trái
+        path.quadTo(0, getHeight(), 0, getHeight() - ROUND); // Vẽ đường cong cho góc dưới bên trái
+        path.closePath();
+
+        g2.fill(path);  
+//        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
         if (selectedIndex >= 0) {
             int menuX = 10;
             int height = 35;

@@ -4,6 +4,7 @@
  */
 package com.inventory.component;
 
+import com.inventory.main.Login;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +21,6 @@ import javax.swing.JLabel;
  * @author ADMIN
  */
 public class Header extends javax.swing.JPanel {
-
 
     /**
      * Creates new form Header
@@ -42,9 +42,11 @@ public class Header extends javax.swing.JPanel {
 
         userName = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(0, 0, 0));
+        setBackground(new java.awt.Color(26, 42, 128));
 
-        userName.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        userName.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        userName.setForeground(new java.awt.Color(255, 255, 255));
+        userName.setText("123123");
         userName.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 userNameAncestorAdded(evt);
@@ -60,47 +62,39 @@ public class Header extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 243, Short.MAX_VALUE)
-                .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 155, Short.MAX_VALUE)
+                .addComponent(userName, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(userName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+            .addComponent(userName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     private void userNameAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_userNameAncestorAdded
-        String username = getCurrentUsername(); // Lấy username hiện tại (bạn cần triển khai hàm này)
-        String fullName = getFullNameByUsername(username);
+        String empId = Login.employeeId;
+        String fullName = getFullNameByEmployeeId(empId);
 
-        // Cập nhật tên lên JLabel
-        userName.setText(fullName);
+        if (!fullName.isEmpty()) {
+            userName.setText("Xin chào " + fullName);
+        } else {
+            userName.setText("Unknown User");
+        }
     }//GEN-LAST:event_userNameAncestorAdded
 
-    private String getFullNameByUsername(String username) {
+    private String getFullNameByEmployeeId(String employeeId) {
         String fullName = "";
-        String query = "SELECT FullName FROM Employees WHERE EmployeeID = ?";
 
-        try (Connection conn = (Connection) XJdbc.getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setString(1, username);
-            ResultSet rs = pstmt.executeQuery();
-
+        try (ResultSet rs = XJdbc.query("SELECT FullName FROM Employees WHERE EmployeeID = ?", employeeId)) {
             if (rs.next()) {
                 fullName = rs.getString("FullName");
             }
-
         } catch (SQLException e) {
-            e.printStackTrace(); // Xử lý lỗi nếu có
+            e.printStackTrace();
+            // Xử lý lỗi ở đây (ví dụ: hiển thị thông báo lỗi)
         }
-
         return fullName;
-    }
-
-    private String getCurrentUsername() {
-        // Giả sử bạn lưu username trong một biến toàn cục hoặc session
-        return "currentUsername"; // Thay bằng cách lấy username thực tế từ nguồn dữ liệu của bạn
     }
 
     @Override

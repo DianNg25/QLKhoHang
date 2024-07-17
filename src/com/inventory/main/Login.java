@@ -22,6 +22,8 @@ public class Login extends javax.swing.JFrame {
 
     private JTextField userTextField;
     private JPasswordField passwordField;
+    public static String loggedInUsername;
+    public static String employeeId;
 
     public Login() {
         GlassPanePopup.install(this);
@@ -93,11 +95,10 @@ public class Login extends javax.swing.JFrame {
         loginPanel.add(rememberMeCheckBox);
 
         // Quên mật khẩu
-        JLabel forgotPasswordLabel = new JLabel("Quên mật khẩu?");
-        forgotPasswordLabel.setBounds(220, 220, 150, 30);
-        forgotPasswordLabel.setForeground(new Color(0x2e536d));
-        loginPanel.add(forgotPasswordLabel);
-
+//        JLabel forgotPasswordLabel = new JLabel("Quên mật khẩu?");
+//        forgotPasswordLabel.setBounds(220, 220, 150, 30);
+//        forgotPasswordLabel.setForeground(new Color(0x2e536d));
+//        loginPanel.add(forgotPasswordLabel);
         // Nút Đăng Nhập
         JButton loginButton = new JButton("ĐĂNG NHẬP");
         loginButton.setBounds(50, 270, 300, 40);
@@ -146,8 +147,6 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        
-        
         // Thêm sự kiện khi nhấn Enter trong các trường nhập liệu
         KeyAdapter enterKeyAdapter = new KeyAdapter() {
             @Override
@@ -181,7 +180,24 @@ public class Login extends javax.swing.JFrame {
             e.printStackTrace();
         }
 
+        if (isValidUser) {
+            loggedInUsername = username;
+            employeeId = getEmployeeId(username);
+        }
+
         return isValidUser;
+    }
+
+    private String getEmployeeId(String username) {
+        String empId = ""; // Đổi thành String
+        try (ResultSet rs = XJdbc.query("SELECT EmployeeID FROM Users WHERE Username = ?", username)) {
+            if (rs.next()) {
+                empId = rs.getString("EmployeeID"); // Lấy giá trị dưới dạng String
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return empId;
     }
 
     // Phương thức mở trang chính
@@ -237,8 +253,6 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    
 
     /**
      * @param args the command line arguments

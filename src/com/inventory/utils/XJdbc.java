@@ -72,6 +72,7 @@ public class XJdbc {
         }
     }
     
+    
     public static Object value(String sql, Object...args) {
         try {
             ResultSet rs = XJdbc.query(sql, args);
@@ -83,9 +84,5 @@ public class XJdbc {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static com.sun.jdi.connect.spi.Connection getConnection() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

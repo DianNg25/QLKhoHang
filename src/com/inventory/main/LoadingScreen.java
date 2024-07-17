@@ -163,7 +163,7 @@ public class LoadingScreen extends javax.swing.JFrame {
 
     private void doTask(String taskName, int progress) throws Exception {
         lblStatus.setText(taskName);
-        Thread.sleep(170); //  For Test
+        Thread.sleep(100); //  For Test
         pro.setValue(progress);
 
         if (progress == 100 && !mainPageOpened) {
