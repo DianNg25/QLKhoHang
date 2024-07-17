@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.inventory.utils.XJdbc;
+import java.awt.Color;
+import java.awt.GradientPaint;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -42,7 +44,7 @@ public class Header extends javax.swing.JPanel {
 
         userName = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(26, 42, 128));
+        setBackground(new java.awt.Color(0, 0, 0));
 
         userName.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
         userName.setForeground(new java.awt.Color(255, 255, 255));
@@ -101,10 +103,17 @@ public class Header extends javax.swing.JPanel {
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(getBackground());
+
+        // Tạo gradient
+        GradientPaint gradient = new GradientPaint(0, 0, new Color(26, 42, 128),
+                0, getHeight(), new Color(26, 54, 134));
+        g2.setPaint(gradient); // Áp dụng gradient lên đối tượng Graphics2D
+
+        // Vẽ hình dạng như cũ
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
         g2.fillRect(0, 0, 25, getHeight());
         g2.fillRect(getWidth() - 25, getHeight() - 25, getWidth(), getHeight());
+
         super.paintComponent(grphcs);
     }
 
