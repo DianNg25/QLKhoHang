@@ -23,8 +23,8 @@ public class ProductsDAO extends InvenDAO<Products, String> {
                 model.getProductID(),
                 model.getProductName(),
                 model.getSupplierID(),
-                model.getColor(),
                 model.getWeight(),
+                model.getColor(),
                 model.getQuantity(),
                 model.getPrice(),
                 model.getStatus());
@@ -35,8 +35,8 @@ public class ProductsDAO extends InvenDAO<Products, String> {
         XJdbc.update(sql,
                 model.getProductName(),
                 model.getSupplierID(),
-                model.getColor(),
                 model.getWeight(),
+                model.getColor(),
                 model.getQuantity(),
                 model.getPrice(),
                 model.getStatus(),
@@ -45,7 +45,7 @@ public class ProductsDAO extends InvenDAO<Products, String> {
 
     public void delete(String productID) {
         String sql = "UPDATE Products SET Status =? WHERE ProductID=?";
-        XJdbc.update(sql, 
+        XJdbc.update(sql,
                 "Đã xóa",
                 productID);
     }

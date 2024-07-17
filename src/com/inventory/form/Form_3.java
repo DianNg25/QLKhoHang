@@ -100,6 +100,11 @@ public class Form_3 extends javax.swing.JPanel {
         button3.setForeground(new java.awt.Color(255, 255, 255));
         button3.setText("Tạo phiếu xuất");
         button3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        button3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -164,6 +169,16 @@ public class Form_3 extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
+       JDialog add = new JDialog();
+        Model_Add_ProductDelivery model = new  Model_Add_ProductDelivery();
+        add.setUndecorated(true);
+        add.getContentPane().add(model);
+        add.pack();
+        add.setLocationRelativeTo(this);
+        add.setVisible(true);
+    }//GEN-LAST:event_button3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

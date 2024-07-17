@@ -58,25 +58,29 @@ public class Model_Add_Product extends javax.swing.JPanel {
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setBackground(new java.awt.Color(94, 134, 153));
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        jPanel1.setBackground(new java.awt.Color(0, 130, 200));
+        jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(204, 204, 204)));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jLabel9.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Thêm sản phẩm");
+        jLabel9.setText("THÊM SẢN PHẨM");
+        jLabel9.setPreferredSize(new java.awt.Dimension(166, 30));
         jPanel1.add(jLabel9, java.awt.BorderLayout.CENTER);
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jPanel2.setBackground(new java.awt.Color(94, 134, 153));
+        jPanel2.setBackground(new java.awt.Color(0, 130, 200));
+        jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 0, 0, 0, new java.awt.Color(204, 204, 204)));
 
-        btnOK.setBackground(new java.awt.Color(41, 83, 103));
+        btnOK.setBackground(new java.awt.Color(0, 102, 102));
         btnOK.setForeground(new java.awt.Color(255, 255, 255));
         btnOK.setText("Thêm");
         btnOK.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
 
+        button2.setBackground(new java.awt.Color(255, 102, 102));
+        button2.setForeground(new java.awt.Color(255, 255, 255));
         button2.setText("Hủy");
         button2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         button2.addActionListener(new java.awt.event.ActionListener() {
@@ -108,7 +112,7 @@ public class Model_Add_Product extends javax.swing.JPanel {
 
         add(jPanel2, java.awt.BorderLayout.PAGE_END);
 
-        jPanel3.setBackground(new java.awt.Color(94, 134, 153));
+        jPanel3.setBackground(new java.awt.Color(0, 130, 200));
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
