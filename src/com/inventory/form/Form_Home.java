@@ -33,8 +33,6 @@ public class Form_Home extends javax.swing.JPanel {
      */
     public Form_Home() {
         initComponents();
-        
-        
         card1.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/stock.png")), "Tổng doanh thu", "", "Increased by 60%"));
         card2.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/profit.png")), "Tổng số hàng tồn kho", "", "Increased by 25%"));
         card3.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/flag.png")), "Tổng số hàng xuất kho", "", "Increased by 70%"));
@@ -89,7 +87,6 @@ public class Form_Home extends javax.swing.JPanel {
         panelBorder1 = new com.inventory.swing.PanelBorder();
         spTable = new javax.swing.JScrollPane();
         table = new com.inventory.swing.Table();
-        jLabel1 = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         card1 = new com.inventory.component.Card_DT();
         card2 = new com.inventory.component.Card_TK();
@@ -99,6 +96,8 @@ public class Form_Home extends javax.swing.JPanel {
         setBackground(new java.awt.Color(255, 255, 255));
 
         panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
+
+        spTable.setBorder(null);
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -117,19 +116,6 @@ public class Form_Home extends javax.swing.JPanel {
             }
         });
         spTable.setViewportView(table);
-
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jLabel1.setText("Thông tin sản phẩm");
-        jLabel1.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                jLabel1AncestorAdded(evt);
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
 
         jLayeredPane1.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
@@ -153,9 +139,6 @@ public class Form_Home extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(spTable, javax.swing.GroupLayout.DEFAULT_SIZE, 866, Short.MAX_VALUE)
-                    .addGroup(panelBorder1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 866, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -165,9 +148,7 @@ public class Form_Home extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spTable, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(spTable, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -191,13 +172,6 @@ public class Form_Home extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jLabel1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jLabel1AncestorAdded
-        // TODO add your handling code here:
-
-      
-
-    }//GEN-LAST:event_jLabel1AncestorAdded
     @Override
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;
@@ -214,7 +188,6 @@ public class Form_Home extends javax.swing.JPanel {
     private com.inventory.component.Card_TK card2;
     private com.inventory.component.Card_XK card3;
     private com.inventory.component.Header header1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLayeredPane jLayeredPane1;
     private com.inventory.swing.PanelBorder panelBorder1;
     private javax.swing.JScrollPane spTable;

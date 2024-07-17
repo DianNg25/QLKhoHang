@@ -25,26 +25,27 @@ public class Table extends JTable {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 TableHeader header = new TableHeader(value.toString());
-                if (column == 4) {
-                    header.setHorizontalAlignment(JLabel.CENTER);
-                }
+                header.setHorizontalAlignment(JLabel.CENTER); // Căn giữa tiêu đề cột
                 return header;
             }
         });
 
+        // Renderer mặc định cho các ô trong bảng
         setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                if (column != 6) { // Không phải là cột trạng thái
-                    Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                    com.setBackground(Color.WHITE);
-                    setBorder(noFocusBorder);
-                    com.setForeground(isSelected ? new Color(15, 89, 140) : new Color(102, 102, 102));
-                    return com;
-                } else {
+                Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                com.setBackground(Color.WHITE);
+                setBorder(noFocusBorder);
+                com.setFont(new Font("sansserif", Font.PLAIN, 13)); // Thay đổi kích thước chữ thành 14
+                com.setForeground(isSelected ? new Color(15, 89, 140) : new Color(102, 102, 102));
+                setHorizontalAlignment(JLabel.CENTER); // Căn giữa nội dung trong các ô
+                if (column == 6) { // Cột trạng thái
                     StatusType type = (StatusType) value;
                     JLabel label = new JLabel(type.getText());
                     label.setFont(label.getFont().deriveFont(Font.BOLD));
+                      label.setFont(new Font("sansserif", Font.BOLD, 13)); // Thay đổi kích thước chữ thành 14 và đậm cho cột trạng thái
+                    label.setHorizontalAlignment(JLabel.CENTER); // Căn giữa nội dung trong cột trạng thái
                     if (type == StatusType.DA_XOA) {
                         label.setForeground(Color.RED); // Màu chữ đỏ cho "Đã xóa"
                     } else if (type == StatusType.BINH_THUONG) {
@@ -52,8 +53,10 @@ public class Table extends JTable {
                     }
                     return label;
                 }
+                return com;
             }
         });
+
     }
 
     public void addRow(Object[] row) {
