@@ -28,12 +28,10 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="txt" pref="394" max="32767" attributes="0"/>
+              <Component id="txt" pref="294" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-              <Component id="btnCancel" min="-2" pref="90" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnOK" min="-2" pref="90" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -52,10 +50,7 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="txt" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="15" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnOK" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnCancel" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="btnOK" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -69,7 +64,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="50" green="50" red="50" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Th&#xf4;ng b&#xe1;o"/>
+        <Property name="text" type="java.lang.String" value="L&#x1ed7;i SQL"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextPane" name="txt">
@@ -80,7 +75,7 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="85" green="85" red="85" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="B&#x1ea1;n c&#xf3; mu&#x1ed1;n &#x111;&#x103;ng xu&#x1ea5;t?"/>
+        <Property name="text" type="java.lang.String" value="ID b&#x1ea1;n v&#x1eeb;a nh&#x1ead;p &#x111;&#xe3; t&#x1ed3;n t&#x1ea1;i."/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
         <Property name="autoscrolls" type="boolean" value="false"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -97,18 +92,10 @@
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="C&#xf3;"/>
-      </Properties>
-    </Component>
-    <Component class="com.inventory.swing.Button" name="btnCancel">
-      <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="df" green="d9" red="d6" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Kh&#xf4;ng"/>
+        <Property name="text" type="java.lang.String" value="OK"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOKActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

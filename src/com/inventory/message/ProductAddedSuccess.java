@@ -7,9 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 
-public class LoginError extends javax.swing.JPanel {
+public class ProductAddedSuccess extends javax.swing.JPanel {
 
-    public LoginError() {
+    public ProductAddedSuccess() {
         initComponents();
         setOpaque(false);
         txt.setBackground(new Color(0, 0, 0, 0));
@@ -38,12 +38,12 @@ public class LoginError extends javax.swing.JPanel {
         setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 25, 25, 25));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(80, 80, 80));
-        jLabel1.setText("Lỗi đăng nhập");
+        jLabel1.setForeground(new java.awt.Color(0, 204, 51));
+        jLabel1.setText("Thông báo");
 
         txt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         txt.setForeground(new java.awt.Color(133, 133, 133));
-        txt.setText("Tên tài khoản hoặc mật khẩu không chính xác.");
+        txt.setText("Thêm sản phẩm thành công.");
         txt.setToolTipText("");
         txt.setAutoscrolls(false);
         txt.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -64,7 +64,7 @@ public class LoginError extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txt, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
+                .addComponent(txt, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)

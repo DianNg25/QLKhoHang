@@ -7,9 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 
-public class LoginError extends javax.swing.JPanel {
+public class PhoneError extends javax.swing.JPanel {
 
-    public LoginError() {
+    public PhoneError() {
         initComponents();
         setOpaque(false);
         txt.setBackground(new Color(0, 0, 0, 0));
@@ -39,11 +39,11 @@ public class LoginError extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(80, 80, 80));
-        jLabel1.setText("Lỗi đăng nhập");
+        jLabel1.setText("Lỗi định dạng");
 
         txt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         txt.setForeground(new java.awt.Color(133, 133, 133));
-        txt.setText("Tên tài khoản hoặc mật khẩu không chính xác.");
+        txt.setText("Số điện thoại phải là số có 10 chữ số và bắt đầu bằng số 0.");
         txt.setToolTipText("");
         txt.setAutoscrolls(false);
         txt.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -101,5 +101,6 @@ public class LoginError extends javax.swing.JPanel {
     private javax.swing.JTextPane txt;
     // End of variables declaration//GEN-END:variables
 
+    
 
 }

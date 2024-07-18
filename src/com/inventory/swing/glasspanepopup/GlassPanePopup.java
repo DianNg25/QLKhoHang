@@ -1,5 +1,6 @@
 package com.inventory.swing.glasspanepopup;
 
+import com.inventory.main.Main;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;

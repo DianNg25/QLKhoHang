@@ -51,12 +51,12 @@ public class LogoutPanel extends javax.swing.JPanel {
         txt.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txt.setFocusable(false);
 
-        btnOK.setBackground(new java.awt.Color(52, 99, 120));
+        btnOK.setBackground(new java.awt.Color(26, 48, 131));
         btnOK.setForeground(new java.awt.Color(255, 255, 255));
-        btnOK.setText("Đồng ý");
+        btnOK.setText("Có");
 
         btnCancel.setBackground(new java.awt.Color(214, 217, 223));
-        btnCancel.setText("Cancel");
+        btnCancel.setText("Không");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
@@ -97,7 +97,8 @@ public class LogoutPanel extends javax.swing.JPanel {
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
-        SwingUtilities.getWindowAncestor(this).dispose();
+//        SwingUtilities.getWindowAncestor(this).dispose();
+        GlassPanePopup.closePopupLast();
     }//GEN-LAST:event_btnCancelActionPerformed
 
     public void eventOK(ActionListener event) {
