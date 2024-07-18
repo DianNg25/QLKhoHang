@@ -10,9 +10,7 @@ package com.inventory.swing;
  */
 public class Panelproduct extends javax.swing.JPanel {
 
-    /**
-     * Creates new form Panelproduct
-     */
+    
     public Panelproduct() {
         initComponents();
     }

@@ -130,7 +130,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
             }
         });
 
-        btnOK.setBackground(new java.awt.Color(0, 102, 102));
+        btnOK.setBackground(new java.awt.Color(26, 48, 131));
         btnOK.setForeground(new java.awt.Color(255, 255, 255));
         btnOK.setText("Thêm");
         btnOK.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N

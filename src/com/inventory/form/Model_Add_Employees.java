@@ -61,7 +61,6 @@ public class Model_Add_Employees extends javax.swing.JPanel {
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("THÊM NHÂN VIÊN");
-        jLabel9.setPreferredSize(new java.awt.Dimension(169, 26));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -80,7 +79,7 @@ public class Model_Add_Employees extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
@@ -101,7 +100,7 @@ public class Model_Add_Employees extends javax.swing.JPanel {
             }
         });
 
-        btnOK.setBackground(new java.awt.Color(0, 102, 102));
+        btnOK.setBackground(new java.awt.Color(26, 48, 131));
         btnOK.setForeground(new java.awt.Color(255, 255, 255));
         btnOK.setText("Thêm");
         btnOK.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
