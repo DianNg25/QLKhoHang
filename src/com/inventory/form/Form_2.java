@@ -39,7 +39,7 @@ public class Form_2 extends javax.swing.JPanel {
 
         };
 
-        String[] columnNames = {"Mã phiếu nhập", "Ngày nhập", "Tổng tiền", "Trạng thái", "Tao tác",};
+        String[] columnNames = {"Mã phiếu nhập", "Ngày nhập", "Tổng tiền", "Trạng thái", "Thao tác",};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         tblNhapHang.setModel(model);
 
@@ -149,7 +149,7 @@ public class Form_2 extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
