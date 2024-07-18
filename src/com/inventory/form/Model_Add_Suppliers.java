@@ -5,26 +5,28 @@
 package com.inventory.form;
 
 import com.inventory.utils.XJdbc;
+import com.sun.jdi.connect.spi.Connection;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import org.apache.poi.poifs.nio.DataSource;
 
 /**
  *
  * @author Nguyen
  */
 public class Model_Add_Suppliers extends javax.swing.JPanel {
-
     /**
      * Creates new form Model_Add_Product
      */
     public Model_Add_Suppliers() {
         initComponents();
         setOpaque(false);
-
     }
 
     @SuppressWarnings("unchecked")
@@ -238,25 +240,55 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
     private void clearForm() {
         txtSupplierName.setText("");
         txtSupplierID.setText("");
-
         txtAddress.setText("");
-
         txtPhone.setText("");
         txtEmail.setText("");
-
     }
 
+    private boolean isEmailValid(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    private boolean isPhoneValid(String phone) {
+        return phone.matches("0\\d{9}");
+    }
+
+
     private void addSupplier() {
-        String supplierID = txtSupplierID.getText();
-        String supplierName = txtSupplierName.getText();
-        String address = txtAddress.getText();
-        String phone = txtPhone.getText();
-        String email = txtEmail.getText();
+        String supplierID = txtSupplierID.getText().trim();
+        String supplierName = txtSupplierName.getText().trim();
+        String address = txtAddress.getText().trim();
+        String phone = txtPhone.getText().trim();
+        String email = txtEmail.getText().trim();
+
+        if (supplierID.isEmpty() || supplierName.isEmpty() || address.isEmpty() || phone.isEmpty() || email.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "All fields must be filled out!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!isEmailValid(email)) {
+            JOptionPane.showMessageDialog(this, "Invalid email format!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!isPhoneValid(phone)) {
+            JOptionPane.showMessageDialog(this, "Phone number must be 10 digits and start with 0!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!XJdbc.isSupplierIDUnique(supplierID)) {
+            JOptionPane.showMessageDialog(this, "Supplier ID already exists!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         String sql = "INSERT INTO Suppliers (SupplierID, SupplierName, Address, Phone, Email) VALUES (?, ?, ?, ?, ?)";
         try {
             XJdbc.update(sql, supplierID, supplierName, address, phone, email);
             JOptionPane.showMessageDialog(this, "Supplier added successfully!");
+            clearForm();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();

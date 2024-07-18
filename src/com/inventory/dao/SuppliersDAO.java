@@ -16,42 +16,45 @@ import java.util.ArrayList;
  * @author Nguyen
  */
 public class SuppliersDAO extends InvenDAO<Suppliers, String> {
-     public void insert(Suppliers model) {
+
+    public void insert(Suppliers model) {
         String sql = "INSERT INTO Suppliers (SupplierID, SupplierName, Address, Phone, Email) VALUES (?, ?, ?, ?, ?)";
-        XJdbc.update(sql, 
-                model.getSupplierID(), 
-                model.getSupplierName(), 
-                model.getAddress(), 
-                model.getPhone(), 
-                model.getEmail()); 
-            
+        XJdbc.update(sql,
+                model.getSupplierID(),
+                model.getSupplierName(),
+                model.getAddress(),
+                model.getPhone(),
+                model.getEmail());
+
     }
-     
-      public void update(Suppliers model) {
+
+    public void update(Suppliers model) {
         String sql = "UPDATE Suppliers SET  SupplierName=?, Address=?, Phone=?, Email=?, WHERE SupplierID=?";
-        XJdbc.update(sql,            
-                model.getSupplierName(), 
-                model.getAddress(), 
+        XJdbc.update(sql,
+                model.getSupplierName(),
+                model.getAddress(),
                 model.getPhone(),
                 model.getEmail(),
                 model.getSupplierID());
     }
-      public void delete(String SupplierID) {
+
+    public void delete(String SupplierID) {
         String sql = "DELETE FROM Suppliers WHERE SupplierID=?";
         XJdbc.update(sql, SupplierID);
     }
-       public List<Suppliers> selectAll() {
+
+    public List<Suppliers> selectAll() {
         String sql = "SELECT * FROM Suppliers";
         return this.selectBySql(sql);
     }
-       
-       public Suppliers selectById(String SupplierID) {
+
+    public Suppliers selectById(String SupplierID) {
         String sql = "SELECT * FROM Suppliers WHERE SupplierID=?";
         List<Suppliers> list = this.selectBySql(sql, SupplierID);
         return list.size() > 0 ? list.get(0) : null;
     }
-       
-        protected List<Suppliers> selectBySql(String sql, Object... args) {
+
+    protected List<Suppliers> selectBySql(String sql, Object... args) {
         List<Suppliers> list = new ArrayList<>();
         try {
             ResultSet rs = null;
@@ -62,9 +65,9 @@ public class SuppliersDAO extends InvenDAO<Suppliers, String> {
                     entity.setSupplierID(rs.getString("SupplierID"));
                     entity.setSupplierName(rs.getString("SupplierName"));
                     entity.setAddress(rs.getString("Address"));
-                    entity.setPhone(rs.getInt("Phone")); 
-                    entity.setEmail(rs.getString("Email"));      
-                   
+                    entity.setPhone(rs.getString("Phone"));
+                    entity.setEmail(rs.getString("Email"));
+
                     list.add(entity);
                 }
             } finally {
