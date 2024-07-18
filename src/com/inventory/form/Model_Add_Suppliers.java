@@ -4,10 +4,12 @@
  */
 package com.inventory.form;
 
+import com.inventory.utils.XJdbc;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 /**
@@ -22,7 +24,7 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
     public Model_Add_Suppliers() {
         initComponents();
         setOpaque(false);
-    
+
     }
 
     @SuppressWarnings("unchecked")
@@ -37,15 +39,15 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         button2 = new com.inventory.swing.Button();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        textField1 = new com.inventory.swing.TextField();
+        txtSupplierID = new com.inventory.swing.TextField();
         jLabel2 = new javax.swing.JLabel();
-        textField2 = new com.inventory.swing.TextField();
+        txtSupplierName = new com.inventory.swing.TextField();
         jLabel3 = new javax.swing.JLabel();
-        textField5 = new com.inventory.swing.TextField();
+        txtEmail = new com.inventory.swing.TextField();
         jLabel5 = new javax.swing.JLabel();
-        textField6 = new com.inventory.swing.TextField();
+        txtAddress = new com.inventory.swing.TextField();
         jLabel6 = new javax.swing.JLabel();
-        textField7 = new com.inventory.swing.TextField();
+        txtPhone = new com.inventory.swing.TextField();
 
         setBackground(new java.awt.Color(39, 74, 89));
         setOpaque(false);
@@ -117,10 +119,10 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Mã nhà cung cấp:");
 
-        textField1.setPreferredSize(new java.awt.Dimension(25, 40));
-        textField1.addActionListener(new java.awt.event.ActionListener() {
+        txtSupplierID.setPreferredSize(new java.awt.Dimension(25, 40));
+        txtSupplierID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField1ActionPerformed(evt);
+                txtSupplierIDActionPerformed(evt);
             }
         });
 
@@ -128,16 +130,16 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Tên nhà cung cấp:");
 
-        textField2.setPreferredSize(new java.awt.Dimension(25, 40));
+        txtSupplierName.setPreferredSize(new java.awt.Dimension(25, 40));
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Địa chỉ:");
 
-        textField5.setPreferredSize(new java.awt.Dimension(25, 40));
-        textField5.addActionListener(new java.awt.event.ActionListener() {
+        txtEmail.setPreferredSize(new java.awt.Dimension(25, 40));
+        txtEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField5ActionPerformed(evt);
+                txtEmailActionPerformed(evt);
             }
         });
 
@@ -146,17 +148,17 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("Số điện thoại:");
 
-        textField6.setPreferredSize(new java.awt.Dimension(25, 40));
+        txtAddress.setPreferredSize(new java.awt.Dimension(25, 40));
 
         jLabel6.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setText("Email:");
 
-        textField7.setPreferredSize(new java.awt.Dimension(25, 40));
-        textField7.addActionListener(new java.awt.event.ActionListener() {
+        txtPhone.setPreferredSize(new java.awt.Dimension(25, 40));
+        txtPhone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField7ActionPerformed(evt);
+                txtPhoneActionPerformed(evt);
             }
         });
 
@@ -174,11 +176,11 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(textField2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textField6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textField5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(textField7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSupplierName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtSupplierID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtPhone, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(121, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -187,23 +189,23 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
                 .addGap(44, 44, 44)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSupplierID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSupplierName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(textField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(textField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(textField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
 
@@ -215,26 +217,52 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         SwingUtilities.getWindowAncestor(this).dispose();
     }//GEN-LAST:event_button2ActionPerformed
 
-    private void textField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField1ActionPerformed
+    private void txtSupplierIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSupplierIDActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textField1ActionPerformed
+    }//GEN-LAST:event_txtSupplierIDActionPerformed
 
-    private void textField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField5ActionPerformed
+    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textField5ActionPerformed
+    }//GEN-LAST:event_txtEmailActionPerformed
 
-    private void textField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField7ActionPerformed
+    private void txtPhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPhoneActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textField7ActionPerformed
+    }//GEN-LAST:event_txtPhoneActionPerformed
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         // TODO add your handling code here:
+        addSupplier();
+        clearForm();
     }//GEN-LAST:event_btnOKActionPerformed
-    
-    public void eventOK(ActionListener event) {
-        btnOK.addActionListener(event);
+
+    private void clearForm() {
+        txtSupplierName.setText("");
+        txtSupplierID.setText("");
+
+        txtAddress.setText("");
+
+        txtPhone.setText("");
+        txtEmail.setText("");
+
     }
-    
+
+    private void addSupplier() {
+        String supplierID = txtSupplierID.getText();
+        String supplierName = txtSupplierName.getText();
+        String address = txtAddress.getText();
+        String phone = txtPhone.getText();
+        String email = txtEmail.getText();
+
+        String sql = "INSERT INTO Suppliers (SupplierID, SupplierName, Address, Phone, Email) VALUES (?, ?, ?, ?, ?)";
+        try {
+            XJdbc.update(sql, supplierID, supplierName, address, phone, email);
+            JOptionPane.showMessageDialog(this, "Supplier added successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void paintComponent(Graphics graphics) {
         Graphics2D g2 = (Graphics2D) graphics;
@@ -243,7 +271,7 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
         super.paintComponent(graphics);
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button btnOK;
@@ -258,10 +286,10 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private com.inventory.swing.TextField textField1;
-    private com.inventory.swing.TextField textField2;
-    private com.inventory.swing.TextField textField5;
-    private com.inventory.swing.TextField textField6;
-    private com.inventory.swing.TextField textField7;
+    private com.inventory.swing.TextField txtAddress;
+    private com.inventory.swing.TextField txtEmail;
+    private com.inventory.swing.TextField txtPhone;
+    private com.inventory.swing.TextField txtSupplierID;
+    private com.inventory.swing.TextField txtSupplierName;
     // End of variables declaration//GEN-END:variables
 }

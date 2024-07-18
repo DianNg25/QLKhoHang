@@ -169,7 +169,7 @@ public class Login extends javax.swing.JFrame {
         boolean isValidUser = false;
 
         try {
-            String sql = "SELECT * FROM Users WHERE Username = ? AND Password = ?";
+            String sql = "SELECT * FROM Employees WHERE Username = ? AND Password = ?";
             ResultSet rs = XJdbc.query(sql, username, password);
 
             if (rs.next()) {
@@ -190,7 +190,7 @@ public class Login extends javax.swing.JFrame {
 
     private String getEmployeeId(String username) {
         String empId = ""; // Đổi thành String
-        try (ResultSet rs = XJdbc.query("SELECT EmployeeID FROM Users WHERE Username = ?", username)) {
+        try (ResultSet rs = XJdbc.query("SELECT EmployeeID FROM Employees WHERE Username = ?", username)) {
             if (rs.next()) {
                 empId = rs.getString("EmployeeID"); // Lấy giá trị dưới dạng String
             }
