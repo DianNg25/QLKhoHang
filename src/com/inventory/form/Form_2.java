@@ -165,7 +165,7 @@ public class Form_2 extends javax.swing.JPanel {
     private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
         // TODO add your handling code here:
         JDialog add = new JDialog();
-        Model_Add_Product model = new Model_Add_Product();
+        Model_Add_EnterCoupon model = new Model_Add_EnterCoupon();
         add.setUndecorated(true);
         add.getContentPane().add(model);
         add.pack();

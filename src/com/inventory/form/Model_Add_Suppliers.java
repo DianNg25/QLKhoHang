@@ -60,7 +60,7 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         jLabel9.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("THÊM SẢN PHẨM");
+        jLabel9.setText("THÊM NHÀ CUNG CẤP");
         jLabel9.setPreferredSize(new java.awt.Dimension(166, 30));
         jPanel1.add(jLabel9, java.awt.BorderLayout.CENTER);
 

@@ -58,6 +58,7 @@ private JTextField tfProductCode;
         setPreferredSize(new java.awt.Dimension(905, 600));
         setLayout(new java.awt.BorderLayout());
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
         jPanel1.setPreferredSize(new java.awt.Dimension(766, 120));
 
