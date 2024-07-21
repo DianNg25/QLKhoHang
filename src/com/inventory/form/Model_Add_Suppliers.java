@@ -4,14 +4,18 @@
  */
 package com.inventory.form;
 
+import com.inventory.message.EmailError;
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
 import com.inventory.utils.XJdbc;
 import com.sun.jdi.connect.spi.Connection;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.apache.poi.poifs.nio.DataSource;
@@ -21,6 +25,7 @@ import org.apache.poi.poifs.nio.DataSource;
  * @author Nguyen
  */
 public class Model_Add_Suppliers extends javax.swing.JPanel {
+
     /**
      * Creates new form Model_Add_Product
      */
@@ -256,7 +261,6 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         return phone.matches("0\\d{9}");
     }
 
-
     private void addSupplier() {
         String supplierID = txtSupplierID.getText().trim();
         String supplierName = txtSupplierName.getText().trim();
@@ -270,8 +274,7 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         }
 
         if (!isEmailValid(email)) {
-            JOptionPane.showMessageDialog(this, "Invalid email format!", "Validation Error", JOptionPane.ERROR_MESSAGE);
-            return;
+           showEmailError();
         }
 
         if (!isPhoneValid(phone)) {
@@ -295,6 +298,22 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         }
     }
 
+    
+    
+    
+    
+    
+    private void showEmailError() {
+    EmailError emailError = new EmailError();
+    JDialog errorDialog = new JDialog();
+    errorDialog.setUndecorated(true);
+    errorDialog.getContentPane().add(emailError);
+    errorDialog.pack();
+    errorDialog.setLocationRelativeTo(this);
+    errorDialog.setVisible(true);
+}
+
+    
     @Override
     protected void paintComponent(Graphics graphics) {
         Graphics2D g2 = (Graphics2D) graphics;
@@ -304,6 +323,10 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         super.paintComponent(graphics);
     }
 
+    
+    
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button btnOK;

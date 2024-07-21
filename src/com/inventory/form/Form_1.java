@@ -17,6 +17,7 @@ import java.awt.Component;
 import java.awt.Font;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -99,95 +100,119 @@ public class Form_1 extends javax.swing.JPanel {
     }
 
     
-    
     private void customizeTable() {
-        String[] columnNames = {"Mã sản phẩm", "Tên sản phẩm", "Loại", "Màu", "Số lượng", "Giá", "Trạng thái", "Thao tác"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        table.setModel(model);
+    String[] columnNames = {"Mã sản phẩm", "Tên sản phẩm", "Loại", "Màu", "Số lượng", "Giá", "Trạng thái", "Thao tác"};
+    DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+    table.setModel(model);
 
-        
-        spTable.setVerticalScrollBar(new ScrollBar());
-        spTable.getVerticalScrollBar().setBackground(Color.WHITE);
-        spTable.getViewport().setBackground(Color.WHITE);
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        
-        table.setShowHorizontalLines(true);
-        table.setGridColor(new Color(230, 230, 230));
-        table.setRowHeight(40);
+    spTable.setVerticalScrollBar(new ScrollBar());
+    spTable.getVerticalScrollBar().setBackground(Color.WHITE);
+    spTable.getViewport().setBackground(Color.WHITE);
+    JPanel p = new JPanel();
+    p.setBackground(Color.WHITE);
+    spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
 
-        // Renderer for table header
-        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        table.getTableHeader().setDefaultRenderer(headerRenderer);
-        table.getTableHeader().setReorderingAllowed(false);
-        table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JLabel headerLabel = new JLabel(value.toString());
-                headerLabel.setHorizontalAlignment(JLabel.CENTER); // Center align column headers
-                headerLabel.setFont(new Font("sansserif", Font.BOLD, 14)); // Set font for headers
-                headerLabel.setBackground(Color.LIGHT_GRAY); // Background color for headers
-                headerLabel.setOpaque(true);
-                return headerLabel;
+    table.setShowHorizontalLines(true);
+    table.setGridColor(new Color(230, 230, 230));
+    table.setRowHeight(40);
+
+    // Renderer for table header
+    DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+    headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+    table.getTableHeader().setDefaultRenderer(headerRenderer);
+    table.getTableHeader().setReorderingAllowed(false);
+    table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            JLabel headerLabel = new JLabel(value.toString());
+            headerLabel.setHorizontalAlignment(JLabel.CENTER); // Center align column headers
+            headerLabel.setFont(new Font("sansserif", Font.BOLD, 14)); // Set font for headers
+            headerLabel.setBackground(Color.LIGHT_GRAY); // Background color for headers
+            headerLabel.setOpaque(true);
+            return headerLabel;
+        }
+    });
+
+    // Default renderer for table cells
+    table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            com.setBackground(Color.WHITE);
+            com.setFont(new Font("sansserif", Font.PLAIN, 13));
+            com.setForeground(isSelected ? new Color(36, 183, 194) : new Color(102, 102, 102));
+            com.setFont(com.getFont().deriveFont(Font.BOLD));
+            setHorizontalAlignment(JLabel.CENTER); // Center align cell content
+
+            // Custom renderer for specific columns (example: status column)
+            if (column == 6) { // Status column
+                JLabel label = new JLabel(value.toString());
+                label.setFont(new Font("sansserif", Font.BOLD, 13));
+                label.setHorizontalAlignment(JLabel.CENTER); // Center align status column
+                label.setForeground(value.toString().equals("Hoạt động") ? Color.GREEN : Color.RED); // Example color logic
+                return label;
             }
-        });
+            return com;
+        }
+    });
 
-        // Default renderer for table cells
-        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                com.setBackground(Color.WHITE);
-                com.setFont(new Font("sansserif", Font.PLAIN, 13));
-                com.setForeground(isSelected ? new Color(36, 183, 194) : new Color(102, 102, 102));
-                com.setFont(com.getFont().deriveFont(Font.BOLD));
-                setHorizontalAlignment(JLabel.CENTER); // Center align cell content
+    // Set custom renderers for other specific columns if needed
+    table.getColumnModel().getColumn(7).setCellRenderer(new TableActionCellRender());
+    table.getColumnModel().getColumn(7).setCellEditor(new TableActionCellEditor(new TableActionEvent() {
+        @Override
+        public void onEdit(int row) {
+            System.out.println("Edit row : " + row);
+        }
 
-                // Custom renderer for specific columns (example: status column)
-                if (column == 6) { // Status column
+        @Override
+        public void onDelete(int row) {
+              if (table.isEditing()) {
+            table.getCellEditor().stopCellEditing();
+        }
+
+        // Hiển thị hộp thoại xác nhận
+        int confirm = JOptionPane.showConfirmDialog(
+            table,
+            "Bạn có muốn xóa không?",
+            "Xác nhận xóa",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+            // Thay đổi trạng thái thành "Đã xóa"
+            model.setValueAt("Đã xóa", row, 6);
+
+            // Thiết lập lại màu sắc cho cột trạng thái
+            table.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                     JLabel label = new JLabel(value.toString());
                     label.setFont(new Font("sansserif", Font.BOLD, 13));
-                    label.setHorizontalAlignment(JLabel.CENTER); // Center align status column
-                    label.setForeground(value.toString().equals("Bình thường") ? Color.GREEN : Color.RED); // Example color logic
+                    label.setHorizontalAlignment(JLabel.CENTER);
+                    label.setForeground(value.toString().equals("Đã xóa") ? Color.RED : Color.GREEN);
                     return label;
                 }
-                return com;
-            }
-        });
+            });
 
-        // Set custom renderers for other specific columns if needed
-        table.getColumnModel().getColumn(7).setCellRenderer(new TableActionCellRender());
-        table.getColumnModel().getColumn(7).setCellEditor(new TableActionCellEditor(new TableActionEvent() {
-            @Override
-            public void onEdit(int row) {
-                System.out.println("Edit row : " + row);
-            }
+            table.repaint();
+        }}
+    }));
+}
 
-            @Override
-            public void onDelete(int row) {
-                if (table.isEditing()) {
-                    table.getCellEditor().stopCellEditing();
-                }
-                DefaultTableModel model = (DefaultTableModel) table.getModel();
-                model.removeRow(row);
-            }
-        }));
-    }
-    
     
     private void loadData() {
         String[][] rowData = {
             {"SP001", "Điện thoại Samsung", "mini", "Đỏ", "15", "120000", "Bình thường", ""},
-            {"SP002", "Điện thoại Nokia", "classic", "Xanh", "10", "90000", "Tốt", ""},
-            {"SP003", "Điện thoại iPhone", "pro", "Đen", "20", "200000", "Mới", ""},
+            {"SP002", "Điện thoại Nokia", "classic", "Xanh", "10", "90000", "Bình thường", ""},
+            {"SP003", "Điện thoại iPhone", "pro", "Đen", "20", "200000", "Bình thường", ""},
             {"SP004", "Máy tính bảng Samsung", "tab", "Trắng", "8", "300000", "Bình thường", ""},
-            {"SP005", "Máy tính bảng Apple", "pro", "Bạc", "5", "500000", "Mới", ""},
-            {"SP006", "Tai nghe Sony", "earbud", "Đen", "25", "50000", "Tốt", ""},
+            {"SP005", "Máy tính bảng Apple", "pro", "Bạc", "5", "500000", "Bình thường", ""},
+            {"SP006", "Tai nghe Sony", "earbud", "Đen", "25", "50000", "Bình thường", ""},
             {"SP007", "Tai nghe Bose", "over-ear", "Trắng", "12", "150000", "Bình thường", ""},
-            {"SP008", "Laptop Dell", "ultrabook", "Xám", "7", "700000", "Mới", ""},
-            {"SP009", "Laptop HP", "notebook", "Bạc", "9", "600000", "Tốt", ""},
+            {"SP008", "Laptop Dell", "ultrabook", "Xám", "7", "700000", "Bình thường", ""},
+            {"SP009", "Laptop HP", "notebook", "Bạc", "9", "600000", "Bình thường", ""},
             {"SP010", "Smartwatch Garmin", "sport", "Xanh lá", "30", "250000", "Bình thường", ""}
         };
 
@@ -302,7 +327,7 @@ public class Form_1 extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Mã sản phẩm", "Tên sản phẩm", "Title 3", "Title 4"
             }
         ) {
             boolean[] canEdit = new boolean [] {
