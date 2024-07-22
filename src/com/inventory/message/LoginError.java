@@ -38,7 +38,7 @@ public class LoginError extends javax.swing.JPanel {
         setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 25, 25, 25));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(80, 80, 80));
+        jLabel1.setForeground(new java.awt.Color(255, 0, 0));
         jLabel1.setText("Lỗi đăng nhập");
 
         txt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
