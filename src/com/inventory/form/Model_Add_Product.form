@@ -130,6 +130,9 @@
               <Font name="SansSerif" size="14" style="1"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOKActionPerformed"/>
+          </Events>
         </Component>
         <Component class="com.inventory.swing.Button" name="button2">
           <Properties>
@@ -420,6 +423,9 @@
               <Dimension value="[151, 38]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboNhaCungCapActionPerformed"/>
+          </Events>
         </Component>
         <Component class="com.inventory.swing.ComboBoxSuggestion" name="cboMau">
           <Properties>

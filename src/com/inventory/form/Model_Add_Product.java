@@ -31,8 +31,10 @@ public class Model_Add_Product extends javax.swing.JPanel {
         populateComboBox();
         
         
-        
-        
+        this.cboNhaCungCap = cboNhaCungCap;
+        this.suppliersDAO = new SuppliersDAO();
+                fillComboBox();
+
     }
 
     @SuppressWarnings("unchecked")
@@ -89,6 +91,11 @@ public class Model_Add_Product extends javax.swing.JPanel {
         btnOK.setForeground(new java.awt.Color(255, 255, 255));
         btnOK.setText("Thêm");
         btnOK.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOKActionPerformed(evt);
+            }
+        });
 
         button2.setBackground(new java.awt.Color(255, 0, 0));
         button2.setForeground(new java.awt.Color(255, 255, 255));
@@ -186,6 +193,11 @@ public class Model_Add_Product extends javax.swing.JPanel {
         rdoLon.setText("Lớn (45 Kg)");
 
         cboNhaCungCap.setPreferredSize(new java.awt.Dimension(151, 38));
+        cboNhaCungCap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboNhaCungCapActionPerformed(evt);
+            }
+        });
 
         cboMau.setPreferredSize(new java.awt.Dimension(151, 38));
 
@@ -265,6 +277,17 @@ public class Model_Add_Product extends javax.swing.JPanel {
         // TODO add your handling code here:
         SwingUtilities.getWindowAncestor(this).dispose();
     }//GEN-LAST:event_button2ActionPerformed
+
+    private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
+        // TODO add your handling code here:
+        addProducts();
+        clearForm();
+    }//GEN-LAST:event_btnOKActionPerformed
+
+    private void cboNhaCungCapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboNhaCungCapActionPerformed
+        // TODO add your handling code here:
+       getSelectedSupplierID();
+    }//GEN-LAST:event_cboNhaCungCapActionPerformed
     
     
     
