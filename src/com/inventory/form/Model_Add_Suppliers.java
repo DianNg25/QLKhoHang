@@ -60,8 +60,9 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         setOpaque(false);
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setBackground(new java.awt.Color(0, 130, 200));
+        jPanel1.setBackground(new java.awt.Color(32, 137, 173));
         jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(204, 204, 204)));
+        jPanel1.setPreferredSize(new java.awt.Dimension(166, 50));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jLabel9.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
@@ -73,10 +74,10 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jPanel2.setBackground(new java.awt.Color(0, 130, 200));
+        jPanel2.setBackground(new java.awt.Color(32, 137, 173));
         jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 0, 0, 0, new java.awt.Color(204, 204, 204)));
 
-        btnOK.setBackground(new java.awt.Color(26, 48, 131));
+        btnOK.setBackground(new java.awt.Color(27, 66, 139));
         btnOK.setForeground(new java.awt.Color(255, 255, 255));
         btnOK.setText("Thêm");
         btnOK.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
@@ -86,7 +87,7 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
             }
         });
 
-        button2.setBackground(new java.awt.Color(255, 102, 102));
+        button2.setBackground(new java.awt.Color(255, 0, 0));
         button2.setForeground(new java.awt.Color(255, 255, 255));
         button2.setText("Hủy");
         button2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
@@ -119,7 +120,7 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
 
         add(jPanel2, java.awt.BorderLayout.PAGE_END);
 
-        jPanel3.setBackground(new java.awt.Color(0, 130, 200));
+        jPanel3.setBackground(new java.awt.Color(32, 137, 173));
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N

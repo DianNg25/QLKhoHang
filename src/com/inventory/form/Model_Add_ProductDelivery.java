@@ -84,9 +84,9 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(700, 489));
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setBackground(new java.awt.Color(0, 130, 200));
+        jPanel1.setBackground(new java.awt.Color(32, 137, 173));
         jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(204, 204, 204)));
-        jPanel1.setPreferredSize(new java.awt.Dimension(700, 30));
+        jPanel1.setPreferredSize(new java.awt.Dimension(700, 50));
 
         jLabel9.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
@@ -106,7 +106,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 28, Short.MAX_VALUE)
+            .addGap(0, 48, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -116,11 +116,11 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jPanel2.setBackground(new java.awt.Color(0, 130, 200));
+        jPanel2.setBackground(new java.awt.Color(32, 137, 173));
         jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 0, 0, 0, new java.awt.Color(204, 204, 204)));
         jPanel2.setPreferredSize(new java.awt.Dimension(700, 80));
 
-        button1.setBackground(new java.awt.Color(255, 102, 102));
+        button1.setBackground(new java.awt.Color(255, 0, 0));
         button1.setForeground(new java.awt.Color(255, 255, 255));
         button1.setText("Hủy");
         button1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -130,7 +130,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
             }
         });
 
-        btnOK.setBackground(new java.awt.Color(26, 48, 131));
+        btnOK.setBackground(new java.awt.Color(27, 66, 139));
         btnOK.setForeground(new java.awt.Color(255, 255, 255));
         btnOK.setText("Thêm");
         btnOK.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -158,7 +158,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
 
         add(jPanel2, java.awt.BorderLayout.PAGE_END);
 
-        jPanel3.setBackground(new java.awt.Color(0, 130, 200));
+        jPanel3.setBackground(new java.awt.Color(32, 137, 173));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -292,7 +292,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(lblPhiVanChuyen1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jCheckBox1)
