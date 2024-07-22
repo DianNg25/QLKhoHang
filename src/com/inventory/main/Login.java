@@ -1,18 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.inventory.main;
 
 import com.inventory.utils.XJdbc;
-import com.inventory.form.Model_Menu;
 import com.inventory.message.*;
-import com.inventory.swing.PanelBorder;
 import com.inventory.swing.glasspanepopup.GlassPanePopup;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
@@ -20,151 +11,189 @@ import java.sql.SQLException;
 
 public class Login extends javax.swing.JFrame {
 
-    private JTextField userTextField;
-    private JPasswordField passwordField;
     public static String loggedInUsername;
     public static String employeeId;
 
     public Login() {
+        initComponents();
         GlassPanePopup.install(this);
-        // Thiết lập JFrame
-        setTitle("Đăng Nhập");
-        setSize(800, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setUndecorated(true); // Bỏ nút Java góc trái
-        setLocationRelativeTo(null); // Đặt cửa sổ ở giữa màn hình
-
-        // Sử dụng PanelBorder
-        PanelBorder panelBorder = new PanelBorder();
-        panelBorder.setBackground(new Color(0, 0, 0, 0)); // Màu nền cho panel với độ trong suốt
-        setContentPane(panelBorder);
-        panelBorder.setLayout(new BorderLayout());
-
-        // Tạo JPanel cho hình ảnh
-        JPanel imagePanel = new JPanel();
-        imagePanel.setLayout(new BorderLayout());
-        imagePanel.setBackground(Color.WHITE); // Đặt màu nền cho panel là màu trắng
-
-        JLabel imageLabel = new JLabel();
-
-        // Sử dụng Model_Menu để lấy icon
-        Model_Menu menu = new Model_Menu("KhoHang-400x400", "Tổng quan", Model_Menu.MenuType.MENU);
-        ImageIcon imageIcon = (ImageIcon) menu.toIcon();
-        if (imageIcon.getIconWidth() == -1) {
-            System.out.println("Hình ảnh không tồn tại hoặc đường dẫn không đúng: " + "/com/inventory/icon/Login_bg.png");
-        } else {
-            imageLabel.setIcon(imageIcon);
-        }
-        imagePanel.add(imageLabel, BorderLayout.CENTER);
-
-        // Tạo JPanel cho form đăng nhập
-        JPanel loginPanel = new JPanel();
-        loginPanel.setLayout(null); // Sử dụng null layout để đặt vị trí các thành phần
-        loginPanel.setBackground(Color.WHITE);
-
-        // Tiêu đề
-        JLabel titleLabel = new JLabel("ĐĂNG NHẬP VÀO TÀI KHOẢN");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        titleLabel.setBounds(50, 20, 300, 30);
-        titleLabel.setForeground(new Color(0x2e536d)); // Đặt màu cho tiêu đề
-        loginPanel.add(titleLabel);
-
-        // Tên đăng nhập
-        JLabel userLabel = new JLabel("Tên đăng nhập");
-        userLabel.setBounds(50, 70, 150, 30);
-        loginPanel.add(userLabel);
-
-        userTextField = new JTextField();
-        userTextField.setBounds(50, 100, 300, 30);
-        userTextField.setForeground(new Color(0x2e536d)); // Đặt màu chữ
-        loginPanel.add(userTextField);
-
-        // Mật khẩu
-        JLabel passwordLabel = new JLabel("Mật khẩu");
-        passwordLabel.setBounds(50, 150, 150, 30);
-        loginPanel.add(passwordLabel);
-
-        passwordField = new JPasswordField();
-        passwordField.setBounds(50, 180, 300, 30);
-        passwordField.setForeground(new Color(0x2e536d)); // Đặt màu chữ
-        loginPanel.add(passwordField);
-
-        // Ghi nhớ tôi
-        JCheckBox rememberMeCheckBox = new JCheckBox("Ghi nhớ tôi");
-        rememberMeCheckBox.setBounds(50, 220, 150, 30);
-        loginPanel.add(rememberMeCheckBox);
-
-        // Quên mật khẩu
-//        JLabel forgotPasswordLabel = new JLabel("Quên mật khẩu?");
-//        forgotPasswordLabel.setBounds(220, 220, 150, 30);
-//        forgotPasswordLabel.setForeground(new Color(0x2e536d));
-//        loginPanel.add(forgotPasswordLabel);
-        // Nút Đăng Nhập
-        JButton loginButton = new JButton("ĐĂNG NHẬP");
-        loginButton.setBounds(50, 270, 300, 40);
-        loginButton.setBackground(new Color(0x2e536d)); // Đặt màu nền cho nút
-        loginButton.setForeground(Color.WHITE); // Đặt màu chữ cho nút
-        loginPanel.add(loginButton);
-
-        // Thêm sự kiện cho nút đăng nhập
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = userTextField.getText();
-                String password = new String(passwordField.getPassword());
-
-                // Kiểm tra nếu tên đăng nhập hoặc mật khẩu bị bỏ trống
-                if (username.isEmpty() || password.isEmpty()) {
-//                    JOptionPane.showMessageDialog(Login.this, "Vui lòng điền đầy đủ tên đăng nhập và mật khẩu", "Lỗi nhập liệu", JOptionPane.WARNING_MESSAGE);
-                    InputError obj = new InputError();
-                    obj.eventOK(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent ae) {
-                            GlassPanePopup.closePopupLast();
-                        }
-                    });
-                    GlassPanePopup.showPopup(obj);
-                    return;
-                }
-
-                // Kiểm tra đăng nhập từ SQL
-                boolean loginSuccess = checkLogin(username, password);
-                if (loginSuccess) {
-                    // Chuyển trang hoặc hiển thị progress bar
-                    openMainPage();
-                } else {
-                    // Hiển thị thông báo lỗi
-//                    JOptionPane.showMessageDialog(Login.this, "Tên đăng nhập hoặc mật khẩu không đúng", "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
-                    LoginError obj = new LoginError();
-                    obj.eventOK(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent ae) {
-                            GlassPanePopup.closePopupLast();
-                        }
-                    });
-                    GlassPanePopup.showPopup(obj);
-                }
-            }
-        });
-
-        // Thêm sự kiện khi nhấn Enter trong các trường nhập liệu
-        KeyAdapter enterKeyAdapter = new KeyAdapter() {
+        setLocationRelativeTo(null);
+        setVisible(true);
+        userTextField.addKeyListener(enterKeyAdapter);
+        passwordField.addKeyListener(enterKeyAdapter);
+        getGlassPane().addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    loginButton.doClick();
+                    GlassPanePopup.closePopupLast();
+                    requestFocusInWindow();
                 }
             }
-        };
-        userTextField.addKeyListener(enterKeyAdapter);
-        passwordField.addKeyListener(enterKeyAdapter);
-
-        // Thêm các panel vào PanelBorder
-        panelBorder.add(imagePanel, BorderLayout.WEST);
-        panelBorder.add(loginPanel, BorderLayout.CENTER);
+        });
     }
 
-    // Phương thức kiểm tra đăng nhập từ SQL
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        panelBorder1 = new com.inventory.swing.PanelBorder();
+        panelBorder2 = new com.inventory.swing.PanelBorder();
+        userTextField = new com.inventory.swing.TextFieldLogin();
+        passwordField = new com.inventory.swing.PasswordField();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        btnLogin = new com.inventory.swing.Button();
+        jLabel1 = new javax.swing.JLabel();
+        panelBorder3 = new com.inventory.swing.PanelBorder();
+        jLabel2 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setUndecorated(true);
+
+        panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
+
+        panelBorder2.setBackground(new java.awt.Color(255, 255, 255));
+
+        userTextField.setDisabledTextColor(new java.awt.Color(0, 255, 85));
+        userTextField.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        userTextField.setLabelText("Tên đăng nhập");
+
+        passwordField.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        passwordField.setLabelText("Mật khẩu");
+
+        jCheckBox1.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
+        jCheckBox1.setText("Ghi nhớ tôi");
+
+        btnLogin.setBackground(new java.awt.Color(83, 131, 164));
+        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogin.setText("Đăng Nhập");
+        btnLogin.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(83, 131, 164));
+        jLabel1.setText("ĐĂNG NHẬP VÀO TÀI KHOẢN");
+
+        javax.swing.GroupLayout panelBorder2Layout = new javax.swing.GroupLayout(panelBorder2);
+        panelBorder2.setLayout(panelBorder2Layout);
+        panelBorder2Layout.setHorizontalGroup(
+            panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBorder2Layout.createSequentialGroup()
+                .addContainerGap(57, Short.MAX_VALUE)
+                .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCheckBox1)
+                    .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel1)
+                        .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(userTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE))))
+                .addGap(0, 57, Short.MAX_VALUE))
+        );
+        panelBorder2Layout.setVerticalGroup(
+            panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBorder2Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(jLabel1)
+                .addGap(45, 45, 45)
+                .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(jCheckBox1)
+                .addGap(30, 30, 30)
+                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
+        );
+
+        panelBorder3.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/inventory/icon/KhoHang-400x400.png"))); // NOI18N
+
+        javax.swing.GroupLayout panelBorder3Layout = new javax.swing.GroupLayout(panelBorder3);
+        panelBorder3.setLayout(panelBorder3Layout);
+        panelBorder3Layout.setHorizontalGroup(
+            panelBorder3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        panelBorder3Layout.setVerticalGroup(
+            panelBorder3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBorder3Layout.createSequentialGroup()
+                .addComponent(jLabel2)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
+        panelBorder1.setLayout(panelBorder1Layout);
+        panelBorder1Layout.setHorizontalGroup(
+            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder1Layout.createSequentialGroup()
+                .addComponent(panelBorder3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelBorder2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        panelBorder1Layout.setVerticalGroup(
+            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelBorder2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelBorder3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        // TODO add your handling code here:
+        String username = userTextField.getText();
+        String password = new String(passwordField.getPassword());
+
+        if (username.isEmpty() || password.isEmpty()) {
+            InputError obj = new InputError();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
+            return;
+        }
+
+        boolean loginSuccess = checkLogin(username, password);
+        if (loginSuccess) {
+            openMainPage();
+        } else {
+            LoginError obj = new LoginError();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
+        }
+    }//GEN-LAST:event_btnLoginActionPerformed
+
+    private final KeyAdapter enterKeyAdapter = new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                btnLoginActionPerformed(null);
+            }
+        }
+    };
+
     private boolean checkLogin(String username, String password) {
         boolean isValidUser = false;
 
@@ -190,7 +219,7 @@ public class Login extends javax.swing.JFrame {
 
     private String getEmployeeId(String username) {
         String empId = ""; // Đổi thành String
-        try (ResultSet rs = XJdbc.query("SELECT * FROM Employees WHERE Username = ?", username)) {
+        try (ResultSet rs = XJdbc.query("SELECT EmployeeID FROM Employees WHERE Username = ?", username)) {
             if (rs.next()) {
                 empId = rs.getString("EmployeeID"); // Lấy giá trị dưới dạng String
             }
@@ -212,51 +241,6 @@ public class Login extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
-        panelBorder1 = new com.inventory.swing.PanelBorder();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(255, 255, 255));
-        setUndecorated(true);
-
-        panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
-        panelBorder1.setLayout(panelBorder1Layout);
-        panelBorder1Layout.setHorizontalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 876, Short.MAX_VALUE)
-        );
-        panelBorder1Layout.setVerticalGroup(
-            panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelBorder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -283,6 +267,10 @@ public class Login extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -293,6 +281,14 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.inventory.swing.Button btnLogin;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private com.inventory.swing.PanelBorder panelBorder1;
+    private com.inventory.swing.PanelBorder panelBorder2;
+    private com.inventory.swing.PanelBorder panelBorder3;
+    private com.inventory.swing.PasswordField passwordField;
+    private com.inventory.swing.TextFieldLogin userTextField;
     // End of variables declaration//GEN-END:variables
 }
