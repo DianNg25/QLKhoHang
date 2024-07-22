@@ -91,4 +91,12 @@ public class ProductsDAO extends InvenDAO<Products, String> {
         }
         return list;
     }
+    
+    
+    public void updateStatus(String productID, String newStatus) {
+        String sql = "UPDATE Products SET Status =? WHERE ProductID=?";
+        XJdbc.update(sql,
+                newStatus,
+                productID);
+    }
 }

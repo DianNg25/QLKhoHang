@@ -190,7 +190,7 @@ public class Login extends javax.swing.JFrame {
 
     private String getEmployeeId(String username) {
         String empId = ""; // Đổi thành String
-        try (ResultSet rs = XJdbc.query("SELECT EmployeeID FROM Employees WHERE Username = ?", username)) {
+        try (ResultSet rs = XJdbc.query("SELECT * FROM Employees WHERE Username = ?", username)) {
             if (rs.next()) {
                 empId = rs.getString("EmployeeID"); // Lấy giá trị dưới dạng String
             }

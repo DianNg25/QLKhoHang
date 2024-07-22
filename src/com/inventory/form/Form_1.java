@@ -4,6 +4,8 @@
  */
 package com.inventory.form;
 
+import com.inventory.dao.ProductsDAO;
+import com.inventory.entity.Products;
 import com.inventory.main.Login;
 import com.inventory.message.LogoutPanel;
 import com.inventory.swing.ScrollBar;
@@ -12,13 +14,20 @@ import com.inventory.swing.TableActionCellRender;
 import com.inventory.swing.TableActionEvent;
 import com.inventory.swing.TableHeader;
 import com.inventory.utils.XJdbc;
+import com.sun.jdi.connect.spi.Connection;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.beans.Statement;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -37,221 +46,140 @@ public class Form_1 extends javax.swing.JPanel {
      */
     public Form_1() {
         initComponents();
-          customizeTable();
-             loadData();
-             
-             
-             
-        //thông tin chỉnh sửa của table
-//        spTable.setVerticalScrollBar(new ScrollBar());
-//        spTable.getVerticalScrollBar().setBackground(Color.WHITE);
-//        spTable.getViewport().setBackground(Color.WHITE);
-//        JPanel p = new JPanel();
-//        p.setBackground(Color.WHITE);
-//        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-//
-//        TableActionEvent event = new TableActionEvent() {
-//
-//            @Override
-//            public void onEdit(int row) {
-//                System.out.println("Edit row : " + row);
-//            }
-//
-//            @Override
-//            public void onDelete(int row) {
-//                if (table.isEditing()) {
-//                    table.getCellEditor().stopCellEditing();
-//                }
-//                DefaultTableModel model = (DefaultTableModel) table.getModel();
-//                model.removeRow(row);
-//            }
-//
-//        };
-//
-//        String[] columnNames = {"Mã sản phẩm", "Tên sản phẩm", "Loại", "Màu", "Số lượng", "Giá", "Trạng thái", "Thao tác"};
-//        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-//        table.setModel(model);
-//
-//        for (int i = 0; i < table.getColumnCount(); i++) {
-//            table.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer());
-//        }
-//
-//        table.getColumnModel().getColumn(7).setCellRenderer(new TableActionCellRender());
-//        table.getColumnModel().getColumn(7).setCellEditor(new TableActionCellEditor(event));
-//
-//        Object[][] rowData = {
-//            {"SP001", "Điện thoại Samsung", "mini", "Đỏ", "15", "120000", "Bình thường", ""},
-//            {"SP002", "Điện thoại Nokia", "classic", "Xanh", "10", "90000", "Tốt", ""},
-//            {"SP003", "Điện thoại iPhone", "pro", "Đen", "20", "200000", "Mới", ""},
-//            {"SP004", "Máy tính bảng Samsung", "tab", "Trắng", "8", "300000", "Bình thường", ""},
-//            {"SP005", "Máy tính bảng Apple", "pro", "Bạc", "5", "500000", "Mới", ""},
-//            {"SP006", "Tai nghe Sony", "earbud", "Đen", "25", "50000", "Tốt", ""},
-//            {"SP007", "Tai nghe Bose", "over-ear", "Trắng", "12", "150000", "Bình thường", ""},
-//            {"SP008", "Laptop Dell", "ultrabook", "Xám", "7", "700000", "Mới", ""},
-//            {"SP009", "Laptop HP", "notebook", "Bạc", "9", "600000", "Tốt", ""},
-//            {"SP010", "Smartwatch Garmin", "sport", "Xanh lá", "30", "250000", "Bình thường", ""}
-//        };
-//
-//        for (Object[] row : rowData) {
-//            model.addRow(row);
-//        }
+        customizeTable();
+        loadData();
 
-//         loadDataFromDatabase(model);
     }
 
-    
     private void customizeTable() {
-    String[] columnNames = {"Mã sản phẩm", "Tên sản phẩm", "Loại", "Màu", "Số lượng", "Giá", "Trạng thái", "Thao tác"};
-    DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-    table.setModel(model);
+        spTable.setVerticalScrollBar(new JScrollBar()); // Use JScrollBar instead of ScrollBar
+        spTable.getVerticalScrollBar().setBackground(Color.WHITE);
+        spTable.getViewport().setBackground(Color.WHITE);
 
-    spTable.setVerticalScrollBar(new ScrollBar());
-    spTable.getVerticalScrollBar().setBackground(Color.WHITE);
-    spTable.getViewport().setBackground(Color.WHITE);
-    JPanel p = new JPanel();
-    p.setBackground(Color.WHITE);
-    spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        JPanel p = new JPanel();
+        p.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
 
-    table.setShowHorizontalLines(true);
-    table.setGridColor(new Color(230, 230, 230));
-    table.setRowHeight(40);
+        table.setShowHorizontalLines(true);
+        table.setGridColor(new Color(230, 230, 230));
+        table.setRowHeight(40);
 
-    // Renderer for table header
-    DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-    headerRenderer.setHorizontalAlignment(JLabel.CENTER);
-    table.getTableHeader().setDefaultRenderer(headerRenderer);
-    table.getTableHeader().setReorderingAllowed(false);
-    table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            JLabel headerLabel = new JLabel(value.toString());
-            headerLabel.setHorizontalAlignment(JLabel.CENTER); // Center align column headers
-            headerLabel.setFont(new Font("sansserif", Font.BOLD, 14)); // Set font for headers
-            headerLabel.setBackground(Color.LIGHT_GRAY); // Background color for headers
-            headerLabel.setOpaque(true);
-            return headerLabel;
-        }
-    });
+        // Renderer for column headers
+        // Renderer for column headers
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        table.getTableHeader().setDefaultRenderer(headerRenderer);
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                TableHeader header = new TableHeader(value.toString());
+                header.setHorizontalAlignment(JLabel.CENTER); // Center-align the header text
+                return header;
+            }
+        });
 
-    // Default renderer for table cells
-    table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            com.setBackground(Color.WHITE);
-            com.setFont(new Font("sansserif", Font.PLAIN, 13));
-            com.setForeground(isSelected ? new Color(36, 183, 194) : new Color(102, 102, 102));
-            com.setFont(com.getFont().deriveFont(Font.BOLD));
-            setHorizontalAlignment(JLabel.CENTER); // Center align cell content
+        // Default renderer for table cells
+        // Default renderer for table cells
+        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                com.setBackground(Color.WHITE);
+                setBorder(noFocusBorder);
+                com.setFont(new Font("sansserif", Font.PLAIN, 13)); // Set font size to 13
+                com.setForeground(isSelected ? new Color(36, 183, 194) : new Color(102, 102, 102));
+                com.setFont(com.getFont().deriveFont(Font.BOLD));
+                setHorizontalAlignment(JLabel.CENTER); // Center-align the cell text
 
-            // Custom renderer for specific columns (example: status column)
-            if (column == 6) { // Status column
+                // Custom renderer for specific columns (example: status column)
+                if (column == 7) { // Status column
                 JLabel label = new JLabel(value.toString());
                 label.setFont(new Font("sansserif", Font.BOLD, 13));
+                if ("Đã xóa".equals(value)) {
+                    label.setForeground(Color.RED); // Màu đỏ cho trạng thái đã xóa
+                } else {
+                    label.setForeground(Color.GREEN); // Màu khác cho trạng thái khác
+                }
                 label.setHorizontalAlignment(JLabel.CENTER); // Center align status column
-                label.setForeground(value.toString().equals("Hoạt động") ? Color.GREEN : Color.RED); // Example color logic
                 return label;
             }
             return com;
         }
-    });
+        });
+    }
 
-    // Set custom renderers for other specific columns if needed
-    table.getColumnModel().getColumn(7).setCellRenderer(new TableActionCellRender());
-    table.getColumnModel().getColumn(7).setCellEditor(new TableActionCellEditor(new TableActionEvent() {
-        @Override
-        public void onEdit(int row) {
-            System.out.println("Edit row : " + row);
-        }
-
-        @Override
-        public void onDelete(int row) {
-              if (table.isEditing()) {
-            table.getCellEditor().stopCellEditing();
-        }
-
-        // Hiển thị hộp thoại xác nhận
-        int confirm = JOptionPane.showConfirmDialog(
-            table,
-            "Bạn có muốn xóa không?",
-            "Xác nhận xóa",
-            JOptionPane.YES_NO_OPTION
-        );
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            DefaultTableModel model = (DefaultTableModel) table.getModel();
-
-            // Thay đổi trạng thái thành "Đã xóa"
-            model.setValueAt("Đã xóa", row, 6);
-
-            // Thiết lập lại màu sắc cho cột trạng thái
-            table.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
-                @Override
-                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                    JLabel label = new JLabel(value.toString());
-                    label.setFont(new Font("sansserif", Font.BOLD, 13));
-                    label.setHorizontalAlignment(JLabel.CENTER);
-                    label.setForeground(value.toString().equals("Đã xóa") ? Color.RED : Color.GREEN);
-                    return label;
-                }
-            });
-
-            table.repaint();
-        }}
-    }));
-}
-
-    
     private void loadData() {
-        String[][] rowData = {
-            {"SP001", "Điện thoại Samsung", "mini", "Đỏ", "15", "120000", "Bình thường", ""},
-            {"SP002", "Điện thoại Nokia", "classic", "Xanh", "10", "90000", "Bình thường", ""},
-            {"SP003", "Điện thoại iPhone", "pro", "Đen", "20", "200000", "Bình thường", ""},
-            {"SP004", "Máy tính bảng Samsung", "tab", "Trắng", "8", "300000", "Bình thường", ""},
-            {"SP005", "Máy tính bảng Apple", "pro", "Bạc", "5", "500000", "Bình thường", ""},
-            {"SP006", "Tai nghe Sony", "earbud", "Đen", "25", "50000", "Bình thường", ""},
-            {"SP007", "Tai nghe Bose", "over-ear", "Trắng", "12", "150000", "Bình thường", ""},
-            {"SP008", "Laptop Dell", "ultrabook", "Xám", "7", "700000", "Bình thường", ""},
-            {"SP009", "Laptop HP", "notebook", "Bạc", "9", "600000", "Bình thường", ""},
-            {"SP010", "Smartwatch Garmin", "sport", "Xanh lá", "30", "250000", "Bình thường", ""}
-        };
+        // Tạo đối tượng DAO
+        String sql = "SELECT * FROM Products";
 
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        for (String[] row : rowData) {
-            model.addRow(row);
+        try {
+            // Gọi phương thức selectBySql để lấy danh sách sản phẩm
+            List<Products> productList = selectBySql(sql);
+
+             productList.sort((p1, p2) -> {
+        // Trạng thái 'Đã xóa' sẽ được đưa xuống dưới cùng
+        return p1.getStatus().equals("Đã xóa") ? 1 : p2.getStatus().equals("Đã xóa") ? -1 : 0;
+    });
+            
+            DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+            tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
+
+            // Thêm dữ liệu vào mô hình dữ liệu
+            for (Products product : productList) {
+                Object[] row = new Object[]{
+                    product.getProductID(),
+                    product.getProductName(),
+                    product.getPrice(),
+                    product.getQuantity(),
+                    product.getSupplierID(),
+                    product.getColor(),
+                    product.getWeight(),
+                    product.getStatus()
+                };
+                tableModel.addRow(row);
+            }
+
+            // Gán mô hình dữ liệu cho JTable
+            table.setModel(tableModel); // Đổi yourTable thành tên biến của JTable bạn đang sử dụng
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading data from database.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-//   private void loadDataFromDatabase(DefaultTableModel model) {
-//        String query = "SELECT MaSanPham, TenSanPham, Loai, Mau, SoLuong, Gia, TrangThai FROM Products";
-//        try {
-//            ResultSet rs = XJdbc.executeQuery(query);
-//            while (rs.next()) {
-//                Object[] row = {
-//                    rs.getString("MaSanPham"),
-//                    rs.getString("TenSanPham"),
-//                    rs.getString("Loai"),
-//                    rs.getString("Mau"),
-//                    rs.getInt("SoLuong"),
-//                    rs.getDouble("Gia"),
-//                    rs.getString("TrangThai"),
-//                    ""
-//                };
-//                model.addRow(row);
-//            }
-//            rs.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    protected List<Products> selectBySql(String sql, Object... args) {
+        List<Products> list = new ArrayList<>();
+        try {
+            java.sql.ResultSet rs = null;
+            try {
+                rs = XJdbc.query(sql, args);
+                while (rs.next()) {
+                    Products entity = new Products();
+                    entity.setProductID(rs.getString("ProductID"));
+                    entity.setProductName(rs.getString("ProductName"));
+                    entity.setSupplierID(rs.getString("SupplierID"));
+                    entity.setColor(rs.getString("Color"));
+                    entity.setWeight(rs.getString("Weight"));
+                    entity.setQuantity(rs.getInt("Quantity"));
+                    entity.setPrice(rs.getDouble("price"));
+                    entity.setStatus(rs.getString("Status"));
+
+                    list.add(entity);
+                }
+            } finally {
+                if (rs != null) {
+                    rs.getStatement().getConnection().close();
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
+        return list;
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -265,6 +193,8 @@ public class Form_1 extends javax.swing.JPanel {
         panelproduct2 = new com.inventory.swing.Panelproduct();
         jPanel5 = new javax.swing.JPanel();
         button3 = new com.inventory.swing.Button();
+        btnDel = new com.inventory.swing.Button();
+        button1 = new com.inventory.swing.Button();
         jPanel2 = new javax.swing.JPanel();
         spTable = new javax.swing.JScrollPane();
         table = new com.inventory.swing.Table();
@@ -285,7 +215,7 @@ public class Form_1 extends javax.swing.JPanel {
 
         button3.setBackground(new java.awt.Color(102, 102, 255));
         button3.setForeground(new java.awt.Color(255, 255, 255));
-        button3.setText("Thêm sản phẩm");
+        button3.setText("Thêm ");
         button3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         button3.setMaximumSize(new java.awt.Dimension(94, 38));
         button3.setMinimumSize(new java.awt.Dimension(94, 38));
@@ -295,20 +225,43 @@ public class Form_1 extends javax.swing.JPanel {
             }
         });
 
+        btnDel.setBackground(new java.awt.Color(102, 102, 255));
+        btnDel.setForeground(new java.awt.Color(255, 255, 255));
+        btnDel.setText("Xóa");
+        btnDel.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnDel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelActionPerformed(evt);
+            }
+        });
+
+        button1.setBackground(new java.awt.Color(102, 102, 255));
+        button1.setForeground(new java.awt.Color(255, 255, 255));
+        button1.setText("Sửa");
+        button1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(629, Short.MAX_VALUE)
-                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(78, 78, 78))
+                .addContainerGap(478, Short.MAX_VALUE)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnDel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(83, 83, 83))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnDel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(button3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(11, 11, 11))
         );
 
@@ -321,17 +274,14 @@ public class Form_1 extends javax.swing.JPanel {
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Mã sản phẩm", "Tên sản phẩm", "Title 3", "Title 4"
+                "Mã SP", "Tên sản phẩm", "Giá", "Số lượng", "Nhà CC", "Màu", "Loại", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -375,8 +325,31 @@ public class Form_1 extends javax.swing.JPanel {
         add.setVisible(true);
     }//GEN-LAST:event_button3ActionPerformed
 
+    private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow >= 0) {
+            String productID = table.getValueAt(selectedRow, 0).toString();
+
+            ProductsDAO dao = new ProductsDAO();
+
+            // Sử dụng hàm updateStatus để cập nhật trạng thái sản phẩm
+            dao.updateStatus(productID, "Đã xóa");
+
+            loadData();
+
+            JOptionPane.showMessageDialog(this, "Product status updated to 'Deleted'!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a product to delete.");
+        }
+    }//GEN-LAST:event_btnDelActionPerformed
+
+    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.inventory.swing.Button btnDel;
+    private com.inventory.swing.Button button1;
     private com.inventory.swing.Button button3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

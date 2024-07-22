@@ -22,7 +22,7 @@ public class TableActionCellRender extends DefaultTableCellRenderer {
         if (isSeleted == false && row % 2 == 0) {
             action.setBackground(Color.WHITE);
         } else {
-            action.setBackground(com.getBackground());
+              action.setBackground(new Color(250, 250, 250));
         }
 
         return action;
