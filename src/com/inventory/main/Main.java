@@ -173,6 +173,7 @@ public class Main extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             new Main().setVisible(true);
         });
+      
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

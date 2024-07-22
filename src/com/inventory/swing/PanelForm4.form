@@ -20,9 +20,9 @@
               <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
               <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-              <Component id="textField3" min="-2" pref="293" max="-2" attributes="0"/>
+              <Component id="txtNameNCC" min="-2" pref="293" max="-2" attributes="0"/>
               <EmptySpace pref="103" max="32767" attributes="0"/>
-              <Component id="button1" min="-2" pref="165" max="-2" attributes="0"/>
+              <Component id="btnTimKiemNCC" min="-2" pref="165" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -33,8 +33,8 @@
               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="textField3" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="button1" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
+                  <Component id="txtNameNCC" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnTimKiemNCC" alignment="3" min="-2" pref="39" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="22" max="32767" attributes="0"/>
           </Group>
@@ -50,7 +50,7 @@
         <Property name="text" type="java.lang.String" value="T&#xea;n nh&#xe0; cung c&#x1ea5;p"/>
       </Properties>
     </Component>
-    <Component class="com.inventory.swing.TextField" name="textField3">
+    <Component class="com.inventory.swing.TextField" name="txtNameNCC">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ae" green="8e" red="48" type="rgb"/>
@@ -66,7 +66,7 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="com.inventory.swing.Button" name="button1">
+    <Component class="com.inventory.swing.Button" name="btnTimKiemNCC">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="66" red="66" type="rgb"/>
@@ -79,6 +79,9 @@
           <Font name="SansSerif" size="18" style="1"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTimKiemNCCActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
