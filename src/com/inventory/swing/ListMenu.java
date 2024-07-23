@@ -7,6 +7,8 @@ import com.inventory.swing.MenuItems;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -15,6 +17,7 @@ import javax.swing.SwingUtilities;
 
 public class ListMenu<E extends Object> extends JList<E> {
 
+    private final List<Model_Menu> menuItems = new ArrayList<>();
     private final DefaultListModel model;
     private int selectedIndex = -1;
     private int overIndex = -1;
@@ -96,5 +99,14 @@ public class ListMenu<E extends Object> extends JList<E> {
 
     public void addItem(Model_Menu data) {
         model.addElement(data);
+        menuItems.add(data); // Store the added menu item
+    }
+
+    public Model_Menu getItemAt(int index) {
+        if (index >= 0 && index < menuItems.size()) { // Ensure valid index
+            return menuItems.get(index);
+        } else {
+            return null; // Or throw an IndexOutOfBoundsException
+        }
     }
 }

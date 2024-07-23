@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import java.util.logging.Logger;
 
 public class XJdbc {
 
@@ -102,25 +103,23 @@ public class XJdbc {
 //            throw new RuntimeException(e);
 //        }
 //    }
-    
-    
-    
-    
-    public static ResultSet query(String sql, Object... args) {
-    try {
-        PreparedStatement stmt = XJdbc.getStmt(sql, args);
-        ResultSet rs = stmt.executeQuery();
-           
-        System.out.println("Query executed: " + sql);
-        return rs;
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Error executing query: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-        throw new RuntimeException(e);
-    }
-}
+    private static final boolean PRINT_QUERIES = false; // Set to true to enable logging
+    private static final Logger logger = Logger.getLogger(XJdbc.class.getName());
 
-    
+    public static ResultSet query(String sql, Object... args) {
+        try {
+            PreparedStatement stmt = XJdbc.getStmt(sql, args);
+            ResultSet rs = stmt.executeQuery();
+            logger.fine("Query executed: " + sql);
+            if (PRINT_QUERIES) {
+                System.out.println("Query executed: " + sql);
+            }
+            return rs;
+        } catch (SQLException e) {
+            logger.severe("Error executing query: " + sql + " - " + e.getMessage()); // Log errors
+        }
+        return null;
+    }
 
     // Lấy giá trị từ truy vấn
     public static Object value(String sql, Object... args) {
@@ -148,7 +147,4 @@ public class XJdbc {
         }
     }
 
-    
-    
-    
 }

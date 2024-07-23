@@ -1,28 +1,39 @@
 package com.inventory.utils;
 
 import com.inventory.entity.Employees;
+import com.inventory.main.Login;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 public class Auth {
+
     /**
-     * Đối tượng này chứa thông tin người sử dụng sau khi đăng nhập
+     * Holds the information of the logged-in user.
      */
     public static Employees user = null;
+
     /**
-     * Xóa thông tin của người sử dụng khi có yêu cầu đăng xuất
+     * Clears user information on logout.
      */
     public static void clear() {
         Auth.user = null;
     }
+
     /**
-     * Kiểm tra xem đăng nhập hay chưa
+     * Checks if a user is logged in.
      */
-    public static boolean isLogin() {
+    public static boolean isLoggedIn() {
         return Auth.user != null;
     }
-     /**
-     * Kiểm tra xem có phải là trưởng phòng hay không
-     */
-    public static boolean isManager() {
-        return Auth.isLogin() && user.getPosition();
+
+    public static boolean isAdmin() {
+        if (user == null) {
+            return false; // Not logged in, so not an admin
+        }
+
+        String position = user.getPosition(); // Get position directly from the user object
+
+        return position.equalsIgnoreCase("Admin"); // Case-insensitive comparison
     }
 }
