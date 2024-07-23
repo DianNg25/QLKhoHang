@@ -38,7 +38,8 @@ public class Table extends JTable {
                 com.setBackground(Color.WHITE);
                 setBorder(noFocusBorder);
                 com.setFont(new Font("sansserif", Font.PLAIN, 13)); // Thay đổi kích thước chữ thành 14
-                com.setForeground(isSelected ? new Color(15, 89, 140) : new Color(102, 102, 102));
+                com.setForeground(isSelected ? new Color(36, 183, 194)  : new  Color(102, 102, 102) );
+                                    com.setFont(com.getFont().deriveFont(Font.BOLD));
                 setHorizontalAlignment(JLabel.CENTER); // Căn giữa nội dung trong các ô
                 if (column == 6) { // Cột trạng thái
                     StatusType type = (StatusType) value;

@@ -1,5 +1,6 @@
 package com.inventory.swing;
 
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
@@ -22,7 +23,7 @@ public class TableActionCellEditor extends DefaultCellEditor {
     public Component getTableCellEditorComponent(JTable jtable, Object o, boolean bln, int row, int column) {
         PanelAction action = new PanelAction();
         action.initEvent(event, row);
-        action.setBackground(jtable.getSelectionBackground());
+        action.setBackground(new Color(250, 250, 250));
         return action;
     }
 }

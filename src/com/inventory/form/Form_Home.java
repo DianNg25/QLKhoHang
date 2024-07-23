@@ -118,16 +118,16 @@ public class Form_Home extends javax.swing.JPanel {
 
         jLayeredPane1.setLayout(new java.awt.GridLayout(1, 0, 10, 0));
 
-        card1.setColor1(new java.awt.Color(35, 67, 82));
-        card1.setColor2(new java.awt.Color(58, 110, 133));
+        card1.setColor1(new java.awt.Color(26, 42, 128));
+        card1.setColor2(new java.awt.Color(36, 183, 194));
         jLayeredPane1.add(card1);
 
-        card2.setColor1(new java.awt.Color(35, 67, 82));
-        card2.setColor2(new java.awt.Color(58, 110, 133));
+        card2.setColor1(new java.awt.Color(26, 42, 128));
+        card2.setColor2(new java.awt.Color(36, 183, 194));
         jLayeredPane1.add(card2);
 
-        card3.setColor1(new java.awt.Color(35, 67, 82));
-        card3.setColor2(new java.awt.Color(58, 110, 133));
+        card3.setColor1(new java.awt.Color(26, 42, 128));
+        card3.setColor2(new java.awt.Color(36, 183, 194));
         jLayeredPane1.add(card3);
 
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);

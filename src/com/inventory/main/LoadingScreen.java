@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  */
 public class LoadingScreen extends javax.swing.JFrame {
 
-    private boolean mainPageOpened = false;
+    private boolean mainLoginOpened = false;
 
     /**
      * Creates new form LoadingScreen
@@ -48,7 +48,7 @@ public class LoadingScreen extends javax.swing.JFrame {
         });
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/inventory/icon/logo_loading.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/inventory/icon/logo_sg_1 (1).png"))); // NOI18N
 
         lblStatus.setForeground(new java.awt.Color(200, 200, 200));
         lblStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -62,20 +62,20 @@ public class LoadingScreen extends javax.swing.JFrame {
                 .addContainerGap(247, Short.MAX_VALUE)
                 .addGroup(curvesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(pro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(247, Short.MAX_VALUE))
         );
         curvesPanel1Layout.setVerticalGroup(
             curvesPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(curvesPanel1Layout.createSequentialGroup()
-                .addContainerGap(107, Short.MAX_VALUE)
+                .addContainerGap(144, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pro, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblStatus)
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -166,16 +166,17 @@ public class LoadingScreen extends javax.swing.JFrame {
         Thread.sleep(100); //  For Test
         pro.setValue(progress);
 
-        if (progress == 100 && !mainPageOpened) {
-            openMainPage(); // Mở trang chính nếu chưa mở
-            mainPageOpened = true; // Đánh dấu đã mở trang chính
+        if (progress == 100 && !mainLoginOpened) {
+            openLoginPage(); // Mở trang chính nếu chưa mở
+            mainLoginOpened = true; // Đánh dấu đã mở trang chính
         }
     }
 
-    private void openMainPage() {
+    private void openLoginPage() {
         try {
-            com.inventory.main.Main main = new com.inventory.main.Main();
-            main.showMainPage();
+            Login login = new Login();
+            login.setVisible(true);
+            dispose();
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Không thể mở trang chính: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);

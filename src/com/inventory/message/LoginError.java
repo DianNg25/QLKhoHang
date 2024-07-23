@@ -33,13 +33,12 @@ public class LoginError extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         txt = new javax.swing.JTextPane();
         btnOK = new com.inventory.swing.Button();
-        btnCancel = new com.inventory.swing.Button();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 25, 25, 25));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(80, 80, 80));
+        jLabel1.setForeground(new java.awt.Color(255, 0, 0));
         jLabel1.setText("Lỗi đăng nhập");
 
         txt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
@@ -50,15 +49,12 @@ public class LoginError extends javax.swing.JPanel {
         txt.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txt.setFocusable(false);
 
-        btnOK.setBackground(new java.awt.Color(52, 99, 120));
+        btnOK.setBackground(new java.awt.Color(26, 48, 131));
         btnOK.setForeground(new java.awt.Color(255, 255, 255));
-        btnOK.setText("Đồng ý");
-
-        btnCancel.setBackground(new java.awt.Color(214, 217, 223));
-        btnCancel.setText("Hủy bỏ");
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+        btnOK.setText("OK");
+        btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
+                btnOKActionPerformed(evt);
             }
         });
 
@@ -71,8 +67,6 @@ public class LoginError extends javax.swing.JPanel {
                 .addComponent(txt, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
@@ -88,26 +82,24 @@ public class LoginError extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+    private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         // TODO add your handling code here:
         GlassPanePopup.closePopupLast();
-    }//GEN-LAST:event_btnCancelActionPerformed
+    }//GEN-LAST:event_btnOKActionPerformed
 
     public void eventOK(ActionListener event) {
         btnOK.addActionListener(event);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.inventory.swing.Button btnCancel;
     private com.inventory.swing.Button btnOK;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextPane txt;
     // End of variables declaration//GEN-END:variables
+
 
 }
