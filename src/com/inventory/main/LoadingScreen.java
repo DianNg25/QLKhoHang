@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  */
 public class LoadingScreen extends javax.swing.JFrame {
 
-    private boolean mainPageOpened = false;
+    private boolean mainLoginOpened = false;
 
     /**
      * Creates new form LoadingScreen
@@ -166,16 +166,17 @@ public class LoadingScreen extends javax.swing.JFrame {
         Thread.sleep(100); //  For Test
         pro.setValue(progress);
 
-        if (progress == 100 && !mainPageOpened) {
-            openMainPage(); // Mở trang chính nếu chưa mở
-            mainPageOpened = true; // Đánh dấu đã mở trang chính
+        if (progress == 100 && !mainLoginOpened) {
+            openLoginPage(); // Mở trang chính nếu chưa mở
+            mainLoginOpened = true; // Đánh dấu đã mở trang chính
         }
     }
 
-    private void openMainPage() {
+    private void openLoginPage() {
         try {
-            com.inventory.main.Main main = new com.inventory.main.Main();
-            main.showMainPage();
+            Login login = new Login();
+            login.setVisible(true);
+            dispose();
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Không thể mở trang chính: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);

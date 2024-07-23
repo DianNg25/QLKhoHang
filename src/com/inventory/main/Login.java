@@ -232,8 +232,8 @@ public class Login extends javax.swing.JFrame {
     // Phương thức mở trang chính
     private void openMainPage() {
         try {
-            LoadingScreen loadingScreen = new LoadingScreen();
-            loadingScreen.setVisible(true);
+            Main main = new Main();
+            main.setVisible(true);
             dispose(); // Đóng cửa sổ đăng nhập
         } catch (Exception ex) {
             ex.printStackTrace();
