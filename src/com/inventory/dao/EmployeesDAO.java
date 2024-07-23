@@ -10,27 +10,29 @@ import java.util.List;
 public class EmployeesDAO extends InvenDAO<Employees, String> {
 
     public void insert(Employees model) {
-        String sql = "INSERT INTO Employees (EmployeeID, Name, Phone, Email, Position, Image, Password ) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        XJdbc.update(sql, 
-                model.getEmployeeID(), 
-                model.getName(), 
-                model.getPhone(), 
-                model.getEmail(), 
-                model.getPosition(), 
-                model.getImage(), 
-                model.getPassword());
+        String sql = "INSERT INTO Employees (EmployeeID, Username, FullName, Phone, Email, Password, Position, Image ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        XJdbc.update(sql,
+                model.getEmployeeID(),
+                model.getUsername(),
+                model.getFullName(),
+                model.getPhone(),
+                model.getEmail(),
+                model.getPassword(),
+                model.getPosition(),
+                model.getImage());
+
     }
 
     public void update(Employees model) {
-        String sql = "UPDATE Employees SET  Name=?, Phone=?, Email=?, Position=?, Image=?, Password=?, WHERE EmployeeID=?";
-        XJdbc.update(sql, 
-             
-                model.getName(), 
-                model.getPhone(), 
+        String sql = "UPDATE Employees SET  Username=?, FullName=?, Phone=?, Email=?, Password=?, Position=?, Image=?, WHERE EmployeeID=?";
+        XJdbc.update(sql,
+                model.getUsername(),
+                model.getFullName(),
+                model.getPhone(),
                 model.getEmail(),
-                model.getPosition(),
-                 model.getImage(), 
                 model.getPassword(),
+                model.getPosition(),
+                model.getImage(),
                 model.getEmployeeID());
     }
 
@@ -59,13 +61,14 @@ public class EmployeesDAO extends InvenDAO<Employees, String> {
                 while (rs.next()) {
                     Employees entity = new Employees();
                     entity.setEmployeeID(rs.getString("EmployeeID"));
-                    entity.setName(rs.getString("Name"));
+                    entity.setUsername(rs.getString("Name"));
+                    entity.setFullName(rs.getString("FullName"));
                     entity.setPhone(rs.getInt("Phone"));
-                    entity.setEmail(rs.getString("Email")); 
-                    entity.setPosition(rs.getBoolean("Position")); 
-                    entity.setImage(rs.getString("Image"));
+                    entity.setEmail(rs.getString("Email"));
                     entity.setPassword(rs.getString("Password"));
-                   
+                    entity.setPosition(rs.getBoolean("Position"));
+                    entity.setImage(rs.getString("Image"));
+
                     list.add(entity);
                 }
             } finally {

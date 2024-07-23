@@ -28,11 +28,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author ADMIN
- */
+
 public class Form_4 extends javax.swing.JPanel {
+
     private JTextField tfProductCode;
     private JTextField tfProductName;
     private JTextField tfSupplier;
@@ -46,14 +44,12 @@ public class Form_4 extends javax.swing.JPanel {
         initComponents();
         customizeTable();
         loadSupplierData();
-      
-        
+
     }
-    
+
     private void customizeTable() {
-        
-        
-       tblNCC.setShowHorizontalLines(true);
+
+        tblNCC.setShowHorizontalLines(true);
         tblNCC.setGridColor(new Color(230, 230, 230));
         tblNCC.setRowHeight(40);
 
@@ -161,10 +157,8 @@ public class Form_4 extends javax.swing.JPanel {
         return list;
     }
 
-    
-    
-     private void timKiemNCC(){
-         String supplierName = txtNameNCC.getText(); // Updated JTextField name
+    private void timKiemNCC() {
+        String supplierName = txtNameNCC.getText(); // Updated JTextField name
         if (supplierName.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên nhà cung cấp để tìm kiếm.");
             return;
@@ -190,12 +184,16 @@ public class Form_4 extends javax.swing.JPanel {
                 model.addRow(new Object[]{id, name, address, phone, email});
             }
 
+            if (!hasResults) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy nhà cung cấp với tên: " + supplierName);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
