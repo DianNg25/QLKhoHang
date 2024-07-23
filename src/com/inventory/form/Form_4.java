@@ -13,11 +13,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.inventory.message.*;
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,7 +24,6 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
 
 public class Form_4 extends javax.swing.JPanel {
 
@@ -158,9 +154,12 @@ public class Form_4 extends javax.swing.JPanel {
     }
 
     private void timKiemNCC() {
-        String supplierName = txtNameNCC.getText(); // Updated JTextField name
+        String supplierName = txtNameNCC.getText();
         if (supplierName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên nhà cung cấp để tìm kiếm.");
+
+            SearchSuppliers_Null obj = new SearchSuppliers_Null();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
             return;
         }
 
@@ -185,7 +184,10 @@ public class Form_4 extends javax.swing.JPanel {
             }
 
             if (!hasResults) {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy nhà cung cấp với tên: " + supplierName);
+
+                Suppliers_NullName obj = new Suppliers_NullName();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
             }
 
         } catch (Exception e) {
