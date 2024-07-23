@@ -5,8 +5,6 @@ import javax.swing.ImageIcon;
 
 public class Model_Menu {
 
-    private boolean enabled = true;
-
     public String getIcon() {
         return icon;
     }
@@ -50,13 +48,5 @@ public class Model_Menu {
 
     public static enum MenuType {
         TITLE, MENU, EMPTY
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
     }
 }

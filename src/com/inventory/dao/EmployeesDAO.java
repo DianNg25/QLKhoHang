@@ -66,7 +66,7 @@ public class EmployeesDAO extends InvenDAO<Employees, String> {
                     entity.setPhone(rs.getInt("Phone"));
                     entity.setEmail(rs.getString("Email"));
                     entity.setPassword(rs.getString("Password"));
-                    entity.setPosition(rs.getString("Position"));
+                    entity.setPosition(rs.getBoolean("Position"));
                     entity.setImage(rs.getString("Image"));
 
                     list.add(entity);
