@@ -11,6 +11,7 @@ import com.sun.jdi.connect.spi.Connection;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import com.inventory.message.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
@@ -270,51 +271,57 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         String email = txtEmail.getText().trim();
 
         if (supplierID.isEmpty() || supplierName.isEmpty() || address.isEmpty() || phone.isEmpty() || email.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "All fields must be filled out!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            InformationSuppliers_Null obj = new InformationSuppliers_Null();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
             return;
         }
 
         if (!isEmailValid(email)) {
-           showEmailError();
+            EmailError obj = new EmailError();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
+            return;
         }
 
         if (!isPhoneValid(phone)) {
-            JOptionPane.showMessageDialog(this, "Phone number must be 10 digits and start with 0!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            ErrorSuppliers_Phone obj = new ErrorSuppliers_Phone();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
             return;
         }
 
         if (!XJdbc.isSupplierIDUnique(supplierID)) {
-            JOptionPane.showMessageDialog(this, "Supplier ID already exists!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            IDError obj = new IDError();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
             return;
         }
 
         String sql = "INSERT INTO Suppliers (SupplierID, SupplierName, Address, Phone, Email) VALUES (?, ?, ?, ?, ?)";
         try {
             XJdbc.update(sql, supplierID, supplierName, address, phone, email);
-            JOptionPane.showMessageDialog(this, "Supplier added successfully!");
+            SupplierAddedSuccess obj = new SupplierAddedSuccess();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
             clearForm();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            SupplierAddedFailed obj = new SupplierAddedFailed();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
         }
     }
 
-    
-    
-    
-    
-    
     private void showEmailError() {
-    EmailError emailError = new EmailError();
-    JDialog errorDialog = new JDialog();
-    errorDialog.setUndecorated(true);
-    errorDialog.getContentPane().add(emailError);
-    errorDialog.pack();
-    errorDialog.setLocationRelativeTo(this);
-    errorDialog.setVisible(true);
-}
+        EmailError emailError = new EmailError();
+        JDialog errorDialog = new JDialog();
+        errorDialog.setUndecorated(true);
+        errorDialog.getContentPane().add(emailError);
+        errorDialog.pack();
+        errorDialog.setLocationRelativeTo(this);
+        errorDialog.setVisible(true);
+    }
 
-    
     @Override
     protected void paintComponent(Graphics graphics) {
         Graphics2D g2 = (Graphics2D) graphics;
@@ -324,10 +331,6 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         super.paintComponent(graphics);
     }
 
-    
-    
-    
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button btnOK;
