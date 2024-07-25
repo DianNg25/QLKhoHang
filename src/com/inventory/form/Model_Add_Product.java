@@ -30,10 +30,9 @@ public class Model_Add_Product extends javax.swing.JPanel {
         setOpaque(false);
         populateComboBox();
         
-        
-        this.cboNhaCungCap = cboNhaCungCap;
+     
         this.suppliersDAO = new SuppliersDAO();
-                fillComboBox();
+//                fillComboBox();
 
     }
 
@@ -53,17 +52,13 @@ public class Model_Add_Product extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         txtTenSanPham = new com.inventory.swing.TextField();
         jLabel3 = new javax.swing.JLabel();
-        txtSoLuong = new com.inventory.swing.TextField();
-        jLabel5 = new javax.swing.JLabel();
         txtGia = new com.inventory.swing.TextField();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         rdoMini = new javax.swing.JRadioButton();
         rdoNho = new javax.swing.JRadioButton();
         rdoVua = new javax.swing.JRadioButton();
         rdoLon = new javax.swing.JRadioButton();
-        cboNhaCungCap = new com.inventory.swing.ComboBoxSuggestion();
         cboMau = new com.inventory.swing.ComboBoxSuggestion();
 
         setBackground(new java.awt.Color(39, 74, 89));
@@ -132,6 +127,7 @@ public class Model_Add_Product extends javax.swing.JPanel {
 
         jPanel3.setBackground(new java.awt.Color(32, 137, 173));
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        jPanel3.setPreferredSize(new java.awt.Dimension(700, 300));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -149,19 +145,7 @@ public class Model_Add_Product extends javax.swing.JPanel {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Giá");
 
-        txtSoLuong.setPreferredSize(new java.awt.Dimension(25, 40));
-
-        jLabel5.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel5.setText("Số lượng");
-
         txtGia.setPreferredSize(new java.awt.Dimension(25, 40));
-
-        jLabel6.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel6.setText("Nhà cung cấp");
 
         jLabel7.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -192,13 +176,6 @@ public class Model_Add_Product extends javax.swing.JPanel {
         rdoLon.setForeground(new java.awt.Color(255, 255, 255));
         rdoLon.setText("Lớn (45 Kg)");
 
-        cboNhaCungCap.setPreferredSize(new java.awt.Dimension(151, 38));
-        cboNhaCungCap.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboNhaCungCapActionPerformed(evt);
-            }
-        });
-
         cboMau.setPreferredSize(new java.awt.Dimension(151, 38));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -210,15 +187,12 @@ public class Model_Add_Product extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(20, 20, 20)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtMaSanPham, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtSoLuong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtTenSanPham, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtGia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -229,8 +203,7 @@ public class Model_Add_Product extends javax.swing.JPanel {
                         .addComponent(rdoVua)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rdoLon)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(cboNhaCungCap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 7, Short.MAX_VALUE))
                     .addComponent(cboMau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(66, 66, 66))
         );
@@ -249,25 +222,18 @@ public class Model_Add_Product extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(cboNhaCungCap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(cboMau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(rdoMini)
                     .addComponent(rdoNho)
                     .addComponent(rdoVua)
-                    .addComponent(rdoLon)))
+                    .addComponent(rdoLon))
+                .addGap(15, 15, 15))
         );
 
         add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -283,11 +249,6 @@ public class Model_Add_Product extends javax.swing.JPanel {
         addProducts();
         clearForm();
     }//GEN-LAST:event_btnOKActionPerformed
-
-    private void cboNhaCungCapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboNhaCungCapActionPerformed
-        // TODO add your handling code here:
-       getSelectedSupplierID();
-    }//GEN-LAST:event_cboNhaCungCapActionPerformed
     
     
     
@@ -296,8 +257,7 @@ public class Model_Add_Product extends javax.swing.JPanel {
         String maSP = txtMaSanPham.getText().trim();
         String tenSP = txtTenSanPham.getText().trim();
         String giaSP = txtGia.getText().trim();
-        String soluong = txtSoLuong.getText().trim();
-        String NCC = cboNhaCungCap.getSelectedItem().toString().trim(); // Sử dụng getSelectedItem() thay vì getText()
+      
         String mau = cboMau.getSelectedItem().toString().trim(); // Sử dụng getSelectedItem() thay vì getText()
 
         // Xác định loại sản phẩm từ radio buttons
@@ -316,15 +276,14 @@ public class Model_Add_Product extends javax.swing.JPanel {
         String trangThai = "Hoạt động";
         // Chuyển đổi giaSP và soluong từ String sang kiểu dữ liệu phù hợp nếu cần
         double gia = Double.parseDouble(giaSP);
-        int soLuong = Integer.parseInt(soluong);
+      
 
         // Tạo đối tượng Product
         Products product = new Products();
         product.setProductID(maSP);
         product.setProductName(tenSP);
         product.setPrice(gia);
-        product.setQuantity(soLuong);
-        product.setSupplierID(NCC);
+       
         product.setColor(mau);
         product.setWeight(loai);
         product.setStatus(trangThai); // Thiết lập trạng thái là "Hoạt động"
@@ -343,11 +302,10 @@ public class Model_Add_Product extends javax.swing.JPanel {
     txtMaSanPham.setText("");
     txtTenSanPham.setText("");
     txtGia.setText("");
-    txtSoLuong.setText("");
-
+ 
     // Đặt lại các hộp thoại lựa chọn (ComboBox)
     cboMau.setSelectedIndex(-1); // Bỏ chọn tất cả các mục
-    cboNhaCungCap.setSelectedIndex(-1); // Bỏ chọn tất cả các mục
+   
 
     // Đặt lại các nút radio (RadioButton)
     rdoLon.setSelected(false);
@@ -356,26 +314,20 @@ public class Model_Add_Product extends javax.swing.JPanel {
     rdoVua.setSelected(false);
 }
 
-    private void fillComboBox() {
-        try {
-            List<Suppliers> suppliersList = suppliersDAO.selectAll(); // Đảm bảo phương thức này không bị gọi nhiều lần
-            cboNhaCungCap.removeAllItems();
-            for (Suppliers supplier : suppliersList) {
-                cboNhaCungCap.addItem(supplier.getSupplierID());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error loading supplier names into ComboBox.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+//    private void fillComboBox() {
+//        try {
+//            List<Suppliers> suppliersList = suppliersDAO.selectAll(); // Đảm bảo phương thức này không bị gọi nhiều lần
+//          
+//            for (Suppliers supplier : suppliersList) {
+//               
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(null, "Error loading supplier names into ComboBox.", "Error", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
 
-    private void getSelectedSupplierID() {
-        String selectedSupplierID = (String) cboNhaCungCap.getSelectedItem();
-        if (selectedSupplierID != null) {
-            // Thực hiện các hành động khác với mã nhà cung cấp đã chọn
-            System.out.println("Selected Supplier ID: " + selectedSupplierID);
-        }
-    }
+   
     
     
     
@@ -424,13 +376,10 @@ public class Model_Add_Product extends javax.swing.JPanel {
     private com.inventory.swing.Button btnOK;
     private com.inventory.swing.Button button2;
     private com.inventory.swing.ComboBoxSuggestion cboMau;
-    private com.inventory.swing.ComboBoxSuggestion cboNhaCungCap;
     private javax.swing.ButtonGroup grpLoai;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -443,7 +392,6 @@ public class Model_Add_Product extends javax.swing.JPanel {
     private javax.swing.JRadioButton rdoVua;
     private com.inventory.swing.TextField txtGia;
     private com.inventory.swing.TextField txtMaSanPham;
-    private com.inventory.swing.TextField txtSoLuong;
     private com.inventory.swing.TextField txtTenSanPham;
     // End of variables declaration//GEN-END:variables
 }

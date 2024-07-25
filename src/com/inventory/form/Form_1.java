@@ -239,6 +239,11 @@ public class Form_1 extends javax.swing.JPanel {
         button1.setForeground(new java.awt.Color(255, 255, 255));
         button1.setText("Sửa");
         button1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -343,6 +348,10 @@ public class Form_1 extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Please select a product to delete.");
         }
     }//GEN-LAST:event_btnDelActionPerformed
+
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button1ActionPerformed
 
     
 

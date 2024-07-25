@@ -63,11 +63,11 @@ public class Employees {
         this.Email = Email;
     }
 
-    public boolean getPosition() {
+    public byte getPosition() {
         return Position;
     }
 
-    public void setPosition(boolean Position) {
+    public void setPosition(byte Position) {
         this.Position = Position;
     }
 
@@ -87,12 +87,14 @@ public class Employees {
         this.Password = Password;
     }
 
+   
+
     private String EmployeeID;
     private String Username;
     private String FullName;
     private int Phone;
     private String Email;
-    private boolean Position = false;
+    private byte Position = 0;
     private String Image;
     private String Password;
 

@@ -175,6 +175,9 @@
                   <Font name="SansSerif" size="18" style="1"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button1ActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

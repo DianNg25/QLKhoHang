@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import com.inventory.message.*;
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -51,7 +53,7 @@ public class Form_7 extends javax.swing.JPanel {
                     employee.getFullName(),
                     employee.getPhone(),
                     employee.getEmail(),
-                    employee.getPosition() ? "Admin" : "User"
+                    employee.getPosition() == 1 ? "Admin" : "User"
                 };
                 tableModel.addRow(row);
             }
@@ -74,7 +76,7 @@ public class Form_7 extends javax.swing.JPanel {
                     entity.setFullName(rs.getString("FullName"));
                     entity.setPhone(rs.getInt("Phone"));
                     entity.setEmail(rs.getString("Email"));
-                    entity.setPosition(rs.getBoolean("Position"));
+                    entity.setPosition(rs.getByte("Position"));
 
                     list.add(entity);
                 }
@@ -232,28 +234,26 @@ public class Form_7 extends javax.swing.JPanel {
             String EmployeeID = tblTable.getValueAt(selectedRow, 0).toString();
 
             // Hiển thị hộp thoại xác nhận
-            int confirmation = JOptionPane.showConfirmDialog(
-                    this,
-                    "Bạn có chắc chắn muốn xóa nhân viên này không?",
-                    "Xác nhận xóa",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE
-            );
+            int confirmation = JOptionPane.showConfirmDialog(null, "Bạn có chắc xóa nhân viên này không?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
 
-            // Kiểm tra sự lựa chọn của người dùng
             if (confirmation == JOptionPane.YES_OPTION) {
                 EmployeesDAO dao = new EmployeesDAO();
                 // Sử dụng hàm delete để xóa nhân viên
                 dao.delete(EmployeeID);
 
                 loadData(); // Cập nhật dữ liệu sau khi xóa
-
-                JOptionPane.showMessageDialog(this, "Nhân viên đã được xóa!");
+                DeleteEmployees1 obj = new DeleteEmployees1();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
             } else {
-                JOptionPane.showMessageDialog(this, "Hủy bỏ xóa.");
+                DeleteEmployees3 obj = new DeleteEmployees3();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhân viên để xóa.");
+            DeleteEmployees2 obj = new DeleteEmployees2();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
         }
 
     }//GEN-LAST:event_btnXoaActionPerformed
