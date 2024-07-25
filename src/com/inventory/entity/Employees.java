@@ -9,6 +9,14 @@ package com.inventory.entity;
  * @author ADMIN
  */
 public class Employees {
+    private String EmployeeID;
+    private String Username;
+    private String FullName;
+    private int Phone;
+    private String Email;
+    private byte Position = 0;
+    private String Image;
+    private String Password;
 
     public Employees() {
     }
@@ -86,18 +94,5 @@ public class Employees {
     public void setPassword(String Password) {
         this.Password = Password;
     }
-
-   
-
-    private String EmployeeID;
-    private String Username;
-    private String FullName;
-    private int Phone;
-    private String Email;
-    private byte Position = 0;
-    private String Image;
-    private String Password;
-
-    
     
 }

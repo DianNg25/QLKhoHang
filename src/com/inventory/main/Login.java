@@ -1,8 +1,12 @@
 package com.inventory.main;
 
+import com.inventory.dao.EmployeesDAO;
+import com.inventory.entity.Employees;
+import java.sql.PreparedStatement;
 import com.inventory.utils.XJdbc;
 import com.inventory.message.*;
 import com.inventory.swing.glasspanepopup.GlassPanePopup;
+import com.inventory.utils.Auth;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -175,13 +179,19 @@ public class Login extends javax.swing.JFrame {
             return;
         }
 
-        boolean loginSuccess = checkLogin(username, password);
-        if (loginSuccess) {
-            openMainPage();
-        } else {
-            LoginError obj = new LoginError();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+        try {
+            Employees loggedInEmployee = checkLogin(username, password);
+            if (loggedInEmployee != null) {
+                Auth.user = loggedInEmployee; // Lưu thông tin đăng nhập vào Auth
+                System.out.println("Position của tài khoản đang đăng nhập: " + Auth.user.getPosition());
+                openMainPage();
+            } else {
+                LoginError obj = new LoginError();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
@@ -194,34 +204,39 @@ public class Login extends javax.swing.JFrame {
         }
     };
 
-    private boolean checkLogin(String username, String password) {
-        boolean isValidUser = false;
-
-        try {
-            String sql = "SELECT * FROM Employees WHERE Username = ? AND Password = ?";
-            ResultSet rs = XJdbc.query(sql, username, password);
-
-            if (rs.next()) {
-                isValidUser = true;
+    private Employees checkLogin(String username, String password) throws SQLException {
+        String sql = "SELECT * FROM Employees WHERE Username = ? AND Password = ?";
+        try (PreparedStatement stmt = XJdbc.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Employees emp = new Employees();
+                    emp.setEmployeeID(rs.getString("EmployeeID"));
+                    emp.setUsername(rs.getString("Username"));
+                    emp.setFullName(rs.getString("FullName"));
+                    emp.setPhone(rs.getInt("Phone"));
+                    emp.setEmail(rs.getString("Email"));
+                    emp.setPassword(rs.getString("Password"));
+                    emp.setPosition(rs.getByte("Position"));
+                    emp.setImage(rs.getString("Image"));
+                    loggedInUsername = username;
+                    employeeId = emp.getEmployeeID();
+                    return emp;
+                }
             }
-            rs.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
-        if (isValidUser) {
-            loggedInUsername = username;
-            employeeId = getEmployeeId(username);
-        }
-
-        return isValidUser;
+        return null; // Không tìm thấy nhân viên
     }
 
     private String getEmployeeId(String username) {
-        String empId = ""; // Đổi thành String
-        try (ResultSet rs = XJdbc.query("SELECT EmployeeID FROM Employees WHERE Username = ?", username)) {
-            if (rs.next()) {
-                empId = rs.getString("EmployeeID"); // Lấy giá trị dưới dạng String
+        String empId = "";
+        try (PreparedStatement stmt = XJdbc.prepareStatement("SELECT EmployeeID FROM Employees WHERE Username = ?")) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    empId = rs.getString("EmployeeID");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -232,8 +247,20 @@ public class Login extends javax.swing.JFrame {
     // Phương thức mở trang chính
     private void openMainPage() {
         try {
-            Main main = new Main();
-            main.setVisible(true);
+            if (Auth.isLogin()) {
+                System.out.println("Position của tài khoản đang đăng nhập: " + Auth.user.getPosition());
+
+                if (Auth.user.getPosition() == 1) {
+                    Main main = new Main();
+                    main.setVisible(true);
+                } else {
+                    MainEmployee mainEmployee = new MainEmployee();
+                    mainEmployee.setVisible(true);
+                }
+            } else {
+                System.out.println("Chưa có tài khoản đăng nhập");
+            }
+
             dispose(); // Đóng cửa sổ đăng nhập
         } catch (Exception ex) {
             ex.printStackTrace();

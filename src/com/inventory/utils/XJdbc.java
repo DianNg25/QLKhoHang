@@ -2,10 +2,10 @@ package com.inventory.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import java.sql.PreparedStatement;
 
 public class XJdbc {
 
@@ -72,6 +72,10 @@ public class XJdbc {
         }
     }
 
+    public static PreparedStatement prepareStatement(String sql) throws SQLException {
+        return getConnection().prepareStatement(sql);
+    }
+
     // Cập nhật dữ liệu
     public static void update(String sql, Object... args) {
         try (PreparedStatement stmt = XJdbc.getStmt(sql, args)) {
@@ -102,25 +106,19 @@ public class XJdbc {
 //            throw new RuntimeException(e);
 //        }
 //    }
-    
-    
-    
-    
     public static ResultSet query(String sql, Object... args) {
-    try {
-        PreparedStatement stmt = XJdbc.getStmt(sql, args);
-        ResultSet rs = stmt.executeQuery();
-           
-        System.out.println("Query executed: " + sql);
-        return rs;
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Error executing query: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-        throw new RuntimeException(e);
-    }
-}
+        try {
+            PreparedStatement stmt = XJdbc.getStmt(sql, args);
+            ResultSet rs = stmt.executeQuery();
 
-    
+            System.out.println("Query executed: " + sql);
+            return rs;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error executing query: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
     // Lấy giá trị từ truy vấn
     public static Object value(String sql, Object... args) {
@@ -148,7 +146,4 @@ public class XJdbc {
         }
     }
 
-    
-    
-    
 }
