@@ -13,16 +13,14 @@ public class Products {
     public Products() {
     }
 
-    public Products(String ProductID, String SupplierID, String ProductName, String Color, String Weight, int Quantity, Double price, String Status) {
-        this.ProductID = ProductID;
-        this.SupplierID = SupplierID;
-        this.ProductName = ProductName;
-        this.Color = Color;
-        this.Weight = Weight;
-        this.Quantity = Quantity;
-        this.price = price;
-        this.Status = Status;
-    }
+    
+    
+    private String ProductID;
+    private String ProductName;
+    private String Color;
+    private String Weight;
+    private int Quantity;
+    private Double price;
 
     public String getProductID() {
         return ProductID;
@@ -30,14 +28,6 @@ public class Products {
 
     public void setProductID(String ProductID) {
         this.ProductID = ProductID;
-    }
-
-    public String getSupplierID() {
-        return SupplierID;
-    }
-
-    public void setSupplierID(String SupplierID) {
-        this.SupplierID = SupplierID;
     }
 
     public String getProductName() {
@@ -88,14 +78,15 @@ public class Products {
         this.Status = Status;
     }
 
-    
-    private String ProductID;
-    private String SupplierID;
-    private String ProductName;
-    private String Color;
-    private String Weight;
-    private int Quantity;
-    private Double price;
+    public Products(String ProductID, String ProductName, String Color, String Weight, int Quantity, Double price, String Status) {
+        this.ProductID = ProductID;
+        this.ProductName = ProductName;
+        this.Color = Color;
+        this.Weight = Weight;
+        this.Quantity = Quantity;
+        this.price = price;
+        this.Status = Status;
+    }
     private String Status;
    
     

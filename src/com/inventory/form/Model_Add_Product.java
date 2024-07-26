@@ -283,7 +283,6 @@ public class Model_Add_Product extends javax.swing.JPanel {
         product.setProductID(maSP);
         product.setProductName(tenSP);
         product.setPrice(gia);
-       
         product.setColor(mau);
         product.setWeight(loai);
         product.setStatus(trangThai); // Thiết lập trạng thái là "Hoạt động"
@@ -302,11 +301,8 @@ public class Model_Add_Product extends javax.swing.JPanel {
     txtMaSanPham.setText("");
     txtTenSanPham.setText("");
     txtGia.setText("");
- 
     // Đặt lại các hộp thoại lựa chọn (ComboBox)
     cboMau.setSelectedIndex(-1); // Bỏ chọn tất cả các mục
-   
-
     // Đặt lại các nút radio (RadioButton)
     rdoLon.setSelected(false);
     rdoMini.setSelected(false);

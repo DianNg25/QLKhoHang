@@ -19,11 +19,16 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.beans.Statement;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -32,9 +37,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.Sheet; // Chỉ sử dụng import này// Import lớp Sheet từ gói đúng
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 /**
  *
  * @author ADMIN
@@ -93,7 +105,7 @@ public class Form_1 extends javax.swing.JPanel {
                 setHorizontalAlignment(JLabel.CENTER); // Center-align the cell text
 
                 // Custom renderer for specific columns (example: status column)
-                if (column == 7) { // Status column
+                if (column == 5) { // Status column
                 JLabel label = new JLabel(value.toString());
                 label.setFont(new Font("sansserif", Font.BOLD, 13));
                 if ("Đã xóa".equals(value)) {
@@ -131,8 +143,6 @@ public class Form_1 extends javax.swing.JPanel {
                     product.getProductID(),
                     product.getProductName(),
                     product.getPrice(),
-                    product.getQuantity(),
-                    product.getSupplierID(),
                     product.getColor(),
                     product.getWeight(),
                     product.getStatus()
@@ -159,7 +169,7 @@ public class Form_1 extends javax.swing.JPanel {
                     Products entity = new Products();
                     entity.setProductID(rs.getString("ProductID"));
                     entity.setProductName(rs.getString("ProductName"));
-                    entity.setSupplierID(rs.getString("SupplierID"));
+             
                     entity.setColor(rs.getString("Color"));
                     entity.setWeight(rs.getString("Weight"));
                     entity.setQuantity(rs.getInt("Quantity"));
@@ -195,6 +205,7 @@ public class Form_1 extends javax.swing.JPanel {
         button3 = new com.inventory.swing.Button();
         btnDel = new com.inventory.swing.Button();
         button1 = new com.inventory.swing.Button();
+        btnExcel = new com.inventory.swing.Button();
         jPanel2 = new javax.swing.JPanel();
         spTable = new javax.swing.JScrollPane();
         table = new com.inventory.swing.Table();
@@ -245,12 +256,24 @@ public class Form_1 extends javax.swing.JPanel {
             }
         });
 
+        btnExcel.setBackground(new java.awt.Color(102, 102, 255));
+        btnExcel.setForeground(new java.awt.Color(255, 255, 255));
+        btnExcel.setText("Excel");
+        btnExcel.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(478, Short.MAX_VALUE)
+                .addContainerGap(370, Short.MAX_VALUE)
+                .addComponent(btnExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnDel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -265,7 +288,8 @@ public class Form_1 extends javax.swing.JPanel {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnDel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnExcel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(button3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(11, 11, 11))
         );
@@ -282,11 +306,11 @@ public class Form_1 extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã SP", "Tên sản phẩm", "Giá", "Số lượng", "Nhà CC", "Màu", "Loại", "Trạng thái"
+                "Mã SP", "Tên sản phẩm", "Giá", "Màu", "Loại", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -353,11 +377,140 @@ public class Form_1 extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_button1ActionPerformed
 
+    private void btnExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelActionPerformed
+        // TODO add your handling code here:
+         File file = chooseExcelFile(); // Implement this method to open a file chooser and return the selected file
+        if (file == null) {
+            JOptionPane.showMessageDialog(this, "Lỗi đọc tệp tin Excel!");
+        } else {
+            // Nhập sản phẩm từ tệp Excel
+            if (importProductsFromExcel(file)) {
+                JOptionPane.showMessageDialog(this, "Import danh sách sản phẩm thành công!");
+                // Cập nhật bảng sản phẩm nếu cần
+//                updateProductTable(); // Ensure this method updates the table correctly
+            } else {
+                JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi nhập danh sách sản phẩm!");
+            }
+        }
+
+    }//GEN-LAST:event_btnExcelActionPerformed
+
     
+// Hàm chọn tệp Excel
+    private File chooseExcelFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Excel Files", "xlsx", "xls"));
+        int returnValue = fileChooser.showOpenDialog(this);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
+        }
+        return null;
+    }
+public boolean importProductsFromExcel(File excelFile) {
+    ProductsDAO dao = new ProductsDAO(); // Khởi tạo đối tượng ProductsDAO
+    boolean success = true;
+
+    try (FileInputStream file = new FileInputStream(excelFile); XSSFWorkbook workbook = new XSSFWorkbook(file)) {
+        Sheet sheet = workbook.getSheetAt(0);
+        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+        tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại trong bảng
+
+        Iterator<Row> rowIterator = sheet.iterator();
+        rowIterator.next(); // Bỏ qua hàng tiêu đề
+        while (rowIterator.hasNext()) {
+            Row row = rowIterator.next();
+            try {
+                String productID = getCellValue(row.getCell(0));
+                String productName = getCellValue(row.getCell(1));
+                String weight = getCellValue(row.getCell(2));
+                String color = getCellValue(row.getCell(3));
+               
+                double price = parseDouble(getCellValue(row.getCell(4)));
+                String status = getCellValue(row.getCell(5));
+
+                // Nếu giá trị trạng thái trống hoặc không hợp lệ, gán giá trị mặc định
+                if (status == null || status.trim().isEmpty()) {
+                    status = "Hoạt động"; // Gán giá trị mặc định
+                }
+
+                if (productID.isEmpty() || productName.isEmpty()) {
+                    System.err.println("ProductID or ProductName is empty at row: " + row.getRowNum());
+                    success = false; // Set success to false if any critical field is empty
+                    continue;
+                }
+
+                Products pr = new Products();
+                pr.setProductID(productID);
+                pr.setProductName(productName);
+                pr.setWeight(weight);
+                pr.setColor(color);
+              
+                pr.setPrice(price);
+                pr.setStatus(status); // Thiết lập trạng thái
+
+                // Thực hiện thêm đối tượng pr vào cơ sở dữ liệu
+                dao.insert(pr); // Chèn sản phẩm vào cơ sở dữ liệu
+
+                // Thêm dữ liệu vào bảng
+                Object[] rowData = new Object[]{productID, productName, weight, color, price, status};
+                tableModel.addRow(rowData);
+            } catch (Exception e) {
+                // Xử lý lỗi với từng hàng, ví dụ như định dạng sai
+                System.err.println("Lỗi khi đọc dữ liệu hàng: " + row.getRowNum() + " - " + e.getMessage());
+                success = false; // Đánh dấu lỗi nếu có lỗi xảy ra
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Lỗi khi đọc file Excel!");
+        success = false; // Đánh dấu lỗi nếu có lỗi khi đọc tệp
+    }
+
+    return success;
+}
+
+
+
+    private String getCellValue(Cell cell) {
+    if (cell == null) {
+        return "";
+    }
+    switch (cell.getCellType()) {
+        case STRING:
+            return cell.getStringCellValue();
+        case NUMERIC:
+            return String.valueOf(cell.getNumericCellValue());
+        case BOOLEAN:
+            return String.valueOf(cell.getBooleanCellValue());
+        case FORMULA:
+            return cell.getCellFormula(); // Thay đổi nếu cần thiết
+        default:
+            return "";
+    }
+}
+
+private int parseInteger(String value) {
+    try {
+        return Integer.parseInt(value.trim());
+    } catch (NumberFormatException e) {
+        return 0; // Hoặc ném ngoại lệ tùy theo yêu cầu
+    }
+}
+
+private double parseDouble(String value) {
+    try {
+        return Double.parseDouble(value.trim());
+    } catch (NumberFormatException e) {
+        return 0.0; // Hoặc ném ngoại lệ tùy theo yêu cầu
+    }
+}
+
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button btnDel;
+    private com.inventory.swing.Button btnExcel;
     private com.inventory.swing.Button button1;
     private com.inventory.swing.Button button3;
     private javax.swing.JPanel jPanel1;

@@ -17,24 +17,22 @@ import java.sql.SQLException;
  */
 public class ProductsDAO extends InvenDAO<Products, String> {
 
-    public void insert(Products model) {
-        String sql = "INSERT INTO Products (ProductID, ProductName, SupplierID, Weight, Color, Quantity, Price, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        XJdbc.update(sql,
-                model.getProductID(),
-                model.getProductName(),
-                model.getSupplierID(),
-                model.getWeight(),
-                model.getColor(),
-                model.getQuantity(),
-                model.getPrice(),
-                model.getStatus());
+    public void insert(Products product) {
+        String sql = "INSERT INTO Products (ProductID, ProductName, Weight, Color, Quantity, Price, Status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try {
+            XJdbc.update(sql, product.getProductID(), product.getProductName(), product.getWeight(), product.getColor(),
+                    product.getQuantity(), product.getPrice(), product.getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error inserting product", e);
+        }
     }
 
     public void update(Products model) {
         String sql = "UPDATE Products SET ProductName=?, SupplierID=?, Weight=?, Color=?, Quantity=?, Price=?, Status=? WHERE ProductID=?";
         XJdbc.update(sql,
                 model.getProductName(),
-                model.getSupplierID(),
+               
                 model.getWeight(),
                 model.getColor(),
                 model.getQuantity(),
@@ -71,7 +69,7 @@ public class ProductsDAO extends InvenDAO<Products, String> {
                     Products entity = new Products();
                     entity.setProductID(rs.getString("ProductID"));
                     entity.setProductName(rs.getString("ProductName"));
-                    entity.setSupplierID(rs.getString("SupplierID"));
+              
                     entity.setColor(rs.getString("Color"));
                     entity.setWeight(rs.getString("Weight"));
                     entity.setQuantity(rs.getInt("Quantity"));
@@ -91,8 +89,7 @@ public class ProductsDAO extends InvenDAO<Products, String> {
         }
         return list;
     }
-    
-    
+
     public void updateStatus(String productID, String newStatus) {
         String sql = "UPDATE Products SET Status =? WHERE ProductID=?";
         XJdbc.update(sql,
