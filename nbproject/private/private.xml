@@ -4,12 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="DuAnMau"/>
         <group>
-            <file>file:/E:/DU_AN_1/QLKhoHang/src/com/inventory/message/DeleteEmployees2.java</file>
-            <file>file:/E:/DU_AN_1/QLKhoHang/src/com/inventory/message/DeleteEmployees3.java</file>
-            <file>file:/E:/DU_AN_1/QLKhoHang/src/com/inventory/form/Form_4.java</file>
-            <file>file:/E:/DU_AN_1/QLKhoHang/src/com/inventory/message/DeleteEmployees.java</file>
-            <file>file:/E:/DU_AN_1/QLKhoHang/src/com/inventory/message/DeleteEmployees1.java</file>
-            <file>file:/E:/DU_AN_1/QLKhoHang/src/com/inventory/form/Form_7.java</file>
+            <file>file:/E:/DU_AN_1/QLKhoHang/src/com/inventory/form/Form_1.java</file>
+            <file>file:/E:/DU_AN_1/QLKhoHang/src/com/inventory/form/Model_Add_ProductDelivery.java</file>
+            <file>file:/E:/DU_AN_1/QLKhoHang/src/com/inventory/dao/ProductsDAO.java</file>
+            <file>file:/E:/DU_AN_1/QLKhoHang/src/com/inventory/entity/Products.java</file>
             <file>file:/E:/DU_AN_1/QLKhoHang/src/com/inventory/main/Main.java</file>
         </group>
     </open-files>
