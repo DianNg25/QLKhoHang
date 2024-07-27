@@ -4,6 +4,7 @@
  */
 package com.inventory.form;
 
+import com.inventory.entity.EmployeesTable;
 import com.inventory.utils.DatabaseUtils;
 import java.awt.Image;
 import java.awt.event.ActionListener;
@@ -21,30 +22,31 @@ import javax.swing.SwingUtilities;
  *
  * @author WINDOWS
  */
-public class Model_Add_Employees extends javax.swing.JPanel {
+public class Model_update_Employees1 extends javax.swing.JPanel {
 
     /**
      * Creates new form Model_Add_Employees
      */
-    public Model_Add_Employees() {
+    public Model_update_Employees1() {
         initComponents();
+
     }
 
-    @SuppressWarnings("empty-statement")
-    private void addTable() {
+    private void updateEmployeeData() {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
+
         try {
             // Lấy dữ liệu từ các trường nhập liệu
-            String id = txtId.getText().trim();
-            String hoten = txtHoTen.getText().trim();
-            String email = txtEmail.getText().trim();
-            String sodt = txtSdt.getText().trim();
-            byte gender = jRadioButton2.isSelected() ? (byte) 1 : (byte) 0; // 1 nếu là Admin, 0 nếu là User
-            String tk = txtTaiKhoan.getText().trim();
-            String mk = textField7.getText().trim(); // Đảm bảo mật khẩu là String
-            String hinh = txtHinh.getText().trim();
+            String id = txtId.getText() != null ? txtId.getText().trim() : "";
+            String hoten = txtHoTen.getText() != null ? txtHoTen.getText().trim() : "";
+            String email = txtEmail.getText() != null ? txtEmail.getText().trim() : "";
+            String sodt = txtSdt.getText() != null ? txtSdt.getText().trim() : "";
+            byte gender = rdoAdmin.isSelected() ? (byte) 1 : (byte) 0; // 1 nếu là Admin, 0 nếu User
+            String tk = txtTaiKhoan.getText() != null ? txtTaiKhoan.getText().trim() : "";
+            String mk = txtMK.getText() != null ? txtMK.getText().trim() : ""; // Đảm bảo mật khẩu là String
+            String hinh = txtHinh.getText() != null ? txtHinh.getText().trim() : "";
 
             // Kiểm tra dữ liệu trống
             if (id.isEmpty() || hoten.isEmpty() || email.isEmpty() || sodt.isEmpty() || tk.isEmpty() || mk.isEmpty()) {
@@ -58,13 +60,13 @@ public class Model_Add_Employees extends javax.swing.JPanel {
                 return;
             }
 
-            // Kiểm tra định dạng số điện thoại (phải bắt đầu bằng 03 hoặc 09 và có 10 chữ số)
+            // Kiểm tra định dạng số điện thoại
             if (!sodt.matches("^(0)\\d{9}$")) {
                 JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ. Nó phải bắt đầu bằng số 0 có 10 chữ số.");
                 return;
             }
 
-            // Kiểm tra mật khẩu (giả định mật khẩu phải dài ít nhất 6 ký tự)
+            // Kiểm tra mật khẩu
             if (mk.length() < 6) {
                 JOptionPane.showMessageDialog(null, "Mật khẩu phải có ít nhất 6 ký tự.");
                 return;
@@ -78,36 +80,35 @@ public class Model_Add_Employees extends javax.swing.JPanel {
             statement = connection.prepareStatement(checkIdQuery);
             statement.setString(1, id);
             resultSet = statement.executeQuery();
-            if (resultSet.next() && resultSet.getInt(1) > 0) {
-                JOptionPane.showMessageDialog(null, "ID đã tồn tại. Vui lòng chọn ID khác.");
+            if (!resultSet.next() || resultSet.getInt(1) == 0) {
+                JOptionPane.showMessageDialog(null, "ID không tồn tại. Vui lòng kiểm tra lại.");
                 return;
             }
 
-            // Chuẩn bị câu lệnh SQL để chèn dữ liệu
-            String query = "INSERT INTO Employees (EmployeeID, Username, FullName, Phone, Email, Password, Position, Image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            // Chuẩn bị câu lệnh SQL để cập nhật dữ liệu
+            String query = "UPDATE Employees SET Username = ?, FullName = ?, Phone = ?, Email = ?, Password = ?, Position = ?, Image = ? WHERE EmployeeID = ?";
             statement = connection.prepareStatement(query);
-            statement.setString(1, id);
-            statement.setString(2, tk);
-            statement.setString(3, hoten);
-            statement.setString(4, sodt);
-            statement.setString(5, email);
-            statement.setString(6, mk);
-            statement.setByte(7, gender);
-            statement.setString(8, hinh);
+            statement.setString(1, tk);
+            statement.setString(2, hoten);
+            statement.setString(3, sodt);
+            statement.setString(4, email);
+            statement.setString(5, mk);
+            statement.setByte(6, gender);
+            statement.setString(7, hinh);
+            statement.setString(8, id);
 
             // Thực hiện lệnh SQL
             int rowsAffected = statement.executeUpdate();
 
             // Kiểm tra kết quả và hiển thị thông báo
             if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Thêm Thành Công!");
-                Clearform();
+                JOptionPane.showMessageDialog(null, "Cập nhật Thành Công!");
             } else {
-                JOptionPane.showMessageDialog(null, "Thêm Thất Bại.");
+                JOptionPane.showMessageDialog(null, "Cập nhật Thất Bại.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Lỗi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         } finally {
             // Đảm bảo đóng tài nguyên
             try {
@@ -124,17 +125,6 @@ public class Model_Add_Employees extends javax.swing.JPanel {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void Clearform() {
-        txtId.setText("");
-        txtHoTen.setText("");
-        txtEmail.setText("");
-        txtSdt.setText("");
-        role.clearSelection(); // Nếu grpGt là ButtonGroup
-        textField7.setText(""); // Nếu textField7 là trường để nhập địa chỉ
-        txtHinh.setText(""); // Hoặc bạn có thể thiết lập ảnh mặc định nếu cần
-        txtTaiKhoan.setText("");
     }
 
     @SuppressWarnings("unchecked")
@@ -161,10 +151,10 @@ public class Model_Add_Employees extends javax.swing.JPanel {
         txtTaiKhoan = new com.inventory.swing.TextField();
         panelBorder1 = new com.inventory.swing.PanelBorder();
         txtHinh = new javax.swing.JLabel();
-        textField7 = new com.inventory.swing.TextField();
+        txtMK = new com.inventory.swing.TextField();
         jLabel8 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        rdoUser = new javax.swing.JRadioButton();
+        rdoAdmin = new javax.swing.JRadioButton();
 
         setPreferredSize(new java.awt.Dimension(700, 550));
         setLayout(new java.awt.BorderLayout());
@@ -218,7 +208,7 @@ public class Model_Add_Employees extends javax.swing.JPanel {
 
         btnOK.setBackground(new java.awt.Color(27, 66, 139));
         btnOK.setForeground(new java.awt.Color(255, 255, 255));
-        btnOK.setText("Thêm");
+        btnOK.setText("Sửa");
         btnOK.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnOK.setPreferredSize(new java.awt.Dimension(36, 33));
         btnOK.addActionListener(new java.awt.event.ActionListener() {
@@ -316,22 +306,22 @@ public class Model_Add_Employees extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        textField7.setPreferredSize(new java.awt.Dimension(25, 40));
+        txtMK.setPreferredSize(new java.awt.Dimension(25, 40));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Mật khẩu");
 
-        role.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jRadioButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("User");
+        role.add(rdoUser);
+        rdoUser.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        rdoUser.setForeground(new java.awt.Color(255, 255, 255));
+        rdoUser.setSelected(true);
+        rdoUser.setText("User");
 
-        role.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jRadioButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jRadioButton2.setText("Admin");
+        role.add(rdoAdmin);
+        rdoAdmin.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        rdoAdmin.setForeground(new java.awt.Color(255, 255, 255));
+        rdoAdmin.setText("Admin");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -351,13 +341,13 @@ public class Model_Add_Employees extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jRadioButton1)
+                                .addComponent(rdoUser)
                                 .addGap(19, 19, 19)
-                                .addComponent(jRadioButton2)
+                                .addComponent(rdoAdmin)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(textField7, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtMK, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtHoTen, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
@@ -404,12 +394,12 @@ public class Model_Add_Employees extends javax.swing.JPanel {
                     .addComponent(panelBorder1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtMK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2)
+                    .addComponent(rdoUser)
+                    .addComponent(rdoAdmin)
                     .addComponent(jLabel4))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -423,7 +413,7 @@ public class Model_Add_Employees extends javax.swing.JPanel {
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         // TODO add your handling code here:
-        addTable();
+        updateEmployeeData();
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void txtHinhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtHinhMouseClicked
@@ -453,6 +443,32 @@ public class Model_Add_Employees extends javax.swing.JPanel {
         btnOK.addActionListener(event);
     }
 
+    public void setEmployeeData(EmployeesTable employee) {
+
+        if (employee == null) {
+            return;
+        } else {
+            txtId.setText(employee.getEmployeeID());
+            txtTaiKhoan.setText(employee.getUsername());
+            txtHoTen.setText(employee.getFullName()); // Có thể cần đổi tên biến nếu bạn muốn lưu mật khẩu ở đây
+            txtSdt.setText(String.valueOf(employee.getPhone()));
+            txtEmail.setText(employee.getEmail());
+
+            // Chuyển đổi position từ byte về dạng String
+            if (employee.getPosition() == 1) {
+                rdoAdmin.setSelected(true);
+            } else {
+                rdoUser.setSelected(true);
+            }
+
+            txtHinh.setText(employee.getImage());
+            // Nếu bạn muốn lưu mật khẩu vào một trường khác, hãy đảm bảo trường mật khẩu có tên khác
+            txtMK.setText(employee.getPassword()); // Giả sử có trường nhập liệu khác cho mật khẩu
+        }
+
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button btnOK;
     private com.inventory.swing.Button button1;
@@ -467,16 +483,17 @@ public class Model_Add_Employees extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private com.inventory.swing.PanelBorder panelBorder1;
+    private javax.swing.JRadioButton rdoAdmin;
+    private javax.swing.JRadioButton rdoUser;
     private javax.swing.ButtonGroup role;
-    private com.inventory.swing.TextField textField7;
     private com.inventory.swing.TextField txtEmail;
     private javax.swing.JLabel txtHinh;
     private com.inventory.swing.TextField txtHoTen;
     private com.inventory.swing.TextField txtId;
+    private com.inventory.swing.TextField txtMK;
     private com.inventory.swing.TextField txtSdt;
     private com.inventory.swing.TextField txtTaiKhoan;
     // End of variables declaration//GEN-END:variables
+
 }

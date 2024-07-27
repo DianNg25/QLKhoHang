@@ -6,6 +6,7 @@ package com.inventory.form;
 
 import com.inventory.dao.EmployeesDAO;
 import com.inventory.entity.Employees;
+import com.inventory.entity.EmployeesTable;
 import com.inventory.utils.XJdbc;
 import java.awt.BorderLayout;
 import java.sql.SQLException;
@@ -31,6 +32,8 @@ public class Form_7 extends javax.swing.JPanel {
     private JTable productTable;
     private DefaultTableModel tableModel;
 
+    private EmployeesTable selectedEmployee;
+
     public Form_7() {
         initComponents();
 
@@ -38,22 +41,24 @@ public class Form_7 extends javax.swing.JPanel {
     }
 
     private void loadData() {
-        String sql = "SELECT EmployeeID, Username, FullName, Phone, Email, Position FROM Employees";
+        String sql = "SELECT * FROM Employees";
 
         try {
-            List<Employees> employeeList = selectBySql(sql);
+            List<EmployeesTable> employeeList = selectBySql(sql);
 
             DefaultTableModel tableModel = (DefaultTableModel) tblTable.getModel();
             tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
 
-            for (Employees employee : employeeList) {
+            for (EmployeesTable employee : employeeList) {
                 Object[] row = new Object[]{
                     employee.getEmployeeID(),
                     employee.getUsername(),
                     employee.getFullName(),
                     employee.getPhone(),
                     employee.getEmail(),
-                    employee.getPosition() == 1 ? "Admin" : "User"
+                    employee.getPosition() == 1 ? "Admin" : "User",
+                    employee.getImage(), // Nếu có cột Image
+                    employee.getPassword() // Nếu có cột Password
                 };
                 tableModel.addRow(row);
             }
@@ -63,21 +68,27 @@ public class Form_7 extends javax.swing.JPanel {
         }
     }
 
-    protected List<Employees> selectBySql(String sql, Object... args) {
-        List<Employees> list = new ArrayList<>();
+    protected List<EmployeesTable> selectBySql(String sql, Object... args) {
+        List<EmployeesTable> list = new ArrayList<>();
         try {
             java.sql.ResultSet rs = null;
             try {
                 rs = XJdbc.query(sql, args);
                 while (rs.next()) {
-                    Employees entity = new Employees();
+                    EmployeesTable entity = new EmployeesTable();
                     entity.setEmployeeID(rs.getString("EmployeeID"));
                     entity.setUsername(rs.getString("Username"));
                     entity.setFullName(rs.getString("FullName"));
                     entity.setPhone(rs.getInt("Phone"));
                     entity.setEmail(rs.getString("Email"));
+
+                    // Nếu bảng có cột Position, bạn cần xác định loại của nó
+                    // Ví dụ: Nếu cột Position là byte
                     entity.setPosition(rs.getByte("Position"));
 
+                    // Nếu bảng có các cột khác như Image và Password, bạn cũng cần lấy chúng
+                    entity.setImage(rs.getString("Image"));
+                    entity.setPassword(rs.getString("Password"));
                     list.add(entity);
                 }
             } finally {
@@ -107,6 +118,7 @@ public class Form_7 extends javax.swing.JPanel {
         button1 = new com.inventory.swing.Button();
         button2 = new com.inventory.swing.Button();
         btnXoa = new com.inventory.swing.Button();
+        btnSua = new com.inventory.swing.Button();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTable = new com.inventory.swing.Table();
@@ -149,6 +161,16 @@ public class Form_7 extends javax.swing.JPanel {
             }
         });
 
+        btnSua.setBackground(new java.awt.Color(102, 102, 255));
+        btnSua.setForeground(new java.awt.Color(255, 255, 255));
+        btnSua.setText("Sửa");
+        btnSua.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -166,16 +188,19 @@ public class Form_7 extends javax.swing.JPanel {
                         .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(35, 35, 35)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(161, 161, 161))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45)
                         .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15)))
-                .addGap(161, 161, 161))
+                        .addGap(51, 51, 51))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(9, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -183,7 +208,8 @@ public class Form_7 extends javax.swing.JPanel {
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -208,6 +234,11 @@ public class Form_7 extends javax.swing.JPanel {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tblTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tblTable);
@@ -258,8 +289,73 @@ public class Form_7 extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnXoaActionPerformed
 
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+
+        if (selectedEmployee != null) {
+            System.out.println("EmployeeID: " + selectedEmployee.getEmployeeID());
+            System.out.println("Username: " + selectedEmployee.getUsername());
+            System.out.println("FullName: " + selectedEmployee.getFullName());
+            System.out.println("Phone: " + selectedEmployee.getPhone());
+            System.out.println("Email: " + selectedEmployee.getEmail());
+            System.out.println("Position: " + (selectedEmployee.getPosition() == 1 ? "Admin" : "User"));
+            System.out.println("Image: " + selectedEmployee.getImage());
+            System.out.println("Password: " + selectedEmployee.getPassword());
+
+            // Mở cửa sổ chỉnh sửa với dữ liệu của nhân viên đã chọn
+            JDialog add = new JDialog();
+            Model_update_Employees1 model = new Model_update_Employees1();
+            // Truyền đối tượng EmployeesTable vào form Model_update_Employees1
+            model.setEmployeeData(selectedEmployee);
+
+            // Thiết lập JDialog
+            add.setUndecorated(true);
+            add.getContentPane().add(model);
+            add.pack();
+            add.setLocationRelativeTo(this); // this có thể là JFrame hoặc JDialog hiện tại
+            add.setVisible(true);
+        } 
+        else {
+            // Xử lý khi không có nhân viên nào được chọn
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhân viên để chỉnh sửa.");
+        }
+    }//GEN-LAST:event_btnSuaActionPerformed
+
+    private void tblTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTableMouseClicked
+        int selectedRow = tblTable.getSelectedRow();
+
+        if (selectedRow != -1) { // Có một hàng được chọn
+            EmployeesTable employee = new EmployeesTable();
+
+            // Lấy dữ liệu từ bảng và lưu vào đối tượng EmployeesTable
+            employee.setEmployeeID((String) tblTable.getValueAt(selectedRow, 0));
+            employee.setUsername((String) tblTable.getValueAt(selectedRow, 1));
+            employee.setFullName((String) tblTable.getValueAt(selectedRow, 2));
+            employee.setPhone(((Number) tblTable.getValueAt(selectedRow, 3)).intValue());
+            employee.setEmail((String) tblTable.getValueAt(selectedRow, 4));
+
+            Object positionObj = tblTable.getValueAt(selectedRow, 5);
+            if (positionObj instanceof String) {
+                String positionStr = (String) positionObj;
+                employee.setPosition(positionStr.equalsIgnoreCase("Admin") ? (byte) 1 : (byte) 0);
+            } else if (positionObj instanceof Number) {
+                employee.setPosition(((Number) positionObj).byteValue());
+            } else {
+                employee.setPosition((byte) 0); // Giá trị mặc định
+            }
+
+//        employee.setImage((String) tblTable.getValueAt(selectedRow, 6));
+//        employee.setPassword((String) tblTable.getValueAt(selectedRow, 7));
+            // Đặt đối tượng EmployeesTable vào biến toàn cục
+            this.selectedEmployee = employee;
+
+            // Optional: Hiển thị thông báo để kiểm tra dữ liệu đã được lưu vào đối tượng
+            JOptionPane.showMessageDialog(this, "Selected Employee: " + employee.getFullName());
+        }
+    }//GEN-LAST:event_tblTableMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.inventory.swing.Button btnSua;
     private com.inventory.swing.Button btnXoa;
     private com.inventory.swing.Button button1;
     private com.inventory.swing.Button button2;

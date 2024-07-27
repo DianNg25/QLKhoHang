@@ -8,7 +8,7 @@ package com.inventory.entity;
  *
  * @author ADMIN
  */
-public class Employees {
+public class EmployeesTable {
     private String EmployeeID;
     private String Username;
     private String FullName;
@@ -18,10 +18,10 @@ public class Employees {
     private String Image;
     private String Password;
 
-    public Employees() {
+    public EmployeesTable() {
     }
 
-    public Employees(String EmployeeID, String Username, String FullName, int Phone, String Email, String Image, String Password) {
+    public EmployeesTable(String EmployeeID, String Username, String FullName, int Phone, String Email, String Image, String Password) {
         this.EmployeeID = EmployeeID;
         this.Username = Username;
         this.FullName = FullName;
