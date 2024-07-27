@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import com.inventory.message.*;
 import com.inventory.swing.glasspanepopup.GlassPanePopup;
+import java.awt.Toolkit;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -366,13 +367,21 @@ public class Form_4 extends javax.swing.JPanel {
 
     private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
         // TODO add your handling code here:
-        JDialog add = new JDialog();
-        Model_Add_Suppliers model = new Model_Add_Suppliers();
-        add.setUndecorated(true);
-        add.getContentPane().add(model);
-        add.pack();
-        add.setLocationRelativeTo(this);
-        add.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            JDialog add = new JDialog();
+            Model_Add_Suppliers model = new Model_Add_Suppliers();
+            add.setUndecorated(true);
+            add.getContentPane().add(model);
+            add.pack();
+
+            // Centering Logic
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = (screenSize.width - add.getWidth()) / 2;
+            int y = (screenSize.height - add.getHeight()) / 2;
+            add.setLocation(x, y);
+
+            add.setVisible(true);
+        });
     }//GEN-LAST:event_button3ActionPerformed
 
     private void btnTimKiemNCCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemNCCActionPerformed
@@ -393,7 +402,6 @@ public class Form_4 extends javax.swing.JPanel {
                 // Sử dụng hàm delete để xóa Nhà cung cấp
                 dao.delete(EmployeeID);
 
-               
                 DeleteSuppliers obj = new DeleteSuppliers();
                 obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
                 GlassPanePopup.showPopup(obj);

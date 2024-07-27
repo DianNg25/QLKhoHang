@@ -34,15 +34,15 @@ public class InformationSuppliers_Null extends javax.swing.JPanel {
         txt = new javax.swing.JTextPane();
         btnOK = new com.inventory.swing.Button();
 
-        setBackground(new java.awt.Color(255, 255, 255));
+        setBackground(new java.awt.Color(204, 204, 204));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 25, 25, 25));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 0, 0));
         jLabel1.setText("Lỗi nhập liệu");
 
+        txt.setBackground(new java.awt.Color(204, 204, 204));
         txt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txt.setForeground(new java.awt.Color(133, 133, 133));
         txt.setText("Tất cả các trường phải được điền vào!");
         txt.setToolTipText("");
         txt.setAutoscrolls(false);

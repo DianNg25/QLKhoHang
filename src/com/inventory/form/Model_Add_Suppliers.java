@@ -26,7 +26,8 @@ import org.apache.poi.poifs.nio.DataSource;
  * @author Nguyen
  */
 public class Model_Add_Suppliers extends javax.swing.JPanel {
-
+    
+    private JDialog errorDialog;
     /**
      * Creates new form Model_Add_Product
      */
@@ -271,57 +272,156 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         String email = txtEmail.getText().trim();
 
         if (supplierID.isEmpty() || supplierName.isEmpty() || address.isEmpty() || phone.isEmpty() || email.isEmpty()) {
-            InformationSuppliers_Null obj = new InformationSuppliers_Null();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+            SwingUtilities.invokeLater(() -> {
+                InformationSuppliers_Null obj = new InformationSuppliers_Null();
+
+                obj.eventOK(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent ae) {
+                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(obj);
+                        dialog.dispose();
+                    }
+                });
+
+                JDialog dialog = new JDialog();
+                dialog.setUndecorated(true);
+                dialog.setModal(true);
+                dialog.getContentPane().add(obj);
+                dialog.pack();
+                dialog.setLocationRelativeTo(this);
+                dialog.setAlwaysOnTop(true);
+                dialog.toFront();
+                dialog.setVisible(true);
+            });
             return;
         }
 
         if (!isEmailValid(email)) {
-            EmailError obj = new EmailError();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+            SwingUtilities.invokeLater(() -> {
+                EmailError obj = new EmailError();
+
+                obj.eventOK(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent ae) {
+                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(obj);
+                        dialog.dispose();
+                    }
+                });
+
+                JDialog dialog = new JDialog();
+                dialog.setUndecorated(true);
+                dialog.setModal(true);
+                dialog.getContentPane().add(obj);
+                dialog.pack();
+                dialog.setLocationRelativeTo(this);
+                dialog.setAlwaysOnTop(true);
+                dialog.toFront();
+                dialog.setVisible(true);
+            });
             return;
         }
 
         if (!isPhoneValid(phone)) {
-            ErrorSuppliers_Phone obj = new ErrorSuppliers_Phone();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+            SwingUtilities.invokeLater(() -> {
+                ErrorSuppliers_Phone obj = new ErrorSuppliers_Phone();
+
+                obj.eventOK(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent ae) {
+                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(obj);
+                        dialog.dispose();
+                    }
+                });
+
+                JDialog dialog = new JDialog();
+                dialog.setUndecorated(true);
+                dialog.setModal(true);
+                dialog.getContentPane().add(obj);
+                dialog.pack();
+                dialog.setLocationRelativeTo(this);
+                dialog.setAlwaysOnTop(true);
+                dialog.toFront();
+                dialog.setVisible(true);
+            });
             return;
         }
 
         if (!XJdbc.isSupplierIDUnique(supplierID)) {
-            IDError obj = new IDError();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+            SwingUtilities.invokeLater(() -> {
+                IDError obj = new IDError();
+
+                obj.eventOK(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent ae) {
+                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(obj);
+                        dialog.dispose();
+                    }
+                });
+
+                JDialog dialog = new JDialog();
+                dialog.setUndecorated(true);
+                dialog.setModal(true);
+                dialog.getContentPane().add(obj);
+                dialog.pack();
+                dialog.setLocationRelativeTo(this);
+                dialog.setAlwaysOnTop(true);
+                dialog.toFront();
+                dialog.setVisible(true);
+            });
             return;
         }
 
         String sql = "INSERT INTO Suppliers (SupplierID, SupplierName, Address, Phone, Email) VALUES (?, ?, ?, ?, ?)";
         try {
             XJdbc.update(sql, supplierID, supplierName, address, phone, email);
-            SupplierAddedSuccess obj = new SupplierAddedSuccess();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+            SwingUtilities.invokeLater(() -> {
+                SupplierAddedSuccess obj = new SupplierAddedSuccess();
+
+                obj.eventOK(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent ae) {
+                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(obj);
+                        dialog.dispose();
+                    }
+                });
+
+                JDialog dialog = new JDialog();
+                dialog.setUndecorated(true);
+                dialog.setModal(true);
+                dialog.getContentPane().add(obj);
+                dialog.pack();
+                dialog.setLocationRelativeTo(this);
+                dialog.setAlwaysOnTop(true);
+                dialog.toFront();
+                dialog.setVisible(true);
+            });
             clearForm();
         } catch (Exception e) {
-            SupplierAddedFailed obj = new SupplierAddedFailed();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+            SwingUtilities.invokeLater(() -> {
+                SupplierAddedFailed obj = new SupplierAddedFailed();
+
+                obj.eventOK(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent ae) {
+                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(obj);
+                        dialog.dispose();
+                    }
+                });
+
+                JDialog dialog = new JDialog();
+                dialog.setUndecorated(true);
+                dialog.setModal(true);
+                dialog.getContentPane().add(obj);
+                dialog.pack();
+                dialog.setLocationRelativeTo(this);
+                dialog.setAlwaysOnTop(true);
+                dialog.toFront();
+                dialog.setVisible(true);
+            });
         }
     }
 
-    private void showEmailError() {
-        EmailError emailError = new EmailError();
-        JDialog errorDialog = new JDialog();
-        errorDialog.setUndecorated(true);
-        errorDialog.getContentPane().add(emailError);
-        errorDialog.pack();
-        errorDialog.setLocationRelativeTo(this);
-        errorDialog.setVisible(true);
-    }
-
+    
     @Override
     protected void paintComponent(Graphics graphics) {
         Graphics2D g2 = (Graphics2D) graphics;
