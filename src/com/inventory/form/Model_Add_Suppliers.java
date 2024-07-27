@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package com.inventory.form;
 
 import com.inventory.message.EmailError;
@@ -12,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import com.inventory.message.*;
+import com.inventory.swing.glasspanepopup.ModalErrorGlassPanePopup;
+import com.inventory.swing.glasspanepopup.ModalErrorOption;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
@@ -26,8 +24,9 @@ import org.apache.poi.poifs.nio.DataSource;
  * @author Nguyen
  */
 public class Model_Add_Suppliers extends javax.swing.JPanel {
-    
+
     private JDialog errorDialog;
+
     /**
      * Creates new form Model_Add_Product
      */
@@ -273,100 +272,44 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
 
         if (supplierID.isEmpty() || supplierName.isEmpty() || address.isEmpty() || phone.isEmpty() || email.isEmpty()) {
             SwingUtilities.invokeLater(() -> {
-                InformationSuppliers_Null obj = new InformationSuppliers_Null();
-
-                obj.eventOK(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent ae) {
-                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(obj);
-                        dialog.dispose();
-                    }
+                InformationSuppliers_Null errorPanel = new InformationSuppliers_Null();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
                 });
-
-                JDialog dialog = new JDialog();
-                dialog.setUndecorated(true);
-                dialog.setModal(true);
-                dialog.getContentPane().add(obj);
-                dialog.pack();
-                dialog.setLocationRelativeTo(this);
-                dialog.setAlwaysOnTop(true);
-                dialog.toFront();
-                dialog.setVisible(true);
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
             });
             return;
         }
 
         if (!isEmailValid(email)) {
             SwingUtilities.invokeLater(() -> {
-                EmailError obj = new EmailError();
-
-                obj.eventOK(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent ae) {
-                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(obj);
-                        dialog.dispose();
-                    }
+                EmailError errorPanel = new EmailError();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
                 });
-
-                JDialog dialog = new JDialog();
-                dialog.setUndecorated(true);
-                dialog.setModal(true);
-                dialog.getContentPane().add(obj);
-                dialog.pack();
-                dialog.setLocationRelativeTo(this);
-                dialog.setAlwaysOnTop(true);
-                dialog.toFront();
-                dialog.setVisible(true);
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
             });
             return;
         }
 
         if (!isPhoneValid(phone)) {
             SwingUtilities.invokeLater(() -> {
-                ErrorSuppliers_Phone obj = new ErrorSuppliers_Phone();
-
-                obj.eventOK(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent ae) {
-                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(obj);
-                        dialog.dispose();
-                    }
+                ErrorSuppliers_Phone errorPanel = new ErrorSuppliers_Phone();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
                 });
-
-                JDialog dialog = new JDialog();
-                dialog.setUndecorated(true);
-                dialog.setModal(true);
-                dialog.getContentPane().add(obj);
-                dialog.pack();
-                dialog.setLocationRelativeTo(this);
-                dialog.setAlwaysOnTop(true);
-                dialog.toFront();
-                dialog.setVisible(true);
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
             });
             return;
         }
 
         if (!XJdbc.isSupplierIDUnique(supplierID)) {
             SwingUtilities.invokeLater(() -> {
-                IDError obj = new IDError();
-
-                obj.eventOK(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent ae) {
-                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(obj);
-                        dialog.dispose();
-                    }
+                IDError errorPanel = new IDError();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
                 });
-
-                JDialog dialog = new JDialog();
-                dialog.setUndecorated(true);
-                dialog.setModal(true);
-                dialog.getContentPane().add(obj);
-                dialog.pack();
-                dialog.setLocationRelativeTo(this);
-                dialog.setAlwaysOnTop(true);
-                dialog.toFront();
-                dialog.setVisible(true);
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
             });
             return;
         }
@@ -375,53 +318,24 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         try {
             XJdbc.update(sql, supplierID, supplierName, address, phone, email);
             SwingUtilities.invokeLater(() -> {
-                SupplierAddedSuccess obj = new SupplierAddedSuccess();
-
-                obj.eventOK(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent ae) {
-                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(obj);
-                        dialog.dispose();
-                    }
+                SupplierAddedSuccess successPanel = new SupplierAddedSuccess();
+                successPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                    clearForm();
                 });
-
-                JDialog dialog = new JDialog();
-                dialog.setUndecorated(true);
-                dialog.setModal(true);
-                dialog.getContentPane().add(obj);
-                dialog.pack();
-                dialog.setLocationRelativeTo(this);
-                dialog.setAlwaysOnTop(true);
-                dialog.toFront();
-                dialog.setVisible(true);
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), successPanel, new ModalErrorOption());
             });
-            clearForm();
         } catch (Exception e) {
             SwingUtilities.invokeLater(() -> {
-                SupplierAddedFailed obj = new SupplierAddedFailed();
-
-                obj.eventOK(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent ae) {
-                        JDialog dialog = (JDialog) SwingUtilities.getWindowAncestor(obj);
-                        dialog.dispose();
-                    }
+                SupplierAddedFailed failedPanel = new SupplierAddedFailed();
+                failedPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
                 });
-
-                JDialog dialog = new JDialog();
-                dialog.setUndecorated(true);
-                dialog.setModal(true);
-                dialog.getContentPane().add(obj);
-                dialog.pack();
-                dialog.setLocationRelativeTo(this);
-                dialog.setAlwaysOnTop(true);
-                dialog.toFront();
-                dialog.setVisible(true);
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), failedPanel, new ModalErrorOption());
             });
         }
     }
 
-    
     @Override
     protected void paintComponent(Graphics graphics) {
         Graphics2D g2 = (Graphics2D) graphics;

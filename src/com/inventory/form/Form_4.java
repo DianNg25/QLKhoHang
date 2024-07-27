@@ -369,6 +369,7 @@ public class Form_4 extends javax.swing.JPanel {
         // TODO add your handling code here:
         SwingUtilities.invokeLater(() -> {
             JDialog add = new JDialog();
+            add.setModal(true);
             Model_Add_Suppliers model = new Model_Add_Suppliers();
             add.setUndecorated(true);
             add.getContentPane().add(model);
