@@ -12,19 +12,7 @@ import java.sql.PreparedStatement;
 
 public class EmployeesDAO extends InvenDAO<Employees, String> {
 
-//    public void insert(Employees model) {
-//        String sql = "INSERT INTO Employees (EmployeeID, Username, FullName, Phone, Email, Password, Position, Image ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-//        XJdbc.update(sql,
-//                model.getEmployeeID(),
-//                model.getUsername(),
-//                model.getFullName(),
-//                model.getPhone(),
-//                model.getEmail(),
-//                model.getPassword(),
-//                model.getPosition(),
-//                model.getImage());
-//
-//    }
+
     public void insert(Employees model) {
         String sql = "INSERT INTO Employees (EmployeeID, Username, FullName, Phone, Email, Password, Position, Image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = XJdbc.prepareStatement(sql)) {

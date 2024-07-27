@@ -29,27 +29,7 @@ public class XJdbc {
         return DriverManager.getConnection(dburl, username, password);
     }
 
-//    // Tạo PreparedStatement
-//    public static PreparedStatement getStmt(String sql, Object... args) throws SQLException {
-//        Connection connection = getConnection();
-//        PreparedStatement pstmt = null;
-//        try {
-//            if (sql.trim().startsWith("{")) {
-//                pstmt = connection.prepareCall(sql);
-//            } else {
-//                pstmt = connection.prepareStatement(sql);
-//            }
-//            for (int i = 0; i < args.length; i++) {
-//                pstmt.setObject(i + 1, args[i]);
-//            }
-//            return pstmt;
-//        } catch (SQLException e) {
-//            if (connection != null && !connection.isClosed()) {
-//                connection.close();
-//            }
-//            throw e;
-//        }
-//    }
+
     // Tạo PreparedStatement
     public static PreparedStatement getStmt(String sql, Object... args) throws SQLException {
         Connection connection = getConnection();
