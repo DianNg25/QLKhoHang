@@ -47,6 +47,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet; // Chỉ sử dụng import này// Import lớp Sheet từ gói đúng
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 /**
  *
  * @author ADMIN
@@ -60,18 +61,18 @@ public class Form_1 extends javax.swing.JPanel {
         initComponents();
         customizeTable();
         loadData();
-
+        
     }
-
+    
     private void customizeTable() {
         spTable.setVerticalScrollBar(new JScrollBar()); // Use JScrollBar instead of ScrollBar
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
-
+        
         JPanel p = new JPanel();
         p.setBackground(Color.WHITE);
         spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-
+        
         table.setShowHorizontalLines(true);
         table.setGridColor(new Color(230, 230, 230));
         table.setRowHeight(40);
@@ -106,33 +107,33 @@ public class Form_1 extends javax.swing.JPanel {
 
                 // Custom renderer for specific columns (example: status column)
                 if (column == 5) { // Status column
-                JLabel label = new JLabel(value.toString());
-                label.setFont(new Font("sansserif", Font.BOLD, 13));
-                if ("Đã xóa".equals(value)) {
-                    label.setForeground(Color.RED); // Màu đỏ cho trạng thái đã xóa
-                } else {
-                    label.setForeground(Color.GREEN); // Màu khác cho trạng thái khác
+                    JLabel label = new JLabel(value.toString());
+                    label.setFont(new Font("sansserif", Font.BOLD, 13));
+                    if ("Đã xóa".equals(value)) {
+                        label.setForeground(Color.RED); // Màu đỏ cho trạng thái đã xóa
+                    } else {
+                        label.setForeground(Color.GREEN); // Màu khác cho trạng thái khác
+                    }
+                    label.setHorizontalAlignment(JLabel.CENTER); // Center align status column
+                    return label;
                 }
-                label.setHorizontalAlignment(JLabel.CENTER); // Center align status column
-                return label;
+                return com;
             }
-            return com;
-        }
         });
     }
-
+    
     private void loadData() {
         // Tạo đối tượng DAO
         String sql = "SELECT * FROM Products";
-
+        
         try {
             // Gọi phương thức selectBySql để lấy danh sách sản phẩm
             List<Products> productList = selectBySql(sql);
-
-             productList.sort((p1, p2) -> {
-        // Trạng thái 'Đã xóa' sẽ được đưa xuống dưới cùng
-        return p1.getStatus().equals("Đã xóa") ? 1 : p2.getStatus().equals("Đã xóa") ? -1 : 0;
-    });
+            
+            productList.sort((p1, p2) -> {
+                // Trạng thái 'Đã xóa' sẽ được đưa xuống dưới cùng
+                return p1.getStatus().equals("Đã xóa") ? 1 : p2.getStatus().equals("Đã xóa") ? -1 : 0;
+            });
             
             DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
             tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
@@ -145,7 +146,8 @@ public class Form_1 extends javax.swing.JPanel {
                     product.getPrice(),
                     product.getColor(),
                     product.getWeight(),
-                    product.getStatus()
+                    product.getStatus(),
+                    product.getSupplierID()
                 };
                 tableModel.addRow(row);
             }
@@ -158,7 +160,7 @@ public class Form_1 extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Error loading data from database.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     protected List<Products> selectBySql(String sql, Object... args) {
         List<Products> list = new ArrayList<>();
         try {
@@ -169,13 +171,13 @@ public class Form_1 extends javax.swing.JPanel {
                     Products entity = new Products();
                     entity.setProductID(rs.getString("ProductID"));
                     entity.setProductName(rs.getString("ProductName"));
-             
+                    
                     entity.setColor(rs.getString("Color"));
                     entity.setWeight(rs.getString("Weight"));
                     entity.setQuantity(rs.getInt("Quantity"));
                     entity.setPrice(rs.getDouble("price"));
                     entity.setStatus(rs.getString("Status"));
-
+                    entity.setSupplierID(rs.getString("SupplierID"));
                     list.add(entity);
                 }
             } finally {
@@ -359,14 +361,14 @@ public class Form_1 extends javax.swing.JPanel {
         int selectedRow = table.getSelectedRow();
         if (selectedRow >= 0) {
             String productID = table.getValueAt(selectedRow, 0).toString();
-
+            
             ProductsDAO dao = new ProductsDAO();
 
             // Sử dụng hàm updateStatus để cập nhật trạng thái sản phẩm
             dao.updateStatus(productID, "Đã xóa");
-
+            
             loadData();
-
+            
             JOptionPane.showMessageDialog(this, "Product status updated to 'Deleted'!");
         } else {
             JOptionPane.showMessageDialog(this, "Please select a product to delete.");
@@ -379,7 +381,7 @@ public class Form_1 extends javax.swing.JPanel {
 
     private void btnExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelActionPerformed
         // TODO add your handling code here:
-         File file = chooseExcelFile(); // Implement this method to open a file chooser and return the selected file
+        File file = chooseExcelFile(); // Implement this method to open a file chooser and return the selected file
         if (file == null) {
             JOptionPane.showMessageDialog(this, "Lỗi đọc tệp tin Excel!");
         } else {
@@ -395,7 +397,6 @@ public class Form_1 extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnExcelActionPerformed
 
-    
 // Hàm chọn tệp Excel
     private File chooseExcelFile() {
         JFileChooser fileChooser = new JFileChooser();
@@ -406,106 +407,103 @@ public class Form_1 extends javax.swing.JPanel {
         }
         return null;
     }
-public boolean importProductsFromExcel(File excelFile) {
-    ProductsDAO dao = new ProductsDAO(); // Khởi tạo đối tượng ProductsDAO
-    boolean success = true;
 
-    try (FileInputStream file = new FileInputStream(excelFile); XSSFWorkbook workbook = new XSSFWorkbook(file)) {
-        Sheet sheet = workbook.getSheetAt(0);
-        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
-        tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại trong bảng
+    public boolean importProductsFromExcel(File excelFile) {
+        ProductsDAO dao = new ProductsDAO(); // Khởi tạo đối tượng ProductsDAO
+        boolean success = true;
+        
+        try (FileInputStream file = new FileInputStream(excelFile); XSSFWorkbook workbook = new XSSFWorkbook(file)) {
+            Sheet sheet = workbook.getSheetAt(0);
+            DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+            tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại trong bảng
 
-        Iterator<Row> rowIterator = sheet.iterator();
-        rowIterator.next(); // Bỏ qua hàng tiêu đề
-        while (rowIterator.hasNext()) {
-            Row row = rowIterator.next();
-            try {
-                String productID = getCellValue(row.getCell(0));
-                String productName = getCellValue(row.getCell(1));
-                String weight = getCellValue(row.getCell(2));
-                String color = getCellValue(row.getCell(3));
-               
-                double price = parseDouble(getCellValue(row.getCell(4)));
-                String status = getCellValue(row.getCell(5));
+            Iterator<Row> rowIterator = sheet.iterator();
+            rowIterator.next(); // Bỏ qua hàng tiêu đề
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                try {
+                    String productID = getCellValue(row.getCell(0));
+                    String productName = getCellValue(row.getCell(1));
+                    String weight = getCellValue(row.getCell(2));
+                    String color = getCellValue(row.getCell(3));
+                    
+                    double price = parseDouble(getCellValue(row.getCell(4)));
+                    String status = getCellValue(row.getCell(5));
 
-                // Nếu giá trị trạng thái trống hoặc không hợp lệ, gán giá trị mặc định
-                if (status == null || status.trim().isEmpty()) {
-                    status = "Hoạt động"; // Gán giá trị mặc định
+                    // Nếu giá trị trạng thái trống hoặc không hợp lệ, gán giá trị mặc định
+                    if (status == null || status.trim().isEmpty()) {
+                        status = "Hoạt động"; // Gán giá trị mặc định
+                    }
+                    
+                    if (productID.isEmpty() || productName.isEmpty()) {
+                        System.err.println("ProductID or ProductName is empty at row: " + row.getRowNum());
+                        success = false; // Set success to false if any critical field is empty
+                        continue;
+                    }
+                    
+                    Products pr = new Products();
+                    pr.setProductID(productID);
+                    pr.setProductName(productName);
+                    pr.setWeight(weight);
+                    pr.setColor(color);
+                    
+                    pr.setPrice(price);
+                    pr.setStatus(status); // Thiết lập trạng thái
+
+                    // Thực hiện thêm đối tượng pr vào cơ sở dữ liệu
+                    dao.insert(pr); // Chèn sản phẩm vào cơ sở dữ liệu
+
+                    // Thêm dữ liệu vào bảng
+                    Object[] rowData = new Object[]{productID, productName, weight, color, price, status};
+                    tableModel.addRow(rowData);
+                } catch (Exception e) {
+                    // Xử lý lỗi với từng hàng, ví dụ như định dạng sai
+                    System.err.println("Lỗi khi đọc dữ liệu hàng: " + row.getRowNum() + " - " + e.getMessage());
+                    success = false; // Đánh dấu lỗi nếu có lỗi xảy ra
                 }
-
-                if (productID.isEmpty() || productName.isEmpty()) {
-                    System.err.println("ProductID or ProductName is empty at row: " + row.getRowNum());
-                    success = false; // Set success to false if any critical field is empty
-                    continue;
-                }
-
-                Products pr = new Products();
-                pr.setProductID(productID);
-                pr.setProductName(productName);
-                pr.setWeight(weight);
-                pr.setColor(color);
-              
-                pr.setPrice(price);
-                pr.setStatus(status); // Thiết lập trạng thái
-
-                // Thực hiện thêm đối tượng pr vào cơ sở dữ liệu
-                dao.insert(pr); // Chèn sản phẩm vào cơ sở dữ liệu
-
-                // Thêm dữ liệu vào bảng
-                Object[] rowData = new Object[]{productID, productName, weight, color, price, status};
-                tableModel.addRow(rowData);
-            } catch (Exception e) {
-                // Xử lý lỗi với từng hàng, ví dụ như định dạng sai
-                System.err.println("Lỗi khi đọc dữ liệu hàng: " + row.getRowNum() + " - " + e.getMessage());
-                success = false; // Đánh dấu lỗi nếu có lỗi xảy ra
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi đọc file Excel!");
+            success = false; // Đánh dấu lỗi nếu có lỗi khi đọc tệp
         }
-    } catch (IOException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Lỗi khi đọc file Excel!");
-        success = false; // Đánh dấu lỗi nếu có lỗi khi đọc tệp
+        
+        return success;
     }
-
-    return success;
-}
-
-
-
+    
     private String getCellValue(Cell cell) {
-    if (cell == null) {
-        return "";
-    }
-    switch (cell.getCellType()) {
-        case STRING:
-            return cell.getStringCellValue();
-        case NUMERIC:
-            return String.valueOf(cell.getNumericCellValue());
-        case BOOLEAN:
-            return String.valueOf(cell.getBooleanCellValue());
-        case FORMULA:
-            return cell.getCellFormula(); // Thay đổi nếu cần thiết
-        default:
+        if (cell == null) {
             return "";
+        }
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue();
+            case NUMERIC:
+                return String.valueOf(cell.getNumericCellValue());
+            case BOOLEAN:
+                return String.valueOf(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula(); // Thay đổi nếu cần thiết
+            default:
+                return "";
+        }
     }
-}
-
-private int parseInteger(String value) {
-    try {
-        return Integer.parseInt(value.trim());
-    } catch (NumberFormatException e) {
-        return 0; // Hoặc ném ngoại lệ tùy theo yêu cầu
+    
+    private int parseInteger(String value) {
+        try {
+            return Integer.parseInt(value.trim());
+        } catch (NumberFormatException e) {
+            return 0; // Hoặc ném ngoại lệ tùy theo yêu cầu
+        }
     }
-}
-
-private double parseDouble(String value) {
-    try {
-        return Double.parseDouble(value.trim());
-    } catch (NumberFormatException e) {
-        return 0.0; // Hoặc ném ngoại lệ tùy theo yêu cầu
+    
+    private double parseDouble(String value) {
+        try {
+            return Double.parseDouble(value.trim());
+        } catch (NumberFormatException e) {
+            return 0.0; // Hoặc ném ngoại lệ tùy theo yêu cầu
+        }
     }
-}
-
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -8,86 +8,96 @@ package com.inventory.entity;
  *
  * @author ADMIN
  */
+
+
 public class Products {
 
-    public Products() {
-    }
-
-    
-    
     private String ProductID;
     private String ProductName;
     private String Color;
     private String Weight;
     private int Quantity;
-    private Double price;
+    private Double Price;
+    private String Status;
+    private String SupplierID;  // Nếu cần lưu SupplierID
 
+    // Constructor không tham số
+    public Products() {
+    }
+     // Constructor với tất cả các tham số
+    public Products(String productID, String productName, String color, String weight, int quantity, Double price, String status, String supplierID) {
+        this.ProductID = productID;
+        this.ProductName = productName;
+        this.Color = color;
+        this.Weight = weight;
+        this.Quantity = quantity;
+        this.Price = price;
+        this.Status = status;
+        this.SupplierID = supplierID;
+    }
+
+    // Getter và Setter cho tất cả các thuộc tính
     public String getProductID() {
         return ProductID;
     }
 
-    public void setProductID(String ProductID) {
-        this.ProductID = ProductID;
+    public void setProductID(String productID) {
+        this.ProductID = productID;
     }
 
     public String getProductName() {
         return ProductName;
     }
 
-    public void setProductName(String ProductName) {
-        this.ProductName = ProductName;
+    public void setProductName(String productName) {
+        this.ProductName = productName;
     }
 
     public String getColor() {
         return Color;
     }
 
-    public void setColor(String Color) {
-        this.Color = Color;
+    public void setColor(String color) {
+        this.Color = color;
     }
 
     public String getWeight() {
         return Weight;
     }
 
-    public void setWeight(String Weight) {
-        this.Weight = Weight;
+    public void setWeight(String weight) {
+        this.Weight = weight;
     }
 
     public int getQuantity() {
         return Quantity;
     }
 
-    public void setQuantity(int Quantity) {
-        this.Quantity = Quantity;
+    public void setQuantity(int quantity) {
+        this.Quantity = quantity;
     }
 
     public Double getPrice() {
-        return price;
+        return Price;
     }
 
     public void setPrice(Double price) {
-        this.price = price;
+        this.Price = price;
     }
 
     public String getStatus() {
         return Status;
     }
 
-    public void setStatus(String Status) {
-        this.Status = Status;
+    public void setStatus(String status) {
+        this.Status = status;
     }
 
-    public Products(String ProductID, String ProductName, String Color, String Weight, int Quantity, Double price, String Status) {
-        this.ProductID = ProductID;
-        this.ProductName = ProductName;
-        this.Color = Color;
-        this.Weight = Weight;
-        this.Quantity = Quantity;
-        this.price = price;
-        this.Status = Status;
+    public String getSupplierID() {
+        return SupplierID;
     }
-    private String Status;
-   
-    
+
+    public void setSupplierID(String supplierID) {
+        this.SupplierID = supplierID;
+    }
 }

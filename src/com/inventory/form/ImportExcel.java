@@ -4,25 +4,52 @@
  */
 package com.inventory.form;
 
+import com.inventory.dao.ImportFormDetailDAO;
+import com.inventory.dao.ImportFormsDAO;
 import com.inventory.dao.ProductsDAO;
+import com.inventory.entity.ImportForm;
+import com.inventory.entity.ImportFormDetail;
 import com.inventory.entity.Products;
+import com.inventory.swing.ScrollBar;
+import com.inventory.swing.TableHeader;
+import com.inventory.utils.XJdbc;
+import com.sun.jdi.connect.spi.Connection;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.UUID;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
 import org.apache.poi.ss.usermodel.Cell;
 import static org.apache.poi.ss.usermodel.CellType.BOOLEAN;
-import static org.apache.poi.ss.usermodel.CellType.FORMULA;
 import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
 import static org.apache.poi.ss.usermodel.CellType.STRING;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import java.sql.ResultSet;
+
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Date;
+import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  *
@@ -35,6 +62,63 @@ public class ImportExcel extends javax.swing.JPanel {
      */
     public ImportExcel() {
         initComponents();
+        customizeTable();
+    }
+
+    private void customizeTable() {
+
+        tblExcel.setShowHorizontalLines(true);
+        tblExcel.setGridColor(new Color(230, 230, 230));
+        tblExcel.setRowHeight(40);
+
+        // Renderer for column headers
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        tblExcel.getTableHeader().setDefaultRenderer(headerRenderer);
+        tblExcel.getTableHeader().setReorderingAllowed(false);
+        tblExcel.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                TableHeader header = new TableHeader(value.toString());
+                header.setHorizontalAlignment(JLabel.CENTER); // Center-align the header text
+                return header;
+            }
+        });
+
+        // Default renderer for table cells
+        tblExcel.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                com.setBackground(Color.WHITE);
+                setBorder(noFocusBorder);
+                com.setFont(new Font("sansserif", Font.PLAIN, 13)); // Set font size to 13
+                com.setForeground(isSelected ? new Color(36, 183, 194) : new Color(102, 102, 102));
+                com.setFont(com.getFont().deriveFont(Font.BOLD));
+                setHorizontalAlignment(JLabel.CENTER); // Center-align the cell text
+
+                if (column == 7) { // Status column
+                    JLabel label = new JLabel(value.toString());
+                    label.setFont(new Font("sansserif", Font.BOLD, 13));
+                    if ("Đã xóa".equals(value)) {
+                        label.setForeground(Color.RED); // Màu đỏ cho trạng thái đã xóa
+                    } else {
+                        label.setForeground(Color.GREEN); // Màu khác cho trạng thái khác
+                    }
+                    label.setHorizontalAlignment(JLabel.CENTER); // Center align status column
+                    return label;
+                }
+                return com;
+            }
+        });
+
+        // Additional customization for JScrollPane
+        spTable.setVerticalScrollBar(new ScrollBar());
+        spTable.getVerticalScrollBar().setBackground(Color.WHITE);
+        spTable.getViewport().setBackground(Color.WHITE);
+        JPanel p = new JPanel();
+        p.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
     }
 
     /**
@@ -52,16 +136,16 @@ public class ImportExcel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        comboBoxSuggestion1 = new com.inventory.swing.ComboBoxSuggestion();
-        textField1 = new com.inventory.swing.TextField();
-        textField4 = new com.inventory.swing.TextField();
+        txtSupplierID = new com.inventory.swing.TextField();
+        txtQuantity = new com.inventory.swing.TextField();
         jPanel2 = new javax.swing.JPanel();
         button1 = new com.inventory.swing.Button();
         btnOK = new com.inventory.swing.Button();
-        button2 = new com.inventory.swing.Button();
-        button3 = new com.inventory.swing.Button();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        btnDeleExcel = new com.inventory.swing.Button();
+        btnExcel = new com.inventory.swing.Button();
+        spTable = new javax.swing.JScrollPane();
         tblExcel = new com.inventory.swing.Table();
+        txtSupplierName = new com.inventory.swing.TextField();
 
         setPreferredSize(new java.awt.Dimension(785, 545));
         setLayout(new java.awt.BorderLayout());
@@ -116,7 +200,9 @@ public class ImportExcel extends javax.swing.JPanel {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Số lượng");
 
-        comboBoxSuggestion1.setPreferredSize(new java.awt.Dimension(151, 38));
+        txtSupplierID.setFocusable(false);
+
+        txtQuantity.setFocusable(false);
 
         jPanel2.setBackground(new java.awt.Color(32, 137, 173));
         jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 0, 0, 0, new java.awt.Color(204, 204, 204)));
@@ -136,19 +222,29 @@ public class ImportExcel extends javax.swing.JPanel {
         btnOK.setForeground(new java.awt.Color(255, 255, 255));
         btnOK.setText("Lưu");
         btnOK.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-
-        button2.setBackground(new java.awt.Color(255, 0, 0));
-        button2.setForeground(new java.awt.Color(255, 255, 255));
-        button2.setText("Xóa");
-        button2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-
-        button3.setBackground(new java.awt.Color(0, 153, 0));
-        button3.setForeground(new java.awt.Color(255, 255, 255));
-        button3.setText("Flie");
-        button3.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        button3.addActionListener(new java.awt.event.ActionListener() {
+        btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button3ActionPerformed(evt);
+                btnOKActionPerformed(evt);
+            }
+        });
+
+        btnDeleExcel.setBackground(new java.awt.Color(255, 0, 0));
+        btnDeleExcel.setForeground(new java.awt.Color(255, 255, 255));
+        btnDeleExcel.setText("Xóa");
+        btnDeleExcel.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnDeleExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleExcelActionPerformed(evt);
+            }
+        });
+
+        btnExcel.setBackground(new java.awt.Color(0, 153, 0));
+        btnExcel.setForeground(new java.awt.Color(255, 255, 255));
+        btnExcel.setText("Flie");
+        btnExcel.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcelActionPerformed(evt);
             }
         });
 
@@ -158,9 +254,9 @@ public class ImportExcel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(351, Short.MAX_VALUE)
-                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDeleExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -174,23 +270,30 @@ public class ImportExcel extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnDeleExcel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExcel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
         tblExcel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Mã sản phẩm", "Tên sản phẩm", "Loại", "Số lượng", "Màu", "Nhà cung cấp", "Giá", "Trạng thái"
             }
-        ));
-        jScrollPane1.setViewportView(tblExcel);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        spTable.setViewportView(tblExcel);
+
+        txtSupplierName.setFocusable(false);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -199,35 +302,35 @@ public class ImportExcel extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSupplierID, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(comboBoxSuggestion1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSupplierName, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addGap(18, 18, 18)
-                .addComponent(textField4, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 765, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(spTable)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSupplierID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(comboBoxSuggestion1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(textField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                    .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtSupplierName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                .addComponent(spTable, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -239,7 +342,7 @@ public class ImportExcel extends javax.swing.JPanel {
         SwingUtilities.getWindowAncestor(this).dispose();
     }//GEN-LAST:event_button1ActionPerformed
 
-    private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
+    private void btnExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelActionPerformed
         File file = chooseExcelFile(); // Implement this method to open a file chooser and return the selected file
         if (file == null) {
             JOptionPane.showMessageDialog(this, "Lỗi đọc tệp tin Excel!");
@@ -253,7 +356,76 @@ public class ImportExcel extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi nhập danh sách sản phẩm!");
             }
         }
-    }//GEN-LAST:event_button3ActionPerformed
+    }//GEN-LAST:event_btnExcelActionPerformed
+
+    private void btnDeleExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleExcelActionPerformed
+        // TODO add your handling code here:  
+        DefaultTableModel tableModel = (DefaultTableModel) tblExcel.getModel();
+
+        // Lấy chỉ số hàng được chọn
+        int selectedRow = tblExcel.getSelectedRow();
+
+        // Kiểm tra nếu có hàng nào được chọn
+        if (selectedRow != -1) {
+            // Hiển thị hộp thoại xác nhận trước khi xóa
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Bạn có chắc chắn muốn xóa hàng này?",
+                    "Xác nhận xóa",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
+            // Nếu người dùng chọn "Yes"
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Xóa hàng được chọn khỏi bảng dữ liệu
+                tableModel.removeRow(selectedRow);
+
+                // Cập nhật tổng số lượng sau khi xóa hàng
+                updateTotalQuantity();
+            }
+        } else {
+            // Thông báo người dùng nếu không có hàng nào được chọn
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một hàng để xóa.");
+        }
+    }//GEN-LAST:event_btnDeleExcelActionPerformed
+
+    private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
+        // TODO add your handling code here:
+        try {
+            boolean success = saveProductsToDatabase();
+            if (success) {
+                // Thực hiện hành động nếu lưu dữ liệu thành công
+            } else {
+                // Xử lý nếu lưu dữ liệu không thành công
+            }
+        } catch (Exception e) {
+            // Xử lý lỗi I/O
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi lưu dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnOKActionPerformed
+
+    private int parseInteger(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return 0; // Hoặc giá trị mặc định khác
+        }
+    }
+
+    private double parseDouble(String value) {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return 0.0; // Hoặc giá trị mặc định khác
+        }
+    }
+
+    private String generateNewImportFormID() {
+        return UUID.randomUUID().toString().substring(0, 10);
+    }
+
+    private String generateNewImportFormDetailID() {
+        return UUID.randomUUID().toString().substring(0, 10);
+    }
 
     private File chooseExcelFile() {
         JFileChooser fileChooser = new JFileChooser();
@@ -264,111 +436,320 @@ public class ImportExcel extends javax.swing.JPanel {
         }
         return null;
     }
-public boolean importProductsFromExcel(File excelFile) {
-    ProductsDAO dao = new ProductsDAO(); // Khởi tạo đối tượng ProductsDAO
-    boolean success = true;
 
-    try (FileInputStream file = new FileInputStream(excelFile); XSSFWorkbook workbook = new XSSFWorkbook(file)) {
-        Sheet sheet = workbook.getSheetAt(0);
+    private boolean saveProductsToDatabase() {
         DefaultTableModel tableModel = (DefaultTableModel) tblExcel.getModel();
-        tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại trong bảng
+        String supplierName = txtSupplierName.getText().trim();
+        String supplierID = getSupplierIDByName(supplierName);
 
-        Iterator<Row> rowIterator = sheet.iterator();
-        rowIterator.next(); // Bỏ qua hàng tiêu đề
-        while (rowIterator.hasNext()) {
-            Row row = rowIterator.next();
+        if (supplierID == null) {
+            JOptionPane.showMessageDialog(this, "Nhà cung cấp không tồn tại trong cơ sở dữ liệu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        try (java.sql.Connection conn = XJdbc.getConnection()) {
+            conn.setAutoCommit(false); // Bắt đầu giao dịch
+
+            ProductsDAO productDAO = new ProductsDAO();
+
             try {
-                String productID = getCellValue(row.getCell(0));
-                String productName = getCellValue(row.getCell(1));
-                String weight = getCellValue(row.getCell(2));
-                String color = getCellValue(row.getCell(3));
-               
-                double price = parseDouble(getCellValue(row.getCell(4)));
-                String status = getCellValue(row.getCell(5));
+                for (int i = 0; i < tableModel.getRowCount(); i++) {
+                    String productID = tableModel.getValueAt(i, 0).toString().trim();
+                    String productName = tableModel.getValueAt(i, 1).toString().trim();
+                    String weight = tableModel.getValueAt(i, 2).toString().trim();
+                    int quantity = parseInteger(tableModel.getValueAt(i, 3).toString());
+                    String color = tableModel.getValueAt(i, 4).toString().trim();
+                    String supplierNameFromTable = tableModel.getValueAt(i, 5).toString().trim();
+                    String supplierIDFromTable = getSupplierIDByName(supplierNameFromTable);
+                    double price = parseDouble(tableModel.getValueAt(i, 6).toString());
+                    String status = tableModel.getValueAt(i, 7).toString().trim();
 
-                // Nếu giá trị trạng thái trống hoặc không hợp lệ, gán giá trị mặc định
-                if (status == null || status.trim().isEmpty()) {
-                    status = "Hoạt động"; // Gán giá trị mặc định
+                    if (status.isEmpty()) {
+                        status = "Hoạt động";
+                    }
+
+                    if (supplierIDFromTable == null) {
+                        System.err.println("Nhà cung cấp không tồn tại: " + supplierNameFromTable);
+                        continue; // Bỏ qua hàng này
+                    }
+
+                    Products product = new Products(productID, productName, color, weight, quantity, price, status, supplierIDFromTable);
+
+                    productDAO.insertOrUpdateProduct(conn, product);
                 }
 
-                if (productID.isEmpty() || productName.isEmpty()) {
-                    System.err.println("ProductID or ProductName is empty at row: " + row.getRowNum());
-                    success = false; // Set success to false if any critical field is empty
-                    continue;
+                conn.commit(); // Commit giao dịch
+                JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu vào cơ sở dữ liệu.", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+                return true;
+
+            } catch (SQLException ex) {
+                conn.rollback(); // Rollback giao dịch nếu có lỗi
+                JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi lưu dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi kết nối cơ sở dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    private Set<String> supplierNamesInFile = new HashSet<>(); // Định nghĩa biến để lưu tên nhà cung cấp
+
+    // Phương thức để cập nhật tổng số lượng sau khi xóa hàng
+    private void updateTotalQuantity() {
+        DefaultTableModel tableModel = (DefaultTableModel) tblExcel.getModel();
+        int rowCount = tableModel.getRowCount();
+        int totalQuantity = 0;
+
+        for (int i = 0; i < rowCount; i++) {
+            // Lấy giá trị của cột số lượng từ mỗi hàng
+            Object quantityObj = tableModel.getValueAt(i, 3); // Cột số lượng là cột thứ 4 (chỉ số 3)
+            if (quantityObj != null) {
+                try {
+                    int quantity = Integer.parseInt(quantityObj.toString());
+                    totalQuantity += quantity;
+                } catch (NumberFormatException e) {
+                    System.err.println("Lỗi định dạng số lượng tại hàng: " + i + " - " + e.getMessage());
                 }
-
-                Products pr = new Products();
-                pr.setProductID(productID);
-                pr.setProductName(productName);
-                pr.setWeight(weight);
-                pr.setColor(color);
-              
-                pr.setPrice(price);
-                pr.setStatus(status); // Thiết lập trạng thái
-
-                // Thực hiện thêm đối tượng pr vào cơ sở dữ liệu
-                dao.insert(pr); // Chèn sản phẩm vào cơ sở dữ liệu
-
-                // Thêm dữ liệu vào bảng
-                Object[] rowData = new Object[]{productID, productName, weight, color, price, status};
-                tableModel.addRow(rowData);
-            } catch (Exception e) {
-                // Xử lý lỗi với từng hàng, ví dụ như định dạng sai
-                System.err.println("Lỗi khi đọc dữ liệu hàng: " + row.getRowNum() + " - " + e.getMessage());
-                success = false; // Đánh dấu lỗi nếu có lỗi xảy ra
             }
         }
-    } catch (IOException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Lỗi khi đọc file Excel!");
-        success = false; // Đánh dấu lỗi nếu có lỗi khi đọc tệp
+
+        // Cập nhật trường txtQuantity
+        txtQuantity.setText(String.valueOf(totalQuantity));
     }
 
-    return success;
-}
+// Phương thức để xóa hàng đã chọn và cập nhật tổng số lượng
+    private void deleteSelectedRows() {
+        DefaultTableModel tableModel = (DefaultTableModel) tblExcel.getModel();
+        int[] selectedRows = tblExcel.getSelectedRows();
 
+        // Xóa hàng từ dưới lên để không làm thay đổi chỉ số hàng còn lại
+        for (int i = selectedRows.length - 1; i >= 0; i--) {
+            tableModel.removeRow(selectedRows[i]);
+        }
 
+        // Cập nhật tổng số lượng sau khi xóa hàng
+        updateTotalQuantity();
+    }
 
+// Phương thức để nhập sản phẩm từ Excel
+    private boolean importProductsFromExcel(File excelFile) {
+        DefaultTableModel tableModel = (DefaultTableModel) tblExcel.getModel();
+        tableModel.setRowCount(0); // Xóa các hàng hiện tại
+        int totalQuantity = 0; // Biến để lưu tổng số lượng
+
+        try (FileInputStream file = new FileInputStream(excelFile); XSSFWorkbook workbook = new XSSFWorkbook(file)) {
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> rowIterator = sheet.iterator();
+
+            if (!rowIterator.hasNext()) {
+                JOptionPane.showMessageDialog(this, "File Excel trống.");
+                return false;
+            }
+
+            rowIterator.next(); // Bỏ qua hàng tiêu đề
+
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                try {
+                    String productID = getCellValue(row.getCell(0)).trim();
+                    String productName = getCellValue(row.getCell(1)).trim();
+                    String weightStr = getCellValue(row.getCell(2)).trim();
+                    int quantity = parseInteger(getCellValue(row.getCell(3)).trim());
+                    if (quantity <= 0) {
+                        quantity = 1; // Đặt số lượng mặc định là 1 nếu bị 0 hoặc lỗi
+                    }
+
+                    String color = getCellValue(row.getCell(4)).trim();
+                    String supplierName = getCellValue(row.getCell(5)).trim();
+                    double price = parseDouble(getCellValue(row.getCell(6)).trim());
+                    String status = getCellValue(row.getCell(7)).trim();
+                    if (status.isEmpty()) {
+                        status = "Hoạt động";
+                    }
+
+                    // Đảm bảo tên nhà cung cấp không bị null hoặc trống
+                    if (supplierName == null || supplierName.trim().isEmpty()) {
+                        System.err.println("Nhà cung cấp không hợp lệ: " + supplierName);
+                        continue; // Bỏ qua hàng này nếu tên nhà cung cấp không hợp lệ
+                    }
+
+                    supplierNamesInFile.add(supplierName); // Cập nhật tên nhà cung cấp
+
+                    String supplierID = getSupplierIDByName(supplierName);
+                    if (supplierID == null) {
+                        // Cảnh báo nếu nhà cung cấp không tồn tại
+                        System.err.println("Nhà cung cấp không tồn tại: " + supplierName);
+                        continue; // Bỏ qua hàng này
+                    }
+
+                    Object[] rowData = new Object[]{productID, productName, weightStr, quantity, color, supplierName, price, status};
+                    tableModel.addRow(rowData);
+
+                    totalQuantity += quantity; // Cộng dồn số lượng
+
+                } catch (NumberFormatException e) {
+                    System.err.println("Lỗi định dạng số tại hàng: " + row.getRowNum() + " - " + e.getMessage());
+                } catch (Exception e) {
+                    System.err.println("Lỗi khi đọc hàng: " + row.getRowNum() + " - " + e.getMessage());
+                }
+            }
+
+            // Cập nhật các trường txt với tổng số lượng
+            txtQuantity.setText(String.valueOf(totalQuantity));
+
+            // Cập nhật txtSupplierName và txtSupplierID cho nhà cung cấp đầu tiên trong danh sách
+            if (!supplierNamesInFile.isEmpty()) {
+                String firstSupplierName = supplierNamesInFile.iterator().next();
+                String supplierID = getSupplierIDByName(firstSupplierName);
+                if (supplierID != null) {
+                    txtSupplierName.setText(firstSupplierName);
+                    txtSupplierID.setText(supplierID);
+                }
+            }
+            return true;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+//  private boolean importProductsFromExcel(File excelFile) {
+//    DefaultTableModel tableModel = (DefaultTableModel) tblExcel.getModel();
+//    tableModel.setRowCount(0); // Xóa các hàng hiện tại
+//    int totalQuantity = 0; // Biến để lưu tổng số lượng
+//
+//    try (FileInputStream file = new FileInputStream(excelFile); XSSFWorkbook workbook = new XSSFWorkbook(file)) {
+//        Sheet sheet = workbook.getSheetAt(0);
+//        Iterator<Row> rowIterator = sheet.iterator();
+//
+//        if (!rowIterator.hasNext()) {
+//            JOptionPane.showMessageDialog(this, "File Excel trống.");
+//            return false;
+//        }
+//
+//        rowIterator.next(); // Bỏ qua hàng tiêu đề
+//
+//        while (rowIterator.hasNext()) {
+//            Row row = rowIterator.next();
+//            try {
+//                String productID = getCellValue(row.getCell(0)).trim();
+//                String productName = getCellValue(row.getCell(1)).trim();
+//                String weightStr = getCellValue(row.getCell(2)).trim();
+//                int quantity = parseInteger(getCellValue(row.getCell(3)).trim());
+//                if (quantity <= 0) {
+//                    quantity = 1; // Đặt số lượng mặc định là 1 nếu bị 0 hoặc lỗi
+//                }
+//
+//                String color = getCellValue(row.getCell(4)).trim();
+//                String supplierName = getCellValue(row.getCell(5)).trim();
+//                double price = parseDouble(getCellValue(row.getCell(6)).trim());
+//                String status = getCellValue(row.getCell(7)).trim();
+//                if (status.isEmpty()) {
+//                    status = "Hoạt động";
+//                }
+//
+//                // Đảm bảo tên nhà cung cấp không bị null hoặc trống
+//                if (supplierName == null || supplierName.trim().isEmpty()) {
+//                    System.err.println("Nhà cung cấp không hợp lệ: " + supplierName);
+//                    continue; // Bỏ qua hàng này nếu tên nhà cung cấp không hợp lệ
+//                }
+//
+//                supplierNamesInFile.add(supplierName); // Cập nhật tên nhà cung cấp
+//
+//                String supplierID = getSupplierIDByName(supplierName);
+//                if (supplierID == null) {
+//                    // Cảnh báo nếu nhà cung cấp không tồn tại
+//                    System.err.println("Nhà cung cấp không tồn tại: " + supplierName);
+//                    continue; // Bỏ qua hàng này
+//                }
+//
+//                Object[] rowData = new Object[]{productID, productName, weightStr, quantity,color,supplierName, price, status };
+//                tableModel.addRow(rowData);
+//
+//                totalQuantity += quantity; // Cộng dồn số lượng
+//
+//            } catch (NumberFormatException e) {
+//                System.err.println("Lỗi định dạng số tại hàng: " + row.getRowNum() + " - " + e.getMessage());
+//            } catch (Exception e) {
+//                System.err.println("Lỗi khi đọc hàng: " + row.getRowNum() + " - " + e.getMessage());
+//            }
+//        }
+//
+//        // Cập nhật các trường txt với tổng số lượng
+//        txtQuantity.setText(String.valueOf(totalQuantity));
+//        // Cập nhật txtSupplierName và txtSupplierID cho nhà cung cấp đầu tiên trong danh sách
+//        if (!supplierNamesInFile.isEmpty()) {
+//            String firstSupplierName = supplierNamesInFile.iterator().next();
+//            String supplierID = getSupplierIDByName(firstSupplierName);
+//            if (supplierID != null) {
+//                txtSupplierName.setText(firstSupplierName);
+//                txtSupplierID.setText(supplierID);
+//            }
+//        }
+//        return true;
+//
+//    } catch (IOException e) {
+//        e.printStackTrace();
+//        return false;
+//    }
+//}
     private String getCellValue(Cell cell) {
-    if (cell == null) {
-        return "";
-    }
-    switch (cell.getCellType()) {
-        case STRING:
-            return cell.getStringCellValue();
-        case NUMERIC:
-            return String.valueOf(cell.getNumericCellValue());
-        case BOOLEAN:
-            return String.valueOf(cell.getBooleanCellValue());
-        case FORMULA:
-            return cell.getCellFormula(); // Thay đổi nếu cần thiết
-        default:
+        if (cell == null) {
             return "";
+        }
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue().trim(); // Loại bỏ khoảng trắng
+            case NUMERIC:
+                return String.valueOf(cell.getNumericCellValue());
+            default:
+                return "";
+        }
     }
-}
 
-private int parseInteger(String value) {
-    try {
-        return Integer.parseInt(value.trim());
-    } catch (NumberFormatException e) {
-        return 0; // Hoặc ném ngoại lệ tùy theo yêu cầu
+//
+//    private int parseInteger(String value) {
+//        try {
+//            return Integer.parseInt(value);
+//        } catch (NumberFormatException e) {
+//            System.err.println("Invalid integer format: " + value);
+//            return 0; // Giá trị mặc định
+//        }
+//    }
+//
+//    private double parseDouble(String value) {
+//        try {
+//            return Double.parseDouble(value);
+//        } catch (NumberFormatException e) {
+//            System.err.println("Invalid double format: " + value);
+//            return 0.0; // Giá trị mặc định
+//        }
+//    }
+    private String getSupplierIDByName(String supplierName) {
+        String sql = "SELECT SupplierID FROM Suppliers WHERE SupplierName = ?";
+        try (ResultSet rs = XJdbc.query(sql, supplierName)) {
+            if (rs.next()) {
+                return rs.getString("SupplierID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
-}
 
-private double parseDouble(String value) {
-    try {
-        return Double.parseDouble(value.trim());
-    } catch (NumberFormatException e) {
-        return 0.0; // Hoặc ném ngoại lệ tùy theo yêu cầu
+    private void updateSupplierDetails() {
+        // Method to update supplier details if needed
     }
-}
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.inventory.swing.Button btnDeleExcel;
+    private com.inventory.swing.Button btnExcel;
     private com.inventory.swing.Button btnOK;
     private com.inventory.swing.Button button1;
-    private com.inventory.swing.Button button2;
-    private com.inventory.swing.Button button3;
-    private com.inventory.swing.ComboBoxSuggestion comboBoxSuggestion1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
@@ -376,9 +757,10 @@ private double parseDouble(String value) {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane spTable;
     private com.inventory.swing.Table tblExcel;
-    private com.inventory.swing.TextField textField1;
-    private com.inventory.swing.TextField textField4;
+    private com.inventory.swing.TextField txtQuantity;
+    private com.inventory.swing.TextField txtSupplierID;
+    private com.inventory.swing.TextField txtSupplierName;
     // End of variables declaration//GEN-END:variables
 }
