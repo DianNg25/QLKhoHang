@@ -4,6 +4,7 @@
  */
 package com.inventory.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -11,18 +12,11 @@ import java.util.Date;
  * @author ADMIN
  */
 public class ImportForm {
-   private String importFormID;
-    private String supplierID;
-    private java.sql.Date importDate;
-    private double totalAmount;
-
-    // Constructor
-    public ImportForm(String importFormID, String supplierID, java.sql.Date importDate, double totalAmount) {
-        this.importFormID = importFormID;
-        this.supplierID = supplierID;
-        this.importDate = importDate;
-        this.totalAmount = totalAmount;
-    }
+    private String importFormID;
+    private String supplierID; // Nếu bạn không cần cột này, bạn có thể bỏ qua
+    private String supplierName; // Thêm trường này
+    private Date importDate;
+    private BigDecimal totalAmount;
 
     public String getImportFormID() {
         return importFormID;
@@ -40,22 +34,28 @@ public class ImportForm {
         this.supplierID = supplierID;
     }
 
-    public java.sql.Date getImportDate() {
+    public String getSupplierName() { // Getter cho SupplierName
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) { // Setter cho SupplierName
+        this.supplierName = supplierName;
+    }
+
+    public Date getImportDate() {
         return importDate;
     }
 
-    public void setImportDate(java.sql.Date importDate) {
+    public void setImportDate(Date importDate) {
         this.importDate = importDate;
     }
 
-    public double getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
-    
-    
     
 }

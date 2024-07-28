@@ -64,65 +64,8 @@ public class Form_1 extends javax.swing.JPanel {
         
     }
     
-    private void customizeTable() {
-        spTable.setVerticalScrollBar(new JScrollBar()); // Use JScrollBar instead of ScrollBar
-        spTable.getVerticalScrollBar().setBackground(Color.WHITE);
-        spTable.getViewport().setBackground(Color.WHITE);
-        
-        JPanel p = new JPanel();
-        p.setBackground(Color.WHITE);
-        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-        
-        table.setShowHorizontalLines(true);
-        table.setGridColor(new Color(230, 230, 230));
-        table.setRowHeight(40);
-
-        // Renderer for column headers
-        // Renderer for column headers
-        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        table.getTableHeader().setDefaultRenderer(headerRenderer);
-        table.getTableHeader().setReorderingAllowed(false);
-        table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                TableHeader header = new TableHeader(value.toString());
-                header.setHorizontalAlignment(JLabel.CENTER); // Center-align the header text
-                return header;
-            }
-        });
-
-        // Default renderer for table cells
-        // Default renderer for table cells
-        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                com.setBackground(Color.WHITE);
-                setBorder(noFocusBorder);
-                com.setFont(new Font("sansserif", Font.PLAIN, 13)); // Set font size to 13
-                com.setForeground(isSelected ? new Color(36, 183, 194) : new Color(102, 102, 102));
-                com.setFont(com.getFont().deriveFont(Font.BOLD));
-                setHorizontalAlignment(JLabel.CENTER); // Center-align the cell text
-
-                // Custom renderer for specific columns (example: status column)
-                if (column == 5) { // Status column
-                    JLabel label = new JLabel(value.toString());
-                    label.setFont(new Font("sansserif", Font.BOLD, 13));
-                    if ("Đã xóa".equals(value)) {
-                        label.setForeground(Color.RED); // Màu đỏ cho trạng thái đã xóa
-                    } else {
-                        label.setForeground(Color.GREEN); // Màu khác cho trạng thái khác
-                    }
-                    label.setHorizontalAlignment(JLabel.CENTER); // Center align status column
-                    return label;
-                }
-                return com;
-            }
-        });
-    }
     
-    private void loadData() {
+     private void loadData() {
         // Tạo đối tượng DAO
         String sql = "SELECT * FROM Products";
         
@@ -192,6 +135,66 @@ public class Form_1 extends javax.swing.JPanel {
         return list;
     }
 
+    
+    private void customizeTable() {
+        spTable.setVerticalScrollBar(new JScrollBar()); // Use JScrollBar instead of ScrollBar
+        spTable.getVerticalScrollBar().setBackground(Color.WHITE);
+        spTable.getViewport().setBackground(Color.WHITE);
+        
+        JPanel p = new JPanel();
+        p.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        
+        table.setShowHorizontalLines(true);
+        table.setGridColor(new Color(230, 230, 230));
+        table.setRowHeight(40);
+
+        // Renderer for column headers
+        // Renderer for column headers
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        table.getTableHeader().setDefaultRenderer(headerRenderer);
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                TableHeader header = new TableHeader(value.toString());
+                header.setHorizontalAlignment(JLabel.CENTER); // Center-align the header text
+                return header;
+            }
+        });
+
+        // Default renderer for table cells
+        // Default renderer for table cells
+        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                com.setBackground(Color.WHITE);
+                setBorder(noFocusBorder);
+                com.setFont(new Font("sansserif", Font.PLAIN, 13)); // Set font size to 13
+                com.setForeground(isSelected ? new Color(36, 183, 194) : new Color(102, 102, 102));
+                com.setFont(com.getFont().deriveFont(Font.BOLD));
+                setHorizontalAlignment(JLabel.CENTER); // Center-align the cell text
+
+                // Custom renderer for specific columns (example: status column)
+                if (column == 5) { // Status column
+                    JLabel label = new JLabel(value.toString());
+                    label.setFont(new Font("sansserif", Font.BOLD, 13));
+                    if ("Đã xóa".equals(value)) {
+                        label.setForeground(Color.RED); // Màu đỏ cho trạng thái đã xóa
+                    } else {
+                        label.setForeground(Color.GREEN); // Màu khác cho trạng thái khác
+                    }
+                    label.setHorizontalAlignment(JLabel.CENTER); // Center align status column
+                    return label;
+                }
+                return com;
+            }
+        });
+    }
+    
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

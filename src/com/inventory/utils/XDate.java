@@ -52,4 +52,9 @@ public class XDate {
     public static Date getCurrentDate() {
         return new Date();
     }
+    
+    
+    
+    
+    
 }

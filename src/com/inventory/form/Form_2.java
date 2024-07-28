@@ -4,10 +4,16 @@
  */
 package com.inventory.form;
 
+import com.inventory.entity.ImportForm;
 import com.inventory.swing.TableActionCellEditor;
 import com.inventory.swing.TableActionCellRender;
 import com.inventory.swing.TableActionEvent;
+import com.inventory.utils.XJdbc;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,48 +26,71 @@ public class Form_2 extends javax.swing.JPanel {
     /**
      * Creates new form Form_1
      */
+    
     public Form_2() {
         initComponents();
-        TableActionEvent event = new TableActionEvent() {
-            @Override
-            public void onEdit(int row) {
-                System.out.println("Edit row : " + row);
-            }
+        loadData();
 
-            @Override
-            public void onDelete(int row) {
-                if (tblNhapHang.isEditing()) {
-                    tblNhapHang.getCellEditor().stopCellEditing();
-                }
-                DefaultTableModel model = (DefaultTableModel) tblNhapHang.getModel();
-                model.removeRow(row);
-            }
+    }
+    
+    
+private void loadData() {
+    String sql = "SELECT ifm.ImportFormID, s.SupplierName, ifm.ImportDate, "
+            + "SUM(ifd.Quantity) AS TotalQuantity "
+            + "FROM ImportForms ifm "
+            + "JOIN Suppliers s ON ifm.SupplierID = s.SupplierID "
+            + "LEFT JOIN ImportFormDetails ifd ON ifm.ImportFormID = ifd.ImportFormID "
+            + "GROUP BY ifm.ImportFormID, s.SupplierName, ifm.ImportDate";
 
-        };
+    try {
+        List<ImportForm> importFormList = selectBySql(sql);
 
-        String[] columnNames = {"Mã phiếu nhập", "Ngày nhập", "Tổng tiền", "Trạng thái", "Thao tác",};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        tblNhapHang.setModel(model);
+        DefaultTableModel tableModel = (DefaultTableModel) tblNhapHang.getModel();
+        tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
 
-        for (int i = 0; i < tblNhapHang.getColumnCount(); i++) {
-            tblNhapHang.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer());
+        for (ImportForm importForm : importFormList) {
+            Object[] row = new Object[]{
+                importForm.getImportFormID(),
+                importForm.getSupplierName(), // Hiển thị tên nhà cung cấp
+                importForm.getImportDate(),
+                importForm.getTotalAmount()
+            };
+            tableModel.addRow(row);
         }
 
-        tblNhapHang.getColumnModel().getColumn(4).setCellRenderer(new TableActionCellRender());
-        tblNhapHang.getColumnModel().getColumn(4).setCellEditor(new TableActionCellEditor(event));
-        addMultipleRows(model);
+        tblNhapHang.setModel(tableModel);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu từ cơ sở dữ liệu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
-
-    public void addMultipleRows(DefaultTableModel model) {
-        Object[][] rowData = {
-            {"PN001", "2024-01-01", 15, "Hoàn thành", ""},
-            {"PN002", "2024-02-15", 10, "Chờ xử lý", ""},
-            {"PN003", "2024-03-10", 20, "Đang vận chuyển", ""},};
-
-        for (Object[] row : rowData) {
-            model.addRow(row);
+}
+protected List<ImportForm> selectBySql(String sql, Object... args) {
+    List<ImportForm> list = new ArrayList<>();
+    try {
+        java.sql.ResultSet rs = null;
+        try {
+            rs = XJdbc.query(sql, args);
+            while (rs.next()) {
+                ImportForm entity = new ImportForm();
+                entity.setImportFormID(rs.getString("ImportFormID"));
+                entity.setSupplierName(rs.getString("SupplierName")); // Thêm ánh xạ này
+                entity.setImportDate(rs.getDate("ImportDate"));
+                entity.setTotalAmount(rs.getBigDecimal("TotalQuantity")); // Đảm bảo tên cột khớp
+                list.add(entity);
+            }
+        } finally {
+            if (rs != null) {
+                rs.getStatement().getConnection().close();
+            }
         }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        throw new RuntimeException(ex);
     }
+    return list;
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -149,9 +178,17 @@ public class Form_2 extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Mã nhập hàng", "Nhà cung cấp", "Ngày Nhập", "Số lượng"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblNhapHang);
 
         jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -247,7 +284,6 @@ public class Form_2 extends javax.swing.JPanel {
     }//GEN-LAST:event_button3ActionPerformed
 
     private void btnAddExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddExcelActionPerformed
-
         JDialog add = new JDialog();
         ImportExcel model = new ImportExcel();
         add.setUndecorated(true);
