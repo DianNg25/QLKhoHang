@@ -4,6 +4,7 @@
  */
 package com.inventory.form;
 
+import com.inventory.dao.SuppliersDAO;
 import com.inventory.entity.Suppliers;
 import com.inventory.swing.ScrollBar;
 import com.inventory.swing.TableHeader;
@@ -15,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import com.inventory.message.*;
 import com.inventory.swing.glasspanepopup.GlassPanePopup;
+import java.awt.Toolkit;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -203,6 +205,8 @@ public class Form_4 extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         button3 = new com.inventory.swing.Button();
+        button1 = new com.inventory.swing.Button();
+        btnDelete_Suppliers = new com.inventory.swing.Button();
         jPanel4 = new javax.swing.JPanel();
         btnTimKiemNCC = new com.inventory.swing.Button();
         txtNameNCC = new com.inventory.swing.TextField();
@@ -220,11 +224,26 @@ public class Form_4 extends javax.swing.JPanel {
 
         button3.setBackground(new java.awt.Color(102, 102, 255));
         button3.setForeground(new java.awt.Color(255, 255, 255));
-        button3.setText("Thêm nhà cung cấp");
+        button3.setText("Thêm");
         button3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         button3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button3ActionPerformed(evt);
+            }
+        });
+
+        button1.setBackground(new java.awt.Color(102, 102, 255));
+        button1.setForeground(new java.awt.Color(255, 255, 255));
+        button1.setText("Sửa");
+        button1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+
+        btnDelete_Suppliers.setBackground(new java.awt.Color(102, 102, 255));
+        btnDelete_Suppliers.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete_Suppliers.setText("Xóa");
+        btnDelete_Suppliers.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnDelete_Suppliers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelete_SuppliersActionPerformed(evt);
             }
         });
 
@@ -233,15 +252,22 @@ public class Form_4 extends javax.swing.JPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(639, Short.MAX_VALUE)
-                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36))
+                .addContainerGap(499, Short.MAX_VALUE)
+                .addComponent(btnDelete_Suppliers, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addGap(0, 18, Short.MAX_VALUE)
-                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete_Suppliers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jPanel1.add(jPanel5, java.awt.BorderLayout.PAGE_END);
@@ -276,7 +302,7 @@ public class Form_4 extends javax.swing.JPanel {
                 .addComponent(jLabel5)
                 .addGap(40, 40, 40)
                 .addComponent(txtNameNCC, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
                 .addComponent(btnTimKiemNCC, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
@@ -326,7 +352,7 @@ public class Form_4 extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -341,22 +367,64 @@ public class Form_4 extends javax.swing.JPanel {
 
     private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
         // TODO add your handling code here:
-        JDialog add = new JDialog();
-        Model_Add_Suppliers model = new Model_Add_Suppliers();
-        add.setUndecorated(true);
-        add.getContentPane().add(model);
-        add.pack();
-        add.setLocationRelativeTo(this);
-        add.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            JDialog add = new JDialog();
+            add.setModal(true);
+            Model_Add_Suppliers model = new Model_Add_Suppliers();
+            add.setUndecorated(true);
+            add.getContentPane().add(model);
+            add.pack();
+
+            // Centering Logic
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = (screenSize.width - add.getWidth()) / 2;
+            int y = (screenSize.height - add.getHeight()) / 2;
+            add.setLocation(x, y);
+
+            add.setVisible(true);
+        });
     }//GEN-LAST:event_button3ActionPerformed
 
     private void btnTimKiemNCCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemNCCActionPerformed
         timKiemNCC();
     }//GEN-LAST:event_btnTimKiemNCCActionPerformed
 
+    private void btnDelete_SuppliersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelete_SuppliersActionPerformed
+
+        int selectedRow = tblNCC.getSelectedRow();
+        if (selectedRow >= 0) {
+            String EmployeeID = tblNCC.getValueAt(selectedRow, 0).toString();
+
+            // Hiển thị hộp thoại xác nhận
+            int confirmation = JOptionPane.showConfirmDialog(null, "Bạn có chắc xóa nhà cung cấp này không?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+
+            if (confirmation == JOptionPane.YES_OPTION) {
+                SuppliersDAO dao = new SuppliersDAO();
+                // Sử dụng hàm delete để xóa Nhà cung cấp
+                dao.delete(EmployeeID);
+
+                DeleteSuppliers obj = new DeleteSuppliers();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+            } else {
+                DeleteSuppliers1 obj = new DeleteSuppliers1();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+            }
+        } else {
+            DeleteSuppliers2 obj = new DeleteSuppliers2();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
+        }
+
+
+    }//GEN-LAST:event_btnDelete_SuppliersActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.inventory.swing.Button btnDelete_Suppliers;
     private com.inventory.swing.Button btnTimKiemNCC;
+    private com.inventory.swing.Button button1;
     private com.inventory.swing.Button button3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;

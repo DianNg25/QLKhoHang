@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package com.inventory.form;
 
 import com.inventory.message.EmailError;
@@ -12,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import com.inventory.message.*;
+import com.inventory.swing.glasspanepopup.ModalErrorGlassPanePopup;
+import com.inventory.swing.glasspanepopup.ModalErrorOption;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
@@ -26,6 +24,8 @@ import org.apache.poi.poifs.nio.DataSource;
  * @author Nguyen
  */
 public class Model_Add_Suppliers extends javax.swing.JPanel {
+
+    private JDialog errorDialog;
 
     /**
      * Creates new form Model_Add_Product
@@ -271,55 +271,69 @@ public class Model_Add_Suppliers extends javax.swing.JPanel {
         String email = txtEmail.getText().trim();
 
         if (supplierID.isEmpty() || supplierName.isEmpty() || address.isEmpty() || phone.isEmpty() || email.isEmpty()) {
-            InformationSuppliers_Null obj = new InformationSuppliers_Null();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+            SwingUtilities.invokeLater(() -> {
+                InformationSuppliers_Null errorPanel = new InformationSuppliers_Null();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
             return;
         }
 
         if (!isEmailValid(email)) {
-            EmailError obj = new EmailError();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+            SwingUtilities.invokeLater(() -> {
+                EmailError errorPanel = new EmailError();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
             return;
         }
 
         if (!isPhoneValid(phone)) {
-            ErrorSuppliers_Phone obj = new ErrorSuppliers_Phone();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+            SwingUtilities.invokeLater(() -> {
+                ErrorSuppliers_Phone errorPanel = new ErrorSuppliers_Phone();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
             return;
         }
 
         if (!XJdbc.isSupplierIDUnique(supplierID)) {
-            IDError obj = new IDError();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+            SwingUtilities.invokeLater(() -> {
+                IDError errorPanel = new IDError();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
             return;
         }
 
         String sql = "INSERT INTO Suppliers (SupplierID, SupplierName, Address, Phone, Email) VALUES (?, ?, ?, ?, ?)";
         try {
             XJdbc.update(sql, supplierID, supplierName, address, phone, email);
-            SupplierAddedSuccess obj = new SupplierAddedSuccess();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
-            clearForm();
+            SwingUtilities.invokeLater(() -> {
+                SupplierAddedSuccess successPanel = new SupplierAddedSuccess();
+                successPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                    clearForm();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), successPanel, new ModalErrorOption());
+            });
         } catch (Exception e) {
-            SupplierAddedFailed obj = new SupplierAddedFailed();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+            SwingUtilities.invokeLater(() -> {
+                SupplierAddedFailed failedPanel = new SupplierAddedFailed();
+                failedPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), failedPanel, new ModalErrorOption());
+            });
         }
-    }
-
-    private void showEmailError() {
-        EmailError emailError = new EmailError();
-        JDialog errorDialog = new JDialog();
-        errorDialog.setUndecorated(true);
-        errorDialog.getContentPane().add(emailError);
-        errorDialog.pack();
-        errorDialog.setLocationRelativeTo(this);
-        errorDialog.setVisible(true);
     }
 
     @Override

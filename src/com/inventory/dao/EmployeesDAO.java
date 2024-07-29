@@ -2,25 +2,32 @@ package com.inventory.dao;
 
 import com.inventory.utils.XJdbc;
 import com.inventory.entity.Employees;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.PreparedStatement;
 
 public class EmployeesDAO extends InvenDAO<Employees, String> {
 
-    public void insert(Employees model) {
-        String sql = "INSERT INTO Employees (EmployeeID, Username, FullName, Phone, Email, Password, Position, Image ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        XJdbc.update(sql,
-                model.getEmployeeID(),
-                model.getUsername(),
-                model.getFullName(),
-                model.getPhone(),
-                model.getEmail(),
-                model.getPassword(),
-                model.getPosition(),
-                model.getImage());
 
+    public void insert(Employees model) {
+        String sql = "INSERT INTO Employees (EmployeeID, Username, FullName, Phone, Email, Password, Position, Image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = XJdbc.prepareStatement(sql)) {
+            stmt.setString(1, model.getEmployeeID());
+            stmt.setString(2, model.getUsername());
+            stmt.setString(3, model.getFullName());
+            stmt.setInt(4, model.getPhone());
+            stmt.setString(5, model.getEmail());
+            stmt.setString(6, model.getPassword());
+            stmt.setByte(7, model.getPosition());
+            stmt.setString(8, model.getImage());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void update(Employees model) {
@@ -54,30 +61,22 @@ public class EmployeesDAO extends InvenDAO<Employees, String> {
 
     protected List<Employees> selectBySql(String sql, Object... args) {
         List<Employees> list = new ArrayList<>();
-        try {
-            ResultSet rs = null;
-            try {
-                rs = XJdbc.query(sql, args);
-                while (rs.next()) {
-                    Employees entity = new Employees();
-                    entity.setEmployeeID(rs.getString("EmployeeID"));
-                    entity.setUsername(rs.getString("Name"));
-                    entity.setFullName(rs.getString("FullName"));
-                    entity.setPhone(rs.getInt("Phone"));
-                    entity.setEmail(rs.getString("Email"));
-                    entity.setPassword(rs.getString("Password"));
-                    entity.setPosition(rs.getBoolean("Position"));
-                    entity.setImage(rs.getString("Image"));
+        try (ResultSet rs = XJdbc.query(sql, args)) {
+            while (rs.next()) {
+                Employees entity = new Employees();
+                entity.setEmployeeID(rs.getString("EmployeeID"));
+                entity.setUsername(rs.getString("Username"));
+                entity.setFullName(rs.getString("FullName"));
+                entity.setPhone(rs.getInt("Phone")); // Giả sử Phone là kiểu int trong CSDL
+                entity.setEmail(rs.getString("Email"));
+                entity.setPassword(rs.getString("Password"));
+                entity.setPosition(rs.getByte("Position"));
+                entity.setImage(rs.getString("Image"));
 
-                    list.add(entity);
-                }
-            } finally {
-                if (rs != null) {
-                    rs.getStatement().getConnection().close();
-                }
+                list.add(entity);
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(EmployeesDAO.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
         return list;

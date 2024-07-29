@@ -15,6 +15,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
@@ -61,9 +63,17 @@ public class PasswordField extends JPasswordField {
     private boolean hide = true;
     private boolean showAndHide;
 
-    public PasswordField() {
+    public PasswordField()  {
+          try {
+            eye = ImageIO.read(getClass().getResourceAsStream("/com/inventory/icon/eye.png"));
+            eye_hide = ImageIO.read(getClass().getResourceAsStream("/com/inventory/icon/eye_hide.png"));
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading icons", e);
+        }
+
         setBorder(new EmptyBorder(20, 3, 10, 30));
         setSelectionColor(new Color(76, 204, 255));
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent me) {
@@ -83,16 +93,13 @@ public class PasswordField extends JPasswordField {
                     int x = getWidth() - 30;
                     if (new Rectangle(x, 0, 30, 30).contains(me.getPoint())) {
                         hide = !hide;
-                        if (hide) {
-                            setEchoChar('*');
-                        } else {
-                            setEchoChar((char) 0);
-                        }
+                        setEchoChar(hide ? '*' : (char) 0);
                         repaint();
                     }
                 }
             }
         });
+
         addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent fe) {
@@ -104,6 +111,7 @@ public class PasswordField extends JPasswordField {
                 showing(true);
             }
         });
+
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent me) {
@@ -117,6 +125,7 @@ public class PasswordField extends JPasswordField {
                 }
             }
         });
+
         TimingTarget target = new TimingTargetAdapter() {
             @Override
             public void begin() {
@@ -128,10 +137,8 @@ public class PasswordField extends JPasswordField {
                 location = fraction;
                 repaint();
             }
-
         };
-        eye = new ImageIcon(getClass().getClassLoader().getResource("com/inventory/icon/eye.png")).getImage();
-        eye_hide = new ImageIcon(getClass().getClassLoader().getResource("com/inventory/icon/eye_hide.png")).getImage();
+
         animator = new Animator(300, target);
         animator.setResolution(0);
         animator.setAcceleration(0.5f);
@@ -156,14 +163,12 @@ public class PasswordField extends JPasswordField {
         Graphics2D g2 = (Graphics2D) grphcs;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+
         int width = getWidth();
         int height = getHeight();
-        if (mouseOver) {
-            g2.setColor(lineColor);
-        } else {
-            g2.setColor(new Color(150, 150, 150));
-        }
+        g2.setColor(mouseOver ? lineColor : new Color(150, 150, 150));
         g2.fillRect(2, height - 1, width - 4, 1);
+
         createHintText(g2);
         createLineStyle(g2);
         if (showAndHide) {
@@ -173,9 +178,13 @@ public class PasswordField extends JPasswordField {
     }
 
     private void createShowHide(Graphics2D g2) {
-        int x = getWidth() - 30 + 5;
-        int y = (getHeight() - 20) / 2;
-        g2.drawImage(hide ? eye_hide : eye, x, y, null);
+        if (eye != null && eye_hide != null) {
+            int x = getWidth() - 30 + 5;
+            int y = (getHeight() - 20) / 2;
+            g2.drawImage(hide ? eye_hide : eye, x, y, this);
+        } else {
+            System.out.println("Icons not loaded");
+        }
     }
 
     private void createHintText(Graphics2D g2) {
@@ -185,16 +194,7 @@ public class PasswordField extends JPasswordField {
         Rectangle2D r2 = ft.getStringBounds(labelText, g2);
         double height = getHeight() - in.top - in.bottom;
         double textY = (height - r2.getHeight()) / 2;
-        double size;
-        if (animateHinText) {
-            if (show) {
-                size = 18 * (1 - location);
-            } else {
-                size = 18 * location;
-            }
-        } else {
-            size = 18;
-        }
+        double size = animateHinText ? (show ? 18 * (1 - location) : 18 * location) : 18;
         g2.drawString(labelText, in.left, (int) (in.top + textY + ft.getAscent() - size));
     }
 
@@ -203,12 +203,7 @@ public class PasswordField extends JPasswordField {
             double width = getWidth() - 4;
             int height = getHeight();
             g2.setColor(lineColor);
-            double size;
-            if (show) {
-                size = width * (1 - location);
-            } else {
-                size = width * location;
-            }
+            double size = show ? width * (1 - location) : width * location;
             double x = (width - size) / 2;
             g2.fillRect((int) (x + 2), height - 2, (int) size, 2);
         }

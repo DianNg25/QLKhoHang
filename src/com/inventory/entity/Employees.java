@@ -9,6 +9,14 @@ package com.inventory.entity;
  * @author ADMIN
  */
 public class Employees {
+    private String EmployeeID;
+    private String Username;
+    private String FullName;
+    private int Phone;
+    private String Email;
+    private byte Position = 0;
+    private String Image;
+    private String Password;
 
     public Employees() {
     }
@@ -27,74 +35,65 @@ public class Employees {
         return EmployeeID;
     }
 
-    public void setEmployeeID(String EmployeeID) {
-        this.EmployeeID = EmployeeID;
-    }
-
     public String getUsername() {
         return Username;
-    }
-
-    public void setUsername(String Username) {
-        this.Username = Username;
     }
 
     public String getFullName() {
         return FullName;
     }
 
-    public void setFullName(String FullName) {
-        this.FullName = FullName;
-    }
-
     public int getPhone() {
         return Phone;
-    }
-
-    public void setPhone(int Phone) {
-        this.Phone = Phone;
     }
 
     public String getEmail() {
         return Email;
     }
 
-    public void setEmail(String Email) {
-        this.Email = Email;
-    }
-
-    public boolean getPosition() {
+    public byte getPosition() {
         return Position;
-    }
-
-    public void setPosition(boolean Position) {
-        this.Position = Position;
     }
 
     public String getImage() {
         return Image;
     }
 
-    public void setImage(String Image) {
-        this.Image = Image;
-    }
-
     public String getPassword() {
         return Password;
+    }
+
+    public void setEmployeeID(String EmployeeID) {
+        this.EmployeeID = EmployeeID;
+    }
+
+    public void setUsername(String Username) {
+        this.Username = Username;
+    }
+
+    public void setFullName(String FullName) {
+        this.FullName = FullName;
+    }
+
+    public void setPhone(int Phone) {
+        this.Phone = Phone;
+    }
+
+    public void setEmail(String Email) {
+        this.Email = Email;
+    }
+
+    public void setPosition(byte Position) {
+        this.Position = Position;
+    }
+
+    public void setImage(String Image) {
+        this.Image = Image;
     }
 
     public void setPassword(String Password) {
         this.Password = Password;
     }
-
-    private String EmployeeID;
-    private String Username;
-    private String FullName;
-    private int Phone;
-    private String Email;
-    private boolean Position = false;
-    private String Image;
-    private String Password;
 
     
     
