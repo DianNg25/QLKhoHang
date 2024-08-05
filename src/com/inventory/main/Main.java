@@ -44,6 +44,10 @@ public class Main extends javax.swing.JFrame {
                     setForm(new Form_6());
                 case 7 ->
                     setForm(new Form_7());
+                case 8 ->
+                    setForm(new Form_8());
+                case 9 ->
+                    setForm(new Form_9());
                 default ->
                     logoutForm();
             }
@@ -173,7 +177,7 @@ public class Main extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             new Main().setVisible(true);
         });
-      
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
