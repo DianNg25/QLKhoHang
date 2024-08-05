@@ -5,6 +5,7 @@
 package com.inventory.form;
 
 import com.inventory.dao.EmployeesDAO;
+import com.inventory.dao.ProductsDAO;
 import com.inventory.entity.Employees;
 import com.inventory.entity.EmployeesTable;
 import com.inventory.utils.XJdbc;
@@ -14,7 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import com.inventory.message.*;
+import com.inventory.swing.TableHeader;
 import com.inventory.swing.glasspanepopup.GlassPanePopup;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -23,25 +29,16 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Form_7 extends javax.swing.JPanel {
 
-    private JTextField tfProductCode;
-    private JTextField tfProductName;
-    private JTextField tfSupplier;
-    private JCheckBox cbMini, cbSmall, cbMedium, cbLarge;
-    private JTextField tfPrice;
-    private JCheckBox cbGray, cbRed, cbBlue, cbOrange;
-    private JTable productTable;
-    private DefaultTableModel tableModel;
-
     private EmployeesTable selectedEmployee;
 
     public Form_7() {
         initComponents();
-
+        customizeTable();
         loadData();
     }
 
     private void loadData() {
-        String sql = "SELECT * FROM Employees";
+        String sql = "SELECT * FROM Employees ORDER BY CASE WHEN Status = 'Nghỉ làm' THEN 1 ELSE 0 END";
 
         try {
             List<EmployeesTable> employeeList = selectBySql(sql);
@@ -57,8 +54,7 @@ public class Form_7 extends javax.swing.JPanel {
                     employee.getPhone(),
                     employee.getEmail(),
                     employee.getPosition() == 1 ? "Admin" : "User",
-                    employee.getImage(), // Nếu có cột Image
-                    employee.getPassword() // Nếu có cột Password
+                    employee.getStatus()
                 };
                 tableModel.addRow(row);
             }
@@ -89,6 +85,7 @@ public class Form_7 extends javax.swing.JPanel {
                     // Nếu bảng có các cột khác như Image và Password, bạn cũng cần lấy chúng
                     entity.setImage(rs.getString("Image"));
                     entity.setPassword(rs.getString("Password"));
+                    entity.setStatus(rs.getString("Status"));
                     list.add(entity);
                 }
             } finally {
@@ -102,6 +99,63 @@ public class Form_7 extends javax.swing.JPanel {
         }
         return list;
     }
+
+  private void customizeTable() {
+    spTable.setVerticalScrollBar(new JScrollBar()); // Use JScrollBar instead of ScrollBar
+    spTable.getVerticalScrollBar().setBackground(Color.WHITE);
+    spTable.getViewport().setBackground(Color.WHITE);
+
+    JPanel p = new JPanel();
+    p.setBackground(Color.WHITE);
+    spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+
+    tblTable.setShowHorizontalLines(true);
+    tblTable.setGridColor(new Color(230, 230, 230));
+    tblTable.setRowHeight(40);
+
+    // Renderer for column headers
+    DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+    headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+    tblTable.getTableHeader().setDefaultRenderer(headerRenderer);
+    tblTable.getTableHeader().setReorderingAllowed(false);
+    tblTable.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            TableHeader header = new TableHeader(value.toString());
+            header.setHorizontalAlignment(JLabel.CENTER); // Center-align the header text
+            return header;
+        }
+    });
+
+    // Default renderer for table cells
+    tblTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            com.setBackground(Color.WHITE);
+            setBorder(noFocusBorder);
+            com.setFont(new Font("sansserif", Font.PLAIN, 13)); // Set font size to 13
+            com.setForeground(isSelected ? new Color(36, 183, 194) : new Color(102, 102, 102));
+            com.setFont(com.getFont().deriveFont(Font.BOLD));
+            setHorizontalAlignment(JLabel.CENTER); // Center-align the cell text
+
+            // Custom renderer for specific columns (example: status column)
+            if (column == 6) { // Status column
+                JLabel label = new JLabel(value.toString());
+                label.setFont(new Font("sansserif", Font.BOLD, 13));
+                if ("Nghỉ làm".equals(value)) {
+                    label.setForeground(Color.RED); // Red for deleted status
+                } else {
+                    label.setForeground(Color.GREEN); // Different color for other statuses
+                }
+                label.setHorizontalAlignment(JLabel.CENTER); // Center align status column
+                return label;
+            }
+            return com;
+        }
+    });
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -120,7 +174,7 @@ public class Form_7 extends javax.swing.JPanel {
         btnXoa = new com.inventory.swing.Button();
         btnSua = new com.inventory.swing.Button();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        spTable = new javax.swing.JScrollPane();
         tblTable = new com.inventory.swing.Table();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -219,17 +273,14 @@ public class Form_7 extends javax.swing.JPanel {
 
         tblTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
-                "Mã nhân viên", "Tài Khoản", "Họ và tên", "Số điện thoại", "Email", "Chức vụ"
+                "Mã nhân viên", "Tài Khoản", "Họ và tên", "Số điện thoại", "Email", "Chức vụ", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -241,9 +292,9 @@ public class Form_7 extends javax.swing.JPanel {
                 tblTableMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblTable);
+        spTable.setViewportView(tblTable);
 
-        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanel2.add(spTable, java.awt.BorderLayout.CENTER);
 
         add(jPanel2, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -262,29 +313,17 @@ public class Form_7 extends javax.swing.JPanel {
         // TODO add your handling code here:
         int selectedRow = tblTable.getSelectedRow();
         if (selectedRow >= 0) {
-            String EmployeeID = tblTable.getValueAt(selectedRow, 0).toString();
+            String em = tblTable.getValueAt(selectedRow, 0).toString();
 
-            // Hiển thị hộp thoại xác nhận
-            int confirmation = JOptionPane.showConfirmDialog(null, "Bạn có chắc xóa nhân viên này không?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            EmployeesDAO dao = new EmployeesDAO();
+            JOptionPane.showMessageDialog(this, "Product status updated to 'Deleted'!");
+            // Sử dụng hàm updateStatus để cập nhật trạng thái sản phẩm
+            dao.updateStatus(em, "Nghỉ làm");
 
-            if (confirmation == JOptionPane.YES_OPTION) {
-                EmployeesDAO dao = new EmployeesDAO();
-                // Sử dụng hàm delete để xóa nhân viên
-                dao.delete(EmployeeID);
+            loadData();
 
-                loadData(); // Cập nhật dữ liệu sau khi xóa
-                DeleteEmployees1 obj = new DeleteEmployees1();
-                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-                GlassPanePopup.showPopup(obj);
-            } else {
-                DeleteEmployees3 obj = new DeleteEmployees3();
-                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-                GlassPanePopup.showPopup(obj);
-            }
         } else {
-            DeleteEmployees2 obj = new DeleteEmployees2();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+            JOptionPane.showMessageDialog(this, "Please select a product to delete.");
         }
 
     }//GEN-LAST:event_btnXoaActionPerformed
@@ -300,6 +339,7 @@ public class Form_7 extends javax.swing.JPanel {
             System.out.println("Position: " + (selectedEmployee.getPosition() == 1 ? "Admin" : "User"));
             System.out.println("Image: " + selectedEmployee.getImage());
             System.out.println("Password: " + selectedEmployee.getPassword());
+            System.out.println("Status: " + selectedEmployee.getStatus());
 
             // Mở cửa sổ chỉnh sửa với dữ liệu của nhân viên đã chọn
             JDialog add = new JDialog();
@@ -313,8 +353,7 @@ public class Form_7 extends javax.swing.JPanel {
             add.pack();
             add.setLocationRelativeTo(this); // this có thể là JFrame hoặc JDialog hiện tại
             add.setVisible(true);
-        } 
-        else {
+        } else {
             // Xử lý khi không có nhân viên nào được chọn
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhân viên để chỉnh sửa.");
         }
@@ -343,13 +382,28 @@ public class Form_7 extends javax.swing.JPanel {
                 employee.setPosition((byte) 0); // Giá trị mặc định
             }
 
-//        employee.setImage((String) tblTable.getValueAt(selectedRow, 6));
-//        employee.setPassword((String) tblTable.getValueAt(selectedRow, 7));
+            // Kiểm tra số cột hiện có trong bảng
+            int columnCount = tblTable.getColumnCount();
+            System.out.println("Column count: " + columnCount);
+
+            // Điều chỉnh chỉ số cột trạng thái cho đúng
+            int statusColumnIndex = 6; // Giả sử cột trạng thái là cột thứ 7 (index 6)
+            if (statusColumnIndex < columnCount) {
+                Object statusObj = tblTable.getValueAt(selectedRow, statusColumnIndex);
+                if (statusObj instanceof String) {
+                    employee.setStatus((String) statusObj);
+                } else {
+                    employee.setStatus("Unknown"); // Giá trị mặc định nếu không phải String
+                }
+            } else {
+                employee.setStatus("Unknown"); // Giá trị mặc định nếu cột trạng thái không tồn tại
+            }
+
             // Đặt đối tượng EmployeesTable vào biến toàn cục
             this.selectedEmployee = employee;
 
             // Optional: Hiển thị thông báo để kiểm tra dữ liệu đã được lưu vào đối tượng
-            JOptionPane.showMessageDialog(this, "Selected Employee: " + employee.getFullName());
+            JOptionPane.showMessageDialog(this, "Selected Employee: " + employee.getFullName() + "\nStatus: " + employee.getStatus());
         }
     }//GEN-LAST:event_tblTableMouseClicked
 
@@ -362,7 +416,7 @@ public class Form_7 extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane spTable;
     private com.inventory.swing.Table tblTable;
     private com.inventory.swing.TextField textField1;
     // End of variables declaration//GEN-END:variables
