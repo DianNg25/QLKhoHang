@@ -96,6 +96,7 @@ public class Card_DT extends javax.swing.JPanel {
         lblIcon = new javax.swing.JLabel();
         lblTitle = new javax.swing.JLabel();
         lblValue = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -118,6 +119,8 @@ public class Card_DT extends javax.swing.JPanel {
             }
         });
 
+        jLabel1.setText("Số tiền");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -127,8 +130,11 @@ public class Card_DT extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTitle)
                     .addComponent(lblIcon)
-                    .addComponent(lblValue))
-                .addContainerGap(216, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblValue)))
+                .addContainerGap(124, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,7 +144,9 @@ public class Card_DT extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(lblTitle)
                 .addGap(18, 18, 18)
-                .addComponent(lblValue)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblValue)
+                    .addComponent(jLabel1))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -162,6 +170,7 @@ public class Card_DT extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblValue;

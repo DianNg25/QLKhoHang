@@ -30,42 +30,52 @@ public class Form_2 extends javax.swing.JPanel {
     public Form_2() {
         initComponents();
         loadData();
-
     }
     
-    
-private void loadData() {
-    String sql = "SELECT ifm.ImportFormID, s.SupplierName, ifm.ImportDate, "
-            + "SUM(ifd.Quantity) AS TotalQuantity "
-            + "FROM ImportForms ifm "
-            + "JOIN Suppliers s ON ifm.SupplierID = s.SupplierID "
-            + "LEFT JOIN ImportFormDetails ifd ON ifm.ImportFormID = ifd.ImportFormID "
-            + "GROUP BY ifm.ImportFormID, s.SupplierName, ifm.ImportDate";
+   private void loadData() {
+    String sql = "SELECT "
+               + "ifm.ImportFormID, "
+               + "s.SupplierName, "
+               + "ifm.ImportDate, "
+               + "COALESCE(SUM(p.Quantity), 0) AS TotalQuantityProducts, "
+               + "COALESCE(SUM(ifd.Quantity), 0) AS TotalQuantityImports "
+               + "FROM ImportForms ifm "
+               + "JOIN Suppliers s ON ifm.SupplierID = s.SupplierID "
+               + "LEFT JOIN ImportFormDetails ifd ON ifm.ImportFormID = ifd.ImportFormID "
+               + "LEFT JOIN Products p ON s.SupplierID = p.SupplierID "
+               + "GROUP BY ifm.ImportFormID, s.SupplierName, ifm.ImportDate";
 
-    try {
-        List<ImportForm> importFormList = selectBySql(sql);
+    try (java.sql.Connection conn = XJdbc.getConnection();
+         java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-        DefaultTableModel tableModel = (DefaultTableModel) tblNhapHang.getModel();
-        tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
+        try (java.sql.ResultSet rs = pstmt.executeQuery()) {
+            DefaultTableModel tableModel = (DefaultTableModel) tblNhapHang.getModel();
+            tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
 
-        for (ImportForm importForm : importFormList) {
-            Object[] row = new Object[]{
-                importForm.getImportFormID(),
-                importForm.getSupplierName(), // Hiển thị tên nhà cung cấp
-                importForm.getImportDate(),
-                importForm.getTotalAmount()
-            };
-            tableModel.addRow(row);
+            while (rs.next()) {
+                Object[] row = new Object[]{
+                    rs.getString("ImportFormID"),          // Mã phiếu nhập
+                    rs.getString("SupplierName"),          // Tên nhà cung cấp
+                    rs.getDate("ImportDate"),              // Ngày nhập
+                    rs.getInt("TotalQuantityProducts"),    // Tổng số lượng sản phẩm từ bảng Products
+                    rs.getInt("TotalQuantityImports")      // Tổng số lượng sản phẩm nhập từ bảng ImportFormDetails
+                };
+                tableModel.addRow(row);
+            }
+
+            tblNhapHang.setModel(tableModel);
+
         }
-
-        tblNhapHang.setModel(tableModel);
 
     } catch (Exception e) {
         e.printStackTrace();
         JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu từ cơ sở dữ liệu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
 }
-protected List<ImportForm> selectBySql(String sql, Object... args) {
+
+    
+    
+    protected List<ImportForm> selectBySql(String sql, Object... args) {
     List<ImportForm> list = new ArrayList<>();
     try {
         java.sql.ResultSet rs = null;
@@ -74,9 +84,9 @@ protected List<ImportForm> selectBySql(String sql, Object... args) {
             while (rs.next()) {
                 ImportForm entity = new ImportForm();
                 entity.setImportFormID(rs.getString("ImportFormID"));
-                entity.setSupplierName(rs.getString("SupplierName")); // Thêm ánh xạ này
+                entity.setSupplierName(rs.getString("SupplierName"));
                 entity.setImportDate(rs.getDate("ImportDate"));
-                entity.setTotalAmount(rs.getBigDecimal("TotalQuantity")); // Đảm bảo tên cột khớp
+                entity.setTotalAmount(rs.getBigDecimal("TotalAmount"));
                 list.add(entity);
             }
         } finally {
@@ -90,6 +100,7 @@ protected List<ImportForm> selectBySql(String sql, Object... args) {
     }
     return list;
 }
+
 
 
     /**
