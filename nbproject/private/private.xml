@@ -4,7 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="DuAnMau"/>
         <group>
-            <file>file:/D:/FPTpolytechnic/SD19202_du_an_1/QLKhoHang/src/com/inventory/form/Form_3.java</file>
+            <file>file:/D:/FPTpolytechnic/SD19202_du_an_1/QLKhoHang/src/com/inventory/form/Form_1.java</file>
+            <file>file:/D:/FPTpolytechnic/SD19202_du_an_1/QLKhoHang/src/com/inventory/form/Model_Edit_Product1.java</file>
+            <file>file:/D:/FPTpolytechnic/SD19202_du_an_1/QLKhoHang/src/com/inventory/entity/ProductsTable.java</file>
         </group>
     </open-files>
 </project-private>
