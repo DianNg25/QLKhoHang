@@ -6,6 +6,7 @@ package com.inventory.form;
 
 import com.inventory.dao.SuppliersDAO;
 import com.inventory.entity.Suppliers;
+import com.inventory.entity.SuppliersTable;
 import com.inventory.swing.ScrollBar;
 import com.inventory.swing.TableHeader;
 import com.inventory.utils.XJdbc;
@@ -37,6 +38,8 @@ public class Form_4 extends javax.swing.JPanel {
     private JCheckBox cbGray, cbRed, cbBlue, cbOrange;
     private JTable productTable;
     private DefaultTableModel tableModel;
+
+    private SuppliersTable suppliersTable;
 
     public Form_4() {
         initComponents();
@@ -236,6 +239,11 @@ public class Form_4 extends javax.swing.JPanel {
         button1.setForeground(new java.awt.Color(255, 255, 255));
         button1.setText("Sửa");
         button1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
 
         btnDelete_Suppliers.setBackground(new java.awt.Color(102, 102, 255));
         btnDelete_Suppliers.setForeground(new java.awt.Color(255, 255, 255));
@@ -339,6 +347,11 @@ public class Form_4 extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tblNCC.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblNCCMouseClicked(evt);
+            }
+        });
         spTable.setViewportView(tblNCC);
 
         jPanel2.add(spTable, java.awt.BorderLayout.CENTER);
@@ -420,6 +433,52 @@ public class Form_4 extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnDelete_SuppliersActionPerformed
 
+    private void tblNCCMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNCCMouseClicked
+        // TODO add your handling code here:
+        int selectedRow = tblNCC.getSelectedRow();
+
+        if (selectedRow != -1) { // Có một hàng được chọn
+            // Tạo một đối tượng Suppliers để lưu thông tin
+            SuppliersTable supplier = new SuppliersTable();
+
+            // Lấy dữ liệu từ bảng và lưu vào đối tượng Suppliers
+            supplier.setSupplierID((String) tblNCC.getValueAt(selectedRow, 0));
+            supplier.setSupplierName((String) tblNCC.getValueAt(selectedRow, 1));
+            supplier.setAddress((String) tblNCC.getValueAt(selectedRow, 2));
+            supplier.setPhone((String) tblNCC.getValueAt(selectedRow, 3));
+            supplier.setEmail((String) tblNCC.getValueAt(selectedRow, 4));
+
+            // Đặt dữ liệu vào các trường nhập liệu  // Ví dụ cho trường email
+
+            // Đặt đối tượng Suppliers vào biến toàn cục nếu cần
+            this.suppliersTable = supplier;
+
+            // Hiển thị thông báo để kiểm tra dữ liệu đã được lưu vào đối tượng
+            JOptionPane.showMessageDialog(this, "Nhà cung cấp đã chọn: " + supplier.getSupplierName());
+        }
+    }//GEN-LAST:event_tblNCCMouseClicked
+
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        // TODO add your handling code here:
+        if (suppliersTable != null) {
+
+            // Mở cửa sổ chỉnh sửa với dữ liệu của nhân viên đã chọn
+            JDialog add = new JDialog();
+            Model_Update_Suppliers model = new Model_Update_Suppliers();
+            // Truyền đối tượng EmployeesTable vào form Model_update_Employees1
+            model.setSupplierData(suppliersTable);
+
+            // Thiết lập JDialog
+            add.setUndecorated(true);
+            add.getContentPane().add(model);
+            add.pack();
+            add.setLocationRelativeTo(this); // this có thể là JFrame hoặc JDialog hiện tại
+            add.setVisible(true);
+        } else {
+            // Xử lý khi không có nhân viên nào được chọn
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhân viên để chỉnh sửa.");
+        }
+    }//GEN-LAST:event_button1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button btnDelete_Suppliers;

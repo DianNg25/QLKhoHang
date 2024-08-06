@@ -33,9 +33,9 @@ public class Form_Home extends javax.swing.JPanel {
      */
     public Form_Home() {
         initComponents();
-        card1.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/stock.png")), "Tổng doanh thu", "", "Increased by 60%"));
-        card2.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/profit.png")), "Tổng số hàng tồn kho", "", "Increased by 25%"));
-        card3.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/flag.png")), "Tổng số hàng xuất kho", "", "Increased by 70%"));
+        card1.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/stock.png")), "Tổng doanh thu", "361.000.000VND", "Increased by 60%"));
+        card2.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/profit.png")), "Tổng số hàng tồn kho", "267 Sản phẩm", "Increased by 25%"));
+        card3.setData(new Model_Card(new ImageIcon(getClass().getResource("/com/inventory/icon/flag.png")), "Tổng số hàng xuất kho", "167 Sản Phẩm", "Increased by 70%"));
 
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);

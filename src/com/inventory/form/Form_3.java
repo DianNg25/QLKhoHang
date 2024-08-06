@@ -4,20 +4,12 @@
  */
 package com.inventory.form;
 
-import com.inventory.swing.TableActionCellEditor;
-import com.inventory.swing.TableActionCellRender;
-import com.inventory.swing.TableActionEvent;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.inventory.entity.ExportFormsTable;
+import com.inventory.utils.XJdbc;
+import java.util.ArrayList;
+
+import java.util.List;
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,50 +17,67 @@ import javax.swing.table.DefaultTableModel;
  * @author ADMIN
  */
 public class Form_3 extends javax.swing.JPanel {
-
+    
+    private ExportFormsTable exportFormsTable;
+    
     public Form_3() {
         initComponents();
-        TableActionEvent event = new TableActionEvent() {
-            @Override
-            public void onEdit(int row) {
-                System.out.println("Edit row : " + row);
-            }
-
-            @Override
-            public void onDelete(int row) {
-                if (tblXuatKho.isEditing()) {
-                    tblXuatKho.getCellEditor().stopCellEditing();
-                }
-                DefaultTableModel model = (DefaultTableModel) tblXuatKho.getModel();
-                model.removeRow(row);
-            }
-
-        };
-        String[] columnNames = {"Mã phiếu xuất", "Ngày xuất", "Tổng tiền", "Trạng thái", "Thao tác"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        tblXuatKho.setModel(model);
-
-        for (int i = 0; i < tblXuatKho.getColumnCount(); i++) {
-            tblXuatKho.getColumnModel().getColumn(i).setCellRenderer(new DefaultTableCellRenderer());
-        }
-
-        tblXuatKho.getColumnModel().getColumn(4).setCellRenderer(new TableActionCellRender());
-        tblXuatKho.getColumnModel().getColumn(4).setCellEditor(new TableActionCellEditor(event));
-
-        addMultipleRows(model);
+        loadExportFormsData();
     }
+    
+    private void loadExportFormsData() {
+    String sql = "SELECT ExportFormID, CustomerID, ExportDate, TotalAmount, Status FROM ExportForms";
 
-    private void addMultipleRows(DefaultTableModel model) {
-        Object[][] rowData = {
-            {"SP001", "2023-07-14", "1500000", "Đã xuất", ""},
-            {"SP002", "2023-07-13", "2000000", "Đang xử lý", ""},
-            {"SP003", "2023-07-12", "2500000", "Hoàn thành", ""}
-        };
+    try {
+        List<ExportFormsTable> exportFormsList = selectExportFormsBySql(sql);
 
-        for (Object[] row : rowData) {
-            model.addRow(row);
+        DefaultTableModel tableModel = (DefaultTableModel) tblXuatKho.getModel(); // tblExportForms là JTable hiển thị dữ liệu
+        tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
+
+        for (ExportFormsTable exportForm : exportFormsList) {
+            Object[] row = new Object[]{
+                exportForm.getExportFormID(),
+                exportForm.getCustomerID(),
+                exportForm.getExportDate(),
+                exportForm.getTotalAmount(),
+                exportForm.getStatus()
+            };
+            tableModel.addRow(row);
         }
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error loading data from database.", "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
+
+    
+    protected List<ExportFormsTable> selectExportFormsBySql(String sql, Object... args) {
+    List<ExportFormsTable> list = new ArrayList<>();
+    try {
+        java.sql.ResultSet rs = null;
+        try {
+            rs = XJdbc.query(sql, args);
+            while (rs.next()) {
+                ExportFormsTable entity = new ExportFormsTable();
+                entity.setExportFormID(rs.getString("ExportFormID"));
+                entity.setCustomerID(rs.getString("CustomerID"));
+                entity.setExportDate(rs.getDate("ExportDate"));
+                entity.setTotalAmount(rs.getDouble("TotalAmount"));
+                entity.setStatus(rs.getString("Status"));
+                list.add(entity);
+            }
+        } finally {
+            if (rs != null) {
+                rs.getStatement().getConnection().close();
+            }
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        throw new RuntimeException(ex);
+    }
+    return list;
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -198,15 +207,23 @@ public class Form_3 extends javax.swing.JPanel {
 
         tblXuatKho.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Mã PX", "Mã KH", "Ngày xuất", "Tổng tiền", "Trạng thái"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(tblXuatKho);
 
         jPanel2.add(jScrollPane2, java.awt.BorderLayout.CENTER);
