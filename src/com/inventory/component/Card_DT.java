@@ -5,11 +5,15 @@
 package com.inventory.component;
 
 import com.inventory.form.Model_Card;
+import com.inventory.utils.RevenueCalculator;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JLabel;
 
 /**
@@ -18,12 +22,14 @@ import javax.swing.JLabel;
  */
 public class Card_DT extends javax.swing.JPanel {
 
+    private RevenueCalculator revenueCalculator;
+
     public Card_DT(Color color1, Color color2, JLabel lblIcon, JLabel lblTitle, JLabel lblValue) {
         this.color1 = color1;
         this.color2 = color2;
         this.lblIcon = lblIcon;
         this.lblTitle = lblTitle;
-        this.lblValue = lblValue;
+
     }
 
     public Color getColor1() {
@@ -58,13 +64,6 @@ public class Card_DT extends javax.swing.JPanel {
         this.lblTitle = lblTitle;
     }
 
-    public JLabel getLblValue() {
-        return lblValue;
-    }
-
-    public void setLblValue(JLabel lblValue) {
-        this.lblValue = lblValue;
-    }
     private Color color1;
     private Color color2;
 
@@ -81,7 +80,7 @@ public class Card_DT extends javax.swing.JPanel {
     public void setData(Model_Card data) {
         lblIcon.setIcon(data.getIcon());
         lblTitle.setText(data.getTitle());
-        lblValue.setText(data.getValues());
+
     }
 
     /**
@@ -95,8 +94,7 @@ public class Card_DT extends javax.swing.JPanel {
 
         lblIcon = new javax.swing.JLabel();
         lblTitle = new javax.swing.JLabel();
-        lblValue = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        lblDoanhThu = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -106,20 +104,17 @@ public class Card_DT extends javax.swing.JPanel {
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Title: ");
 
-        lblValue.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblValue.setForeground(new java.awt.Color(255, 255, 255));
-        lblValue.setText("Value");
-        lblValue.addAncestorListener(new javax.swing.event.AncestorListener() {
+        lblDoanhThu.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblDoanhThu.setForeground(new java.awt.Color(255, 255, 255));
+        lblDoanhThu.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                lblValueAncestorAdded(evt);
+                lblDoanhThuAncestorAdded(evt);
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
-
-        jLabel1.setText("Số tiền");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -128,13 +123,14 @@ public class Card_DT extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTitle)
-                    .addComponent(lblIcon)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblValue)))
-                .addContainerGap(124, Short.MAX_VALUE))
+                        .addComponent(lblDoanhThu, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                        .addGap(113, 113, 113))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTitle)
+                            .addComponent(lblIcon))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -143,18 +139,25 @@ public class Card_DT extends javax.swing.JPanel {
                 .addComponent(lblIcon)
                 .addGap(18, 18, 18)
                 .addComponent(lblTitle)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblValue)
-                    .addComponent(jLabel1))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void lblValueAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_lblValueAncestorAdded
+    private void lblDoanhThuAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_lblDoanhThuAncestorAdded
         // TODO add your handling code here:
+           updateRevenue();
+    }//GEN-LAST:event_lblDoanhThuAncestorAdded
 
-    }//GEN-LAST:event_lblValueAncestorAdded
+    public void updateRevenue() {
+    revenueCalculator = new RevenueCalculator();
+    
+    // Gọi phương thức tính tổng doanh thu mà không cần ngày
+    double revenue = revenueCalculator.getTotalRevenue();
+    lblDoanhThu.setText("Doanh thu: " + revenue);
+}
+
 
     @Override
     protected void paintComponent(Graphics grphcs) {
@@ -170,9 +173,8 @@ public class Card_DT extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblDoanhThu;
     private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblValue;
     // End of variables declaration//GEN-END:variables
 }

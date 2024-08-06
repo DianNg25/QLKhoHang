@@ -23,7 +23,7 @@ public class Card_TK extends javax.swing.JPanel {
         this.color2 = color2;
         this.lblIcon = lblIcon;
         this.lblTitle = lblTitle;
-        this.lblValue = lblValue;
+        this.lblTk = lblValue;
     }
     
     public Color getColor1() {
@@ -59,11 +59,11 @@ public class Card_TK extends javax.swing.JPanel {
     }
     
     public JLabel getLblValue() {
-        return lblValue;
+        return lblTk;
     }
     
     public void setLblValue(JLabel lblValue) {
-        this.lblValue = lblValue;
+        this.lblTk = lblValue;
     }
     private Color color1;
     private Color color2;
@@ -81,7 +81,7 @@ public class Card_TK extends javax.swing.JPanel {
     public void setData(Model_Card data) {
         lblIcon.setIcon(data.getIcon());
         lblTitle.setText(data.getTitle());
-        lblValue.setText(data.getValues());
+        lblTk.setText(data.getValues());
     }
 
     /**
@@ -95,7 +95,7 @@ public class Card_TK extends javax.swing.JPanel {
 
         lblIcon = new javax.swing.JLabel();
         lblTitle = new javax.swing.JLabel();
-        lblValue = new javax.swing.JLabel();
+        lblTk = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -105,12 +105,11 @@ public class Card_TK extends javax.swing.JPanel {
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Title: ");
 
-        lblValue.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblValue.setForeground(new java.awt.Color(255, 255, 255));
-        lblValue.setText("Value");
-        lblValue.addAncestorListener(new javax.swing.event.AncestorListener() {
+        lblTk.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblTk.setText("Value");
+        lblTk.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                lblValueAncestorAdded(evt);
+                lblTkAncestorAdded(evt);
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -127,7 +126,7 @@ public class Card_TK extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTitle)
                     .addComponent(lblIcon)
-                    .addComponent(lblValue))
+                    .addComponent(lblTk))
                 .addContainerGap(216, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -138,15 +137,15 @@ public class Card_TK extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(lblTitle)
                 .addGap(18, 18, 18)
-                .addComponent(lblValue)
+                .addComponent(lblTk)
                 .addContainerGap(18, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void lblValueAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_lblValueAncestorAdded
+    private void lblTkAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_lblTkAncestorAdded
         // TODO add your handling code here:
         
-    }//GEN-LAST:event_lblValueAncestorAdded
+    }//GEN-LAST:event_lblTkAncestorAdded
 
     @Override
     protected void paintComponent(Graphics grphcs) {
@@ -164,6 +163,6 @@ public class Card_TK extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblValue;
+    private javax.swing.JLabel lblTk;
     // End of variables declaration//GEN-END:variables
 }

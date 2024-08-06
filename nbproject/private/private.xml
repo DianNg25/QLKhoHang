@@ -4,9 +4,19 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group name="DuAnMau"/>
         <group>
-            <file>file:/D:/FPTpolytechnic/SD19202_du_an_1/QLKhoHang/src/com/inventory/form/Form_1.java</file>
-            <file>file:/D:/FPTpolytechnic/SD19202_du_an_1/QLKhoHang/src/com/inventory/form/Model_Edit_Product1.java</file>
-            <file>file:/D:/FPTpolytechnic/SD19202_du_an_1/QLKhoHang/src/com/inventory/entity/ProductsTable.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/form/Form_9.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/component/Card_TK.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/entity/Employees.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/dao/EmployeesDAO.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/form/Form_5.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/component/Header.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/form/Form_Home.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/main/Login.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/utils/RevenueCalculator.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/form/Form_7.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/form/ImportExcel.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/component/Card_DT.java</file>
+            <file>file:/D:/FPT%20POLYTECHNIC/DUAN_1/QLKhoHang/src/com/inventory/component/Card_NV.java</file>
         </group>
     </open-files>
 </project-private>
