@@ -61,7 +61,7 @@ public class DoiMatKhau extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(630, 310));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 153, 0));
+        jLabel1.setForeground(new java.awt.Color(0, 0, 153));
         jLabel1.setText("QUÊN MẬT KHẨU");
 
         btnOK.setBackground(new java.awt.Color(204, 0, 0));
@@ -86,7 +86,7 @@ public class DoiMatKhau extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel5.setText("Mật khẩu mới");
 
-        txtEmail.setBackground(new java.awt.Color(72, 142, 174));
+        txtEmail.setBackground(new java.awt.Color(190, 213, 243));
         txtEmail.setForeground(new java.awt.Color(255, 255, 255));
         txtEmail.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         txtEmail.addActionListener(new java.awt.event.ActionListener() {
@@ -95,7 +95,7 @@ public class DoiMatKhau extends javax.swing.JPanel {
             }
         });
 
-        txtXacNhanMa.setBackground(new java.awt.Color(72, 142, 174));
+        txtXacNhanMa.setBackground(new java.awt.Color(190, 213, 243));
         txtXacNhanMa.setForeground(new java.awt.Color(255, 255, 255));
         txtXacNhanMa.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
 
@@ -104,16 +104,11 @@ public class DoiMatKhau extends javax.swing.JPanel {
         lblStatus.setBackground(new java.awt.Color(255, 255, 255));
         lblStatus.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
 
-        txtUserName.setBackground(new java.awt.Color(72, 142, 174));
+        txtUserName.setBackground(new java.awt.Color(190, 213, 243));
         txtUserName.setForeground(new java.awt.Color(255, 255, 255));
         txtUserName.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
-        txtUserName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUserNameActionPerformed(evt);
-            }
-        });
 
-        txtMatKhauMoi.setBackground(new java.awt.Color(72, 142, 174));
+        txtMatKhauMoi.setBackground(new java.awt.Color(190, 213, 243));
         txtMatKhauMoi.setForeground(new java.awt.Color(255, 255, 255));
         txtMatKhauMoi.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         txtMatKhauMoi.addActionListener(new java.awt.event.ActionListener() {
@@ -122,8 +117,7 @@ public class DoiMatKhau extends javax.swing.JPanel {
             }
         });
 
-        btnGuiMa.setBackground(new java.awt.Color(26, 48, 131));
-        btnGuiMa.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuiMa.setBackground(new java.awt.Color(190, 213, 243));
         btnGuiMa.setText("Gửi mã");
         btnGuiMa.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
         btnGuiMa.addActionListener(new java.awt.event.ActionListener() {
@@ -132,8 +126,7 @@ public class DoiMatKhau extends javax.swing.JPanel {
             }
         });
 
-        btnXacNhan.setBackground(new java.awt.Color(26, 48, 131));
-        btnXacNhan.setForeground(new java.awt.Color(255, 255, 255));
+        btnXacNhan.setBackground(new java.awt.Color(190, 213, 243));
         btnXacNhan.setText("Xác nhận");
         btnXacNhan.setFont(new java.awt.Font("SansSerif", 1, 13)); // NOI18N
         btnXacNhan.addActionListener(new java.awt.event.ActionListener() {
@@ -157,32 +150,37 @@ public class DoiMatKhau extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(jLabel3))
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel3)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnGuiMa, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(138, 138, 138))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtXacNhanMa, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnXacNhan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addGap(138, 138, 138))
+                        .addGap(278, 278, 278)
+                        .addComponent(jLabel5)
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(lblStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(12, 12, 12)
+                            .addComponent(btnGuiMa, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(txtXacNhanMa, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btnXacNhan, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -193,11 +191,12 @@ public class DoiMatKhau extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCheckPass, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMatKhauMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addComponent(jLabel5)))
-                        .addGap(0, 6, Short.MAX_VALUE))))
+                            .addComponent(txtMatKhauMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,10 +240,6 @@ public class DoiMatKhau extends javax.swing.JPanel {
     private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
 
     }//GEN-LAST:event_txtEmailActionPerformed
-
-    private void txtUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserNameActionPerformed
-
-    }//GEN-LAST:event_txtUserNameActionPerformed
 
     private void txtMatKhauMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMatKhauMoiActionPerformed
 
