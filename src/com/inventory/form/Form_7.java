@@ -64,41 +64,40 @@ public class Form_7 extends javax.swing.JPanel {
         }
     }
 
-    protected List<EmployeesTable> selectBySql(String sql, Object... args) {
-        List<EmployeesTable> list = new ArrayList<>();
+protected List<EmployeesTable> selectBySql(String sql, Object... args) {
+    List<EmployeesTable> list = new ArrayList<>();
+    try {
+        java.sql.ResultSet rs = null;
         try {
-            java.sql.ResultSet rs = null;
-            try {
-                rs = XJdbc.query(sql, args);
-                while (rs.next()) {
-                    EmployeesTable entity = new EmployeesTable();
-                    entity.setEmployeeID(rs.getString("EmployeeID"));
-                    entity.setUsername(rs.getString("Username"));
-                    entity.setFullName(rs.getString("FullName"));
-                    entity.setPhone(rs.getInt("Phone"));
-                    entity.setEmail(rs.getString("Email"));
+            rs = XJdbc.query(sql, args);
+            while (rs.next()) {
+                EmployeesTable entity = new EmployeesTable();
+                entity.setEmployeeID(rs.getString("EmployeeID"));
+                entity.setUsername(rs.getString("Username"));
+                entity.setFullName(rs.getString("FullName"));
 
-                    // Nếu bảng có cột Position, bạn cần xác định loại của nó
-                    // Ví dụ: Nếu cột Position là byte
-                    entity.setPosition(rs.getByte("Position"));
+                // Đọc số điện thoại dưới dạng String
+               entity.setPhone(rs.getInt("Phone"));
 
-                    // Nếu bảng có các cột khác như Image và Password, bạn cũng cần lấy chúng
-                    entity.setImage(rs.getString("Image"));
-                    entity.setPassword(rs.getString("Password"));
-                    entity.setStatus(rs.getString("Status"));
-                    list.add(entity);
-                }
-            } finally {
-                if (rs != null) {
-                    rs.getStatement().getConnection().close();
-                }
+                entity.setEmail(rs.getString("Email"));
+                entity.setPosition(rs.getByte("Position"));
+                entity.setImage(rs.getString("Image"));
+                entity.setPassword(rs.getString("Password"));
+                entity.setStatus(rs.getString("Status"));
+                list.add(entity);
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
+        } finally {
+            if (rs != null) {
+                rs.getStatement().getConnection().close();
+            }
         }
-        return list;
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        throw new RuntimeException(ex);
     }
+    return list;
+}
+
 
   private void customizeTable() {
     spTable.setVerticalScrollBar(new JScrollBar()); // Use JScrollBar instead of ScrollBar
@@ -403,7 +402,7 @@ public class Form_7 extends javax.swing.JPanel {
             this.selectedEmployee = employee;
 
             // Optional: Hiển thị thông báo để kiểm tra dữ liệu đã được lưu vào đối tượng
-            JOptionPane.showMessageDialog(this, "Selected Employee: " + employee.getFullName() + "\nStatus: " + employee.getStatus());
+//            JOptionPane.showMessageDialog(this, "Selected Employee: " + employee.getFullName() + "\nStatus: " + employee.getStatus());
         }
     }//GEN-LAST:event_tblTableMouseClicked
 
