@@ -42,10 +42,6 @@ public class DatabaseUtils {
             throw new RuntimeException(ex);
         }
     }
-    
-    
-    
-   
-    
+  
     
 }
