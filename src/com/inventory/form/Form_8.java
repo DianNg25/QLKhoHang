@@ -4,17 +4,81 @@
  */
 package com.inventory.form;
 
+import com.inventory.dao.CustomersDAO;
+import com.inventory.entity.Customers;
+import com.inventory.entity.CustomersTable;
+import com.inventory.utils.XJdbc;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ADMIN
  */
 public class Form_8 extends javax.swing.JPanel {
 
+    private CustomersTable customersTable;
+
     /**
      * Creates new form Form_8
      */
     public Form_8() {
         initComponents();
+        loadData();
+    }
+
+    private void loadData() {
+        String sql = "SELECT * FROM Customers";
+
+        try {
+            List<Customers> customerList = selectBySql(sql);
+
+            DefaultTableModel tableModel = (DefaultTableModel) tblTable.getModel();
+            tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
+
+            for (Customers customer : customerList) {
+                Object[] row = new Object[]{
+                    customer.getCustomerID(),
+                    customer.getCustomerName(),
+                    customer.getAddress(),
+                    customer.getPhone()
+                };
+                tableModel.addRow(row);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading data from database.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    protected List<Customers> selectBySql(String sql, Object... args) {
+        List<Customers> list = new ArrayList<>();
+        try {
+            java.sql.ResultSet rs = null;
+            try {
+                rs = XJdbc.query(sql, args);
+                while (rs.next()) {
+                    Customers entity = new Customers();
+                    entity.setCustomerID(rs.getString("CustomerID"));
+                    entity.setCustomerName(rs.getString("CustomerName"));
+                    entity.setAddress(rs.getString("Address"));
+                    entity.setPhone(rs.getString("Phone")); // Sửa từ rs.getInt thành rs.getString
+
+                    list.add(entity);
+                }
+            } finally {
+                if (rs != null) {
+                    rs.getStatement().getConnection().close();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
+        return list;
     }
 
     /**
@@ -26,21 +90,221 @@ public class Form_8 extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        textField1 = new com.inventory.swing.TextField();
+        button2 = new com.inventory.swing.Button();
+        btnXoa = new com.inventory.swing.Button();
+        btnSua = new com.inventory.swing.Button();
+        button1 = new com.inventory.swing.Button();
+        jPanel2 = new javax.swing.JPanel();
+        spTable = new javax.swing.JScrollPane();
+        tblTable = new com.inventory.swing.Table();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 895, Short.MAX_VALUE)
+        setLayout(new java.awt.BorderLayout());
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
+        jPanel1.setPreferredSize(new java.awt.Dimension(766, 120));
+
+        jLabel2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jLabel2.setText("Tên khách hàng");
+
+        textField1.setBackground(new java.awt.Color(72, 142, 174));
+
+        button2.setBackground(new java.awt.Color(102, 102, 255));
+        button2.setForeground(new java.awt.Color(255, 255, 255));
+        button2.setText("Tìm kiếm");
+        button2.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+
+        btnXoa.setBackground(new java.awt.Color(102, 102, 255));
+        btnXoa.setForeground(new java.awt.Color(255, 255, 255));
+        btnXoa.setText("xóa");
+        btnXoa.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
+
+        btnSua.setBackground(new java.awt.Color(102, 102, 255));
+        btnSua.setForeground(new java.awt.Color(255, 255, 255));
+        btnSua.setText("Sửa");
+        btnSua.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuaActionPerformed(evt);
+            }
+        });
+
+        button1.setBackground(new java.awt.Color(102, 102, 255));
+        button1.setForeground(new java.awt.Color(255, 255, 255));
+        button1.setText("Thêm");
+        button1.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(161, 161, 161))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44)
+                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52))))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 688, Short.MAX_VALUE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(9, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
+
+        add(jPanel1, java.awt.BorderLayout.PAGE_START);
+
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        tblTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Mã Khách Hàng", "Tên Khách Hàng", "Địa Chỉ", "Số điện thoại"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTableMouseClicked(evt);
+            }
+        });
+        spTable.setViewportView(tblTable);
+
+        jPanel2.add(spTable, java.awt.BorderLayout.CENTER);
+
+        add(jPanel2, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        int selectedRow = tblTable.getSelectedRow();
+        if (selectedRow >= 0) {
+            // Lấy ID khách hàng từ hàng đã chọn
+            String customerId = tblTable.getValueAt(selectedRow, 0).toString();
+
+            // Xác nhận hành động xóa
+            int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa khách hàng này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Xóa khách hàng bằng cách gọi phương thức deleteCustomer
+                CustomersDAO dao = new CustomersDAO();
+                boolean success = dao.deleteCustomer(customerId);
+
+                // Hiển thị thông báo thành công hoặc thất bại
+                if (success) {
+                    JOptionPane.showMessageDialog(this, "Khách hàng đã được xóa thành công!");
+                    // Tải lại dữ liệu để cập nhật bảng
+                    loadData();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Xóa khách hàng thất bại.");
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một khách hàng để xóa.");
+        }
+    }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        // Mở cửa sổ chỉnh sửa với dữ liệu của nhân viên đã chọn
+        JDialog add = new JDialog();
+        Model_Edit_Customers model = new Model_Edit_Customers();
+        // Truyền đối tượng EmployeesTable vào form Model_update_Employees1
+        model.setCustomersData(customersTable);
+
+        // Thiết lập JDialog
+        add.setUndecorated(true);
+        add.getContentPane().add(model);
+        add.pack();
+        add.setLocationRelativeTo(this); // this có thể là JFrame hoặc JDialog hiện tại
+        add.setVisible(true);
+
+    }//GEN-LAST:event_btnSuaActionPerformed
+
+    private void tblTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTableMouseClicked
+        int selectedRow = tblTable.getSelectedRow();
+
+        if (selectedRow != -1) { // Có một hàng được chọn
+            CustomersTable customer = new CustomersTable();
+
+            // Lấy dữ liệu từ bảng và lưu vào đối tượng CustomersTable
+            customer.setCustomerID((String) tblTable.getValueAt(selectedRow, 0));
+            customer.setCustomerName((String) tblTable.getValueAt(selectedRow, 1));
+            customer.setAddress((String) tblTable.getValueAt(selectedRow, 2));
+            customer.setPhone((String) tblTable.getValueAt(selectedRow, 3)); // Sử dụng getString cho cột Phone
+
+            // Đặt đối tượng CustomersTable vào biến toàn cục
+            this.customersTable = customer;
+
+//            // Optional: Hiển thị thông báo để kiểm tra dữ liệu đã được lưu vào đối tượng
+//            JOptionPane.showMessageDialog(this, "Selected Customer: " + customer.getCustomerName() + "\nPhone: " + customer.getPhone());
+        }
+    }//GEN-LAST:event_tblTableMouseClicked
+
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        JDialog add = new JDialog();
+        Model_Add_Customers model = new Model_Add_Customers();
+        add.setUndecorated(true);
+        add.getContentPane().add(model);
+        add.pack();
+        add.setLocationRelativeTo(this);
+        add.setVisible(true);
+    }//GEN-LAST:event_button1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.inventory.swing.Button btnSua;
+    private com.inventory.swing.Button btnXoa;
+    private com.inventory.swing.Button button1;
+    private com.inventory.swing.Button button2;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane spTable;
+    private com.inventory.swing.Table tblTable;
+    private com.inventory.swing.TextField textField1;
     // End of variables declaration//GEN-END:variables
 }
