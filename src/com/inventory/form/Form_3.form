@@ -264,9 +264,9 @@
                   <Table columnCount="5" rowCount="4">
                     <Column editable="false" title="M&#xe3; PX" type="java.lang.Object"/>
                     <Column editable="false" title="M&#xe3; KH" type="java.lang.Object"/>
-                    <Column editable="true" title="Ng&#xe0;y xu&#x1ea5;t" type="java.lang.Object"/>
+                    <Column editable="false" title="Ng&#xe0;y xu&#x1ea5;t" type="java.lang.Object"/>
                     <Column editable="false" title="T&#x1ed5;ng ti&#x1ec1;n" type="java.lang.Object"/>
-                    <Column editable="true" title="Tr&#x1ea1;ng th&#xe1;i" type="java.lang.Object"/>
+                    <Column editable="false" title="Tr&#x1ea1;ng th&#xe1;i" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

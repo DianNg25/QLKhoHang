@@ -77,7 +77,7 @@ public class Form_3 extends javax.swing.JPanel {
                 if (column == 4) { // Status column
                     JLabel label = new JLabel(value.toString());
                     label.setFont(new Font("sansserif", Font.BOLD, 13));
-                    if ("Đã xóa".equals(value)) {
+                    if ("Đã xuất".equals(value)) {
                         label.setForeground(Color.RED); // Màu đỏ cho trạng thái đã xóa
                     } else {
                         label.setForeground(Color.GREEN); // Màu khác cho trạng thái khác
@@ -293,7 +293,7 @@ public class Form_3 extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, false, true
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

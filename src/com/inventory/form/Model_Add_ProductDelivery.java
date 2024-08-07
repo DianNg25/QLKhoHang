@@ -211,7 +211,6 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         txtMaPX = new com.inventory.swing.TextField();
         txtNgayXuat = new com.inventory.swing.TextField();
-        txtPhiSL = new com.inventory.swing.TextField();
         cboImportFormID = new com.inventory.swing.ComboBoxSuggestion();
         cbo2 = new com.inventory.swing.ComboBoxSuggestion();
         jLabel8 = new javax.swing.JLabel();
@@ -229,6 +228,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         txtPHX = new com.inventory.swing.TextField();
         txtName = new com.inventory.swing.TextField();
         cboImportFormID1 = new com.inventory.swing.ComboBoxSuggestion();
+        txtPhiSL = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(850, 500));
         setLayout(new java.awt.BorderLayout());
@@ -365,8 +365,6 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
             }
         });
 
-        txtPhiSL.setPreferredSize(new java.awt.Dimension(25, 40));
-
         cboImportFormID.setPreferredSize(new java.awt.Dimension(151, 38));
         cboImportFormID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -434,6 +432,9 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
             }
         });
 
+        txtPhiSL.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtPhiSL.setForeground(new java.awt.Color(255, 255, 255));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -479,9 +480,9 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                                     .addComponent(cboImportFormID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblHoaHong, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                            .addComponent(lblHoaHong, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                             .addComponent(lblPhiVanChuyen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtPhiSL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtPhiSL, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
                         .addGap(135, 135, 135)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -547,13 +548,13 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                         .addGap(8, 8, 8)
                         .addComponent(lblHoaHong, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPhiSL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtPhiSL, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtPHX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel14))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -917,7 +918,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
     private com.inventory.swing.TextField txtNgayNhap;
     private com.inventory.swing.TextField txtNgayXuat;
     private com.inventory.swing.TextField txtPHX;
-    private com.inventory.swing.TextField txtPhiSL;
+    private javax.swing.JLabel txtPhiSL;
     private com.inventory.swing.TextField txtSoLuong;
     private com.inventory.swing.TextField txtTenNCC;
     private com.inventory.swing.TextField txtTong;
