@@ -42,6 +42,8 @@ public class MainEmployee extends javax.swing.JFrame {
                     setForm(new Form_5());
                 case 6 ->
                     setForm(new Form_6());
+                     case 7 ->
+                    setForm(new Form_9());
                 default ->
                     logoutForm();
             }

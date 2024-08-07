@@ -20,7 +20,6 @@ public class Login extends javax.swing.JFrame {
     public static String loggedInUsername;
     public static String employeeId;
     private Preferences prefs;
-    
 
     public Login() {
         initComponents();
@@ -212,13 +211,20 @@ public class Login extends javax.swing.JFrame {
                 }
 
                 openMainPage();
-            } else {
-                LoginError obj = new LoginError();
-                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-                GlassPanePopup.showPopup(obj);
             }
+        } catch (LoginException e) {
+            // Xử lý ngoại lệ LoginException
+            LoginError1 obj = new LoginError1();
+            obj.setMessage(e.getMessage()); // Cập nhật thông báo lỗi
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
         } catch (SQLException e) {
+            // Xử lý ngoại lệ SQLException
             e.printStackTrace();
+            // Có thể thêm thông báo lỗi khác nếu cần
+            InputError obj = new InputError();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
@@ -232,9 +238,9 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_cboGhiNhoMouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-                DoiMatKhau obj = new DoiMatKhau();
-                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-                GlassPanePopup.showPopup(obj);
+        DoiMatKhau obj = new DoiMatKhau();
+        obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+        GlassPanePopup.showPopup(obj);
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private final KeyAdapter enterKeyAdapter = new KeyAdapter() {
@@ -246,11 +252,42 @@ public class Login extends javax.swing.JFrame {
         }
     };
 
-    private Employees checkLogin(String username, String password) throws SQLException {
-        String sql = "SELECT * FROM Employees WHERE Username = ? AND Password = ?";
+    private Employees checkLogin(String username, String password) throws SQLException, LoginException {
+        // Câu lệnh SQL để kiểm tra tài khoản và mật khẩu
+        String sql = "SELECT EmployeeID, Status FROM Employees WHERE Username = ? AND Password = ?";
         try (PreparedStatement stmt = XJdbc.prepareStatement(sql)) {
             stmt.setString(1, username);
             stmt.setString(2, password);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Lấy EmployeeID và Status
+                    String employeeId = rs.getString("EmployeeID");
+                    String status = rs.getString("Status");
+
+                    // Kiểm tra trạng thái
+                    if ("Đang làm".equals(status)) {
+                        // Nếu trạng thái là "Đang làm", lấy thông tin chi tiết của nhân viên
+                        Employees emp = getEmployeeDetails(employeeId);
+                        loggedInUsername = username;
+                        this.employeeId = employeeId;
+                        return emp; // Đăng nhập thành công
+                    } else {
+                        // Nếu trạng thái là khác, ném ngoại lệ LoginException
+                        throw new LoginException("Tài khoản đã nghỉ làm hoặc không có quyền truy cập.");
+                    }
+                } else {
+                    // Nếu không tìm thấy nhân viên, ném ngoại lệ LoginException
+                    throw new LoginException("Tài khoản hoặc mật khẩu không đúng.");
+                }
+            }
+        }
+    }
+
+// Phương thức để lấy thông tin chi tiết của nhân viên dựa trên EmployeeID
+    private Employees getEmployeeDetails(String employeeId) throws SQLException {
+        String sql = "SELECT * FROM Employees WHERE EmployeeID = ?";
+        try (PreparedStatement stmt = XJdbc.prepareStatement(sql)) {
+            stmt.setString(1, employeeId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Employees emp = new Employees();
@@ -262,13 +299,11 @@ public class Login extends javax.swing.JFrame {
                     emp.setPassword(rs.getString("Password"));
                     emp.setPosition(rs.getByte("Position"));
                     emp.setImage(rs.getString("Image"));
-                    loggedInUsername = username;
-                    employeeId = emp.getEmployeeID();
                     return emp;
                 }
             }
         }
-        return null; // Không tìm thấy nhân viên
+        return null; // Không tìm thấy thông tin chi tiết
     }
 
     private String getEmployeeId(String username) {

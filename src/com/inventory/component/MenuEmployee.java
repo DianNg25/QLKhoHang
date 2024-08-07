@@ -53,7 +53,7 @@ public class MenuEmployee extends javax.swing.JPanel {
 
         listMenu1.addItem(new Model_Menu("6", "Quả lý báo cáo, thống kê", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("7", "Hóa đơn", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
+        listMenu1.addItem(new Model_Menu("7", "Đổi mật khẩu", Model_Menu.MenuType.MENU));
 
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
