@@ -66,7 +66,11 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
     }
 
     private void updateFieldsBasedOnImportFormID(String importFormID) {
-        String query = "SELECT ImportFormID, SupplierID, ImportDate, TotalAmount FROM ImportForms WHERE ImportFormID = ?";
+        String query = "SELECT i.ImportFormID, i.SupplierID, i.ImportDate, d.Quantity "
+                + "FROM ImportForms i "
+                + "JOIN ImportFormDetails d ON i.ImportFormID = d.ImportFormID "
+                + "WHERE i.ImportFormID = ?";
+
         try (java.sql.Connection connection = XJdbc.getConnection(); java.sql.PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, importFormID);
@@ -75,25 +79,24 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                     // Lấy thông tin phiếu nhập
                     String supplierID = resultSet.getString("SupplierID");
                     String importDate = resultSet.getDate("ImportDate").toString();
-                    double totalAmount = resultSet.getDouble("TotalAmount");
+                    int quantity = resultSet.getInt("Quantity");
 
                     // Lấy tên nhà cung cấp và cập nhật vào txtNCC
                     String supplierName = getSupplierName(supplierID);
                     txtTenNCC.setText(supplierName);
-                    txtSoLuong.setText(String.valueOf(totalAmount));
+                    txtSoLuong.setText(String.valueOf(quantity));
                     txtNgayNhap.setText(importDate);
 
                     // Lấy tổng giá của sản phẩm từ nhà cung cấp
                     double totalPrice = getTotalPriceBySupplierName(supplierName);
                     txtPhiSL.setText(String.valueOf(totalPrice));
-
                 } else {
                     txtMaPX.setText("Không tìm thấy thông tin cho ID phiếu nhập này.");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi lấy thông tin phiếu nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi khi truy vấn dữ liệu phiếu nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -396,6 +399,12 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Tên NCC");
 
+        txtSoLuong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSoLuongActionPerformed(evt);
+            }
+        });
+
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Số lượng");
@@ -440,7 +449,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                     .addComponent(jLabel7)
                     .addComponent(jLabel8)
                     .addComponent(jLabel6))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -461,22 +470,18 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                                             .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE))
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(cboImportFormID, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                                        .addGap(9, 9, 9))
                                     .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cboImportFormID1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtTenNCC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(cboImportFormID1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                                    .addComponent(txtTenNCC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cboImportFormID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(txtPhiSL, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lblHoaHong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblPhiVanChuyen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblHoaHong, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                            .addComponent(lblPhiVanChuyen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtPhiSL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(135, 135, 135)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -496,7 +501,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                         .addComponent(txtTenNCC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(43, 43, 43)
+                        .addGap(32, 32, 32)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(txtMaPX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -526,32 +531,29 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                         .addComponent(jLabel13))
                     .addComponent(cboImportFormID1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel7)
-                    .addComponent(lblPhiVanChuyen, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblPhiVanChuyen, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cbo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel7)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(15, 15, 15)
-                                .addComponent(jLabel6))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(lblHoaHong, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(12, 12, 12))
-                                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING))))
-                        .addGap(27, 27, 27)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(txtPhiSL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(lblHoaHong, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtPhiSL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(txtPHX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtPHX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -592,6 +594,9 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         String phiVanChuyenStr = lblPhiVanChuyen.getText().trim();
         String status = "Đã xuất"; // Giá trị cố định
 
+        String quantityStr = txtSoLuong.getText().trim();
+        String priceStr = txtTong.getText().trim();
+
         // Kiểm tra mã phiếu xuất không được bỏ trống
         if (exportFormID.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Mã phiếu xuất không được bỏ trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -608,6 +613,8 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         double totalAmount = parseDoubleOrZero(totalAmountStr);
         double hoaHong = parseDoubleOrZero(hoaHongStr);
         double phiVanChuyen = parseDoubleOrZero(phiVanChuyenStr);
+        double price = parseDoubleOrZero(priceStr);
+        int quantity = parseIntOrZero(quantityStr);
 
         java.sql.Date exportDate = null;
         try {
@@ -626,23 +633,36 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         }
 
         // Câu lệnh SQL để chèn dữ liệu vào bảng ExportForms
-        String query = "INSERT INTO ExportForms (ExportFormID, CustomerID, ExportDate, TotalAmount, CommissionFee, ShippingFee, Status) "
+        String queryExportForms = "INSERT INTO ExportForms (ExportFormID, CustomerID, ExportDate, TotalAmount, CommissionFee, ShippingFee, Status) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String queryExportFormDetails = "INSERT INTO ExportFormDetails (ExportFormDetailID, ExportFormID, Quantity, Price) "
+                + "VALUES (?, ?, ?, ?)";
 
-        try (java.sql.Connection connection = XJdbc.getConnection(); java.sql.PreparedStatement statement = connection.prepareStatement(query)) {
+        try (java.sql.Connection connection = XJdbc.getConnection(); java.sql.PreparedStatement statementExportForms = connection.prepareStatement(queryExportForms); java.sql.PreparedStatement statementExportFormDetails = connection.prepareStatement(queryExportFormDetails)) {
 
-            // Đặt giá trị vào câu lệnh PreparedStatement
-            statement.setString(1, exportFormID);
-            statement.setString(2, customerId);
-            statement.setDate(3, exportDate);
-            statement.setDouble(4, totalAmount);
-            statement.setDouble(5, hoaHong);
-            statement.setDouble(6, phiVanChuyen);
-            statement.setString(7, status);
+            // Đặt giá trị vào câu lệnh PreparedStatement cho ExportForms
+            statementExportForms.setString(1, exportFormID);
+            statementExportForms.setString(2, customerId);
+            statementExportForms.setDate(3, exportDate);
+            statementExportForms.setDouble(4, totalAmount);
+            statementExportForms.setDouble(5, hoaHong);
+            statementExportForms.setDouble(6, phiVanChuyen);
+            statementExportForms.setString(7, status);
 
-            // Thực thi câu lệnh
-            int rowsInserted = statement.executeUpdate();
-            if (rowsInserted > 0) {
+            // Thực thi câu lệnh cho ExportForms
+            int rowsInsertedExportForms = statementExportForms.executeUpdate();
+
+            // Đặt giá trị vào câu lệnh PreparedStatement cho ExportFormDetails
+            statementExportFormDetails.setString(1, exportFormID);
+            statementExportFormDetails.setString(2, exportFormID);
+            statementExportFormDetails.setInt(3, quantity);
+            statementExportFormDetails.setDouble(4, price);
+
+            // Thực thi câu lệnh cho ExportFormDetails
+            int rowsInsertedExportFormDetails = statementExportFormDetails.executeUpdate();
+
+            // Kiểm tra kết quả và hiển thị thông báo
+            if (rowsInsertedExportForms > 0 && rowsInsertedExportFormDetails > 0) {
                 JOptionPane.showMessageDialog(this, "Thông tin phiếu xuất đã được lưu thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(this, "Không thể lưu thông tin phiếu xuất.", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -668,15 +688,13 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNameActionPerformed
 
-    private double parseDoubleOrZero(String text) {
-        try {
-            return Double.parseDouble(text);
-        } catch (NumberFormatException e) {
-            return 0.0; // Trả về 0 nếu không thể chuyển đổi
-        }
-    }
+    private void txtSoLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoLuongActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSoLuongActionPerformed
 
+    // Hàm kiểm tra mã phiếu xuất đã tồn tại hay chưa
     private boolean isExportFormIDExists(String exportFormID) {
+        // Câu lệnh SQL để kiểm tra mã phiếu xuất
         String query = "SELECT COUNT(*) FROM ExportForms WHERE ExportFormID = ?";
         try (java.sql.Connection connection = XJdbc.getConnection(); java.sql.PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, exportFormID);
@@ -687,9 +705,26 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra mã phiếu xuất.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
         return false;
+    }
+
+// Hàm chuyển đổi chuỗi sang double, trả về 0 nếu lỗi
+    private double parseDoubleOrZero(String str) {
+        try {
+            return Double.parseDouble(str);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+// Hàm chuyển đổi chuỗi sang int, trả về 0 nếu lỗi
+    private int parseIntOrZero(String str) {
+        try {
+            return Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
     //Tính hoa hồng
