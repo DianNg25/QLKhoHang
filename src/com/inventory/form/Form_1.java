@@ -363,21 +363,32 @@ public class Form_1 extends javax.swing.JPanel {
 
     private void btnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelActionPerformed
         // TODO add your handling code here:
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow >= 0) {
-            String productID = table.getValueAt(selectedRow, 0).toString();
+       int selectedRow = table.getSelectedRow();
+    if (selectedRow >= 0) {
+        String productID = table.getValueAt(selectedRow, 0).toString();
 
-            ProductsDAO dao = new ProductsDAO();
+        ProductsDAO dao = new ProductsDAO();
+        String currentStatus = dao.getStatus(productID);
 
-            // Sử dụng hàm updateStatus để cập nhật trạng thái sản phẩm
-            dao.updateStatus(productID, "Đã xóa");
-
-            loadData();
-
-            JOptionPane.showMessageDialog(this, "Product status updated to 'Deleted'!");
+        if ("Đã xóa".equals(currentStatus)) {
+            JOptionPane.showMessageDialog(this, "Sản phẩm này đã được xóa.");
         } else {
-            JOptionPane.showMessageDialog(this, "Please select a product to delete.");
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                "Bạn có muốn xóa sản phẩm này không?", 
+                "Xác nhận xóa", 
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                dao.delete(productID);
+                loadData(); // Tải lại dữ liệu sau khi cập nhật trạng thái
+            } else {
+                JOptionPane.showMessageDialog(this, "Hành động đã bị hủy.");
+            }
         }
+    } else {
+        JOptionPane.showMessageDialog(this, "Please select a product to delete.");
+    }
     }//GEN-LAST:event_btnDelActionPerformed
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed

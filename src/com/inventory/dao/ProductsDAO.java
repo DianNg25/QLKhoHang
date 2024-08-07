@@ -203,4 +203,20 @@ public class ProductsDAO extends InvenDAO<Products, String> {
                 newStatus,
                 productID);
     }
+    
+     public String getStatus(String productID) {
+        String sql = "SELECT Status FROM Products WHERE ProductID = ?";
+        try (java.sql.Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, productID);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("Status");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error getting status of product", e);
+        }
+        return null; // Trả về null nếu không tìm thấy trạng thái
+    }
 }

@@ -83,7 +83,7 @@ public class Form_7 extends javax.swing.JPanel {
                 if (column == 6) { // Status column
                     JLabel label = new JLabel(value.toString());
                     label.setFont(new Font("sansserif", Font.BOLD, 13));
-                    if ("Đã xóa".equals(value)) {
+                    if ("Nghỉ làm".equals(value)) {
                         label.setForeground(Color.RED); // Màu đỏ cho trạng thái đã xóa
                     } else {
                         label.setForeground(Color.GREEN); // Màu khác cho trạng thái khác
@@ -105,31 +105,36 @@ public class Form_7 extends javax.swing.JPanel {
 
     
     private void loadData() {
-        String sql = "SELECT * FROM Employees ORDER BY CASE WHEN Status = 'Nghỉ làm' THEN 1 ELSE 0 END";
+    EmployeesDAO dao = new EmployeesDAO();
+    List<Employees> employees = dao.selectAll(); // Lấy tất cả nhân viên
 
-        try {
-            List<EmployeesTable> employeeList = selectBySql(sql);
-
-            DefaultTableModel tableModel = (DefaultTableModel) tblTable.getModel();
-            tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
-
-            for (EmployeesTable employee : employeeList) {
-                Object[] row = new Object[]{
-                    employee.getEmployeeID(),
-                    employee.getUsername(),
-                    employee.getFullName(),
-                    employee.getPhone(),
-                    employee.getEmail(),
-                    employee.getPosition() == 1 ? "Admin" : "User",
-                    employee.getStatus()
-                };
-                tableModel.addRow(row);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error loading data from database.", "Error", JOptionPane.ERROR_MESSAGE);
+    // Sắp xếp dữ liệu sao cho trạng thái "Nghỉ làm" nằm ở cuối bảng
+    employees.sort((e1, e2) -> {
+        if ("Nghỉ làm".equals(e1.getStatus()) && !"Nghỉ làm".equals(e2.getStatus())) {
+            return 1; // e1 nên xuất hiện sau e2
+        } else if (!"Nghỉ làm".equals(e1.getStatus()) && "Nghỉ làm".equals(e2.getStatus())) {
+            return -1; // e1 nên xuất hiện trước e2
         }
+        return 0; // Giữ nguyên vị trí nếu cả hai có cùng trạng thái
+    });
+
+    // Cập nhật dữ liệu vào bảng
+    DefaultTableModel model = (DefaultTableModel) tblTable.getModel();
+    model.setRowCount(0); // Xóa các hàng cũ
+
+    for (Employees employee : employees) {
+        model.addRow(new Object[] {
+            employee.getEmployeeID(),
+            employee.getUsername(),
+            employee.getFullName(),
+            employee.getPhone(),
+            employee.getEmail(),
+            employee.getPassword(),
+            employee.getStatus()
+        });
     }
+}
+
 
 protected List<EmployeesTable> selectBySql(String sql, Object... args) {
     List<EmployeesTable> list = new ArrayList<>();
@@ -320,22 +325,46 @@ protected List<EmployeesTable> selectBySql(String sql, Object... args) {
     }//GEN-LAST:event_button1ActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        // TODO add your handling code here:
-        int selectedRow = tblTable.getSelectedRow();
-        if (selectedRow >= 0) {
-            String em = tblTable.getValueAt(selectedRow, 0).toString();
+       // Lấy hàng đã chọn trong bảng
+    int selectedRow = tblTable.getSelectedRow();
+    
+    // Kiểm tra xem có hàng nào được chọn không
+    if (selectedRow >= 0) {
+        // Lấy giá trị từ hàng đã chọn
+        String em = tblTable.getValueAt(selectedRow, 0).toString();
+        
+        // Tạo đối tượng EmployeesDAO để truy xuất thông tin trạng thái
+        EmployeesDAO dao = new EmployeesDAO();
+        String currentStatus = dao.getStatus(em); // Giả sử có phương thức getStatus để lấy trạng thái hiện tại của nhân viên
 
-            EmployeesDAO dao = new EmployeesDAO();
-            JOptionPane.showMessageDialog(this, "Bạn có muốn xóa nhân viên này không?");
-            // Sử dụng hàm updateStatus để cập nhật trạng thái sản phẩm
-            dao.updateStatus(em, "Nghỉ làm");
-
-            loadData();
-
+        // Kiểm tra trạng thái hiện tại
+        if ("Nghỉ làm".equals(currentStatus)) {
+            // Nếu trạng thái đã là "Nghỉ làm", hiển thị thông báo rằng nhân viên đã bị xóa
+            JOptionPane.showMessageDialog(this, "Nhân viên này đã được xóa rồi.");
         } else {
-            JOptionPane.showMessageDialog(this, "Please select a product to delete.");
-        }
+            // Hiển thị hộp thoại xác nhận
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                "Bạn có muốn xóa nhân viên này không?", 
+                "Xác nhận xóa", 
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
 
+            // Kiểm tra phản hồi của người dùng
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Cập nhật trạng thái của nhân viên
+                dao.updateStatus(em, "Nghỉ làm");
+                
+                // Tải lại dữ liệu để cập nhật bảng
+                loadData();
+            } else {
+                // Nếu người dùng chọn "No", không làm gì cả
+                JOptionPane.showMessageDialog(this, "Hành động đã bị hủy.");
+            }
+        }
+    } else {
+        // Thông báo nếu không có hàng nào được chọn
+        JOptionPane.showMessageDialog(this, "Please select a product to delete.");
+    }
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed

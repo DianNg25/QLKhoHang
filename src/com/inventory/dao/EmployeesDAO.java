@@ -138,4 +138,19 @@ public class EmployeesDAO extends InvenDAO<Employees, String> {
         }
     }
 
+    public String getStatus(String employeeId) {
+        String sql = "SELECT Status FROM Employees WHERE EmployeeID=?";
+        try (PreparedStatement stmt = XJdbc.prepareStatement(sql)) {
+            stmt.setString(1, employeeId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("Status");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeesDAO.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex);
+        }
+        return null; // Trả về null nếu không tìm thấy trạng thái
+    }
 }
