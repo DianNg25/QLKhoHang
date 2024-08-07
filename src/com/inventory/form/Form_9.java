@@ -10,12 +10,19 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 import com.inventory.message.*;
 import com.inventory.swing.glasspanepopup.GlassPanePopup;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import javax.swing.ImageIcon;
 
 /**
  *
  * @author ADMIN
  */
 public class Form_9 extends javax.swing.JPanel {
+
+    private String currentCaptchaCode; // Biến lưu trữ mã CAPTCHA hiện tại
 
     public Form_9() {
         initComponents();
@@ -106,22 +113,22 @@ public class Form_9 extends javax.swing.JPanel {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtMatKhauCu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtMatKhauMoi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtXacNhanMatKhau, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtTenDangNhap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(txtMaCapcha, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblMaCapcha, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCapcha, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMatKhauCu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtMatKhauMoi, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtXacNhanMatKhau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtTenDangNhap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnThayDoiMatKhau, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(txtMaCapcha, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblMaCapcha, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnCapcha, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 142, Short.MAX_VALUE)))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(22, 22, 22))
         );
         jPanel4Layout.setVerticalGroup(
@@ -137,18 +144,22 @@ public class Form_9 extends javax.swing.JPanel {
                 .addComponent(txtXacNhanMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtMaCapcha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGap(104, 104, 104)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblMaCapcha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCapcha, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addComponent(btnThayDoiMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(69, 69, 69)
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtMaCapcha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addGap(106, 106, 106)
+                                .addComponent(lblMaCapcha, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                        .addComponent(btnThayDoiMatKhau, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(106, 106, 106)
+                        .addComponent(btnCapcha, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         jPanel2.add(jPanel4, java.awt.BorderLayout.CENTER);
@@ -190,15 +201,13 @@ public class Form_9 extends javax.swing.JPanel {
         }
 
         // Kiểm tra mã CAPTCHA
-        String displayedCaptcha = lblMaCapcha.getText();
-        String enteredCaptcha = txtMaCapcha.getText();
-        if (!displayedCaptcha.equals(enteredCaptcha)) {
+         if (!currentCaptchaCode.equals(txtMaCapcha.getText())) {
             CaptchaNull obj = new CaptchaNull();
             obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
             GlassPanePopup.showPopup(obj);
             return;
         }
-
+        
         // Đổi mật khẩu
         try {
             employeesDAO.updatePassword(username, newPassword);
@@ -210,54 +219,77 @@ public class Form_9 extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnThayDoiMatKhauActionPerformed
 
+
     private void txtMaCapchaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaCapchaActionPerformed
-        // Lấy mã CAPTCHA đã hiển thị
-        String displayedCaptcha = lblMaCapcha.getText();
-
         // Lấy mã CAPTCHA người dùng nhập vào
-        String enteredCaptcha = txtMaCapcha.getText();
+    String enteredCaptcha = txtMaCapcha.getText();
 
-        // Kiểm tra sự trùng khớp
-        if (displayedCaptcha.equals(enteredCaptcha)) {
-            // Xử lý khi mã CAPTCHA đúng
-            JOptionPane.showMessageDialog(this, "Mã CAPTCHA chính xác!");
-        } else {
-            // Xử lý khi mã CAPTCHA sai
-            JOptionPane.showMessageDialog(this, "Mã CAPTCHA không chính xác. Vui lòng thử lại.");
-        }
+    // Lấy mã CAPTCHA đã lưu
+    String displayedCaptcha = currentCaptchaCode;
+
+    // Kiểm tra sự trùng khớp
+    if (!displayedCaptcha.equals(enteredCaptcha)) {
+        CaptchaNull obj = new CaptchaNull();
+        obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+        GlassPanePopup.showPopup(obj);
+        return;
+    }
+
+    // Nếu mã CAPTCHA chính xác
+    System.out.println("Mã CAPTCHA chính xác: " + displayedCaptcha);
     }//GEN-LAST:event_txtMaCapchaActionPerformed
 
     private void btnCapchaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapchaActionPerformed
-        // Giả định rằng bạn có một phương thức để lấy mã CAPTCHA từ hệ thống
-        String captchaCode = generateCaptchaCode();
-
-        // Hiển thị mã CAPTCHA lên JTextField (txtMaCapcha)
-        lblMaCapcha.setText(captchaCode);
+         currentCaptchaCode = generateCaptchaCode();
+        BufferedImage captchaImage = createCaptchaImage(currentCaptchaCode);
+        lblMaCapcha.setIcon(new ImageIcon(captchaImage));
     }//GEN-LAST:event_btnCapchaActionPerformed
 
     private void txtTenDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenDangNhapActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTenDangNhapActionPerformed
+
+     private BufferedImage createCaptchaImage(String captchaText) {
+        int width = 190;
+        int height = 50;
+        BufferedImage captchaImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = captchaImage.createGraphics();
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, width, height);
+
+        Random random = new Random();
+        g2d.setColor(Color.GRAY);
+        for (int i = 0; i < 10; i++) {
+            int x1 = random.nextInt(width);
+            int y1 = random.nextInt(height);
+            int x2 = random.nextInt(width);
+            int y2 = random.nextInt(height);
+            g2d.drawLine(x1, y1, x2, y2);
+        }
+
+        String[] fonts = {"Arial", "Courier New", "Times New Roman"};
+        Random fontRandom = new Random();
+        for (int i = 0; i < captchaText.length(); i++) {
+            g2d.setColor(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+            g2d.setFont(new Font(fonts[fontRandom.nextInt(fonts.length)], Font.BOLD, 30));
+            g2d.drawString(String.valueOf(captchaText.charAt(i)), 20 + i * 25, 35 + random.nextInt(10));
+        }
+
+        g2d.dispose();
+        return captchaImage;
+    }
+
     private String generateCaptchaCode() {
-        // Ví dụ đơn giản tạo mã CAPTCHA ngẫu nhiên
         int length = 6;
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        
         StringBuilder captcha = new StringBuilder();
         Random random = new Random();
-
         for (int i = 0; i < length; i++) {
             captcha.append(characters.charAt(random.nextInt(characters.length())));
         }
-
         return captcha.toString();
     }
 
-    private String getLoggedInUser() {
-        // Phương thức này nên trả về tên đăng nhập của user hiện đang đăng nhập
-        // Ví dụ:
-        return "currentLoggedInUser";
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button btnCapcha;

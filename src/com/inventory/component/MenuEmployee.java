@@ -51,10 +51,11 @@ public class MenuEmployee extends javax.swing.JPanel {
         listMenu1.addItem(new Model_Menu("4", "Quản lý xuất hàng", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("5", "Quản lý nhà cung cấp", Model_Menu.MenuType.MENU));
 
-        listMenu1.addItem(new Model_Menu("6", "Quả lý báo cáo, thống kê", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("7", "Quản lý khách hàng", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("7", "Hóa đơn", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("7", "Đổi mật khẩu", Model_Menu.MenuType.MENU));
 
+        listMenu1.addItem(new Model_Menu("7", "Đổi mật khẩu", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
@@ -147,7 +148,7 @@ public class MenuEmployee extends javax.swing.JPanel {
         path.quadTo(0, getHeight(), 0, getHeight() - ROUND); // Vẽ đường cong cho góc dưới bên trái
         path.closePath();
 
-        g2.fill(path);  
+        g2.fill(path);
 //        g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
         if (selectedIndex >= 0) {
             int menuX = 10;

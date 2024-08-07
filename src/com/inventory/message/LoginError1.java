@@ -91,11 +91,9 @@ public class LoginError1 extends javax.swing.JPanel {
         GlassPanePopup.closePopupLast();
     }//GEN-LAST:event_btnOKActionPerformed
 
-     // Thêm phương thức để thiết lập thông báo lỗi
-    public void setMessage(String message) {
+     public void setMessage(String message) {
         txt.setText(message);
     }
-
     public void eventOK(ActionListener event) {
         btnOK.addActionListener(event);
     }

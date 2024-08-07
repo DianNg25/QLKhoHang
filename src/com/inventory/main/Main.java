@@ -39,13 +39,13 @@ public class Main extends javax.swing.JFrame {
                 case 4 ->
                     setForm(new Form_4());
                 case 5 ->
-                    setForm(new Form_5());
-                case 6 ->
-                    setForm(new Form_6());
-                case 7 ->
-                    setForm(new Form_7());
-                case 8 ->
                     setForm(new Form_8());
+                case 6 ->
+                    setForm(new Form_5());
+                case 7 ->
+                    setForm(new Form_6());
+                case 8 ->
+                    setForm(new Form_7());
                 case 9 ->
                     setForm(new Form_9());
                 default ->
