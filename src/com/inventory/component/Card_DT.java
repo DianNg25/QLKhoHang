@@ -4,17 +4,28 @@
  */
 package com.inventory.component;
 
+import com.inventory.entity.ModelData;
 import com.inventory.form.Model_Card;
+import com.inventory.swing.chart.ModelChart;
 import com.inventory.utils.RevenueCalculator;
+import com.inventory.utils.XJdbc;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.math.BigDecimal;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,7 +34,7 @@ import javax.swing.JLabel;
 public class Card_DT extends javax.swing.JPanel {
 
     private RevenueCalculator revenueCalculator;
-
+ private java.sql.Connection con; 
     public Card_DT(Color color1, Color color2, JLabel lblIcon, JLabel lblTitle, JLabel lblValue) {
         this.color1 = color1;
         this.color2 = color2;
@@ -104,7 +115,7 @@ public class Card_DT extends javax.swing.JPanel {
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Title: ");
 
-        lblDoanhThu.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblDoanhThu.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         lblDoanhThu.setForeground(new java.awt.Color(255, 255, 255));
         lblDoanhThu.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
@@ -123,14 +134,10 @@ public class Card_DT extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblDoanhThu, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
-                        .addGap(113, 113, 113))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTitle)
-                            .addComponent(lblIcon))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(lblDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTitle)
+                    .addComponent(lblIcon))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,26 +146,88 @@ public class Card_DT extends javax.swing.JPanel {
                 .addComponent(lblIcon)
                 .addGap(18, 18, 18)
                 .addComponent(lblTitle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lblDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblDoanhThuAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_lblDoanhThuAncestorAdded
         // TODO add your handling code here:
-           updateRevenue();
+        setProcedure();
     }//GEN-LAST:event_lblDoanhThuAncestorAdded
 
-    public void updateRevenue() {
-    revenueCalculator = new RevenueCalculator();
+    private void setProcedure() {
+        List<ModelData> listData = new ArrayList<>();
+        for (int month = 1; month <= 12; month++) {
+            listData.add(new ModelData(getMonthName(month), 0, 0, 0, 0)); // Khởi tạo với giá trị 0 cho tất cả các tháng
+        }
+
+        try (Connection con = XJdbc.getConnection(); CallableStatement stmt = con.prepareCall("{CALL GetMonthlyStats()}"); // Thêm các CallableStatement cho các SP khác
+                 CallableStatement cstmtImported = con.prepareCall("{CALL GetTotalImportedQuantity()}"); CallableStatement cstmtExported = con.prepareCall("{CALL GetTotalExportedQuantity()}"); CallableStatement cstmtInventory = con.prepareCall("{CALL GetCurrentInventory()}"); CallableStatement cstmtRevenue = con.prepareCall("{CALL GetTotalRevenue()}")) {
+
+            // Lấy dữ liệu từ GetMonthlyStats và cập nhật listData
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int monthNumber = rs.getInt("Month");
+                    String month = getMonthName(monthNumber);
+                    double imported = rs.getDouble("totalImported");
+                    double exported = rs.getDouble("totalExported");
+                    double revenue = rs.getDouble("totalRevenue");
+                    double endingInventory = rs.getDouble("endingInventory");
+
+                    System.out.println("Month: " + month
+                            + ", Imported: " + imported
+                            + ", Exported: " + exported
+                            + ", Revenue: " + revenue
+                            + ", Ending Inventory: " + endingInventory);
+
+                    for (ModelData data : listData) {
+                        if (data.getMonth().equals(month)) {
+                            data.setImported(imported);
+                            data.setExported(exported);
+                            data.setRevenue(revenue);
+                            data.setEndingInventory(endingInventory);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            System.out.println("listData: " + listData);
+
+            try (ResultSet rsRevenue = cstmtRevenue.executeQuery()) {
+                if (rsRevenue.next()) {
+                    DecimalFormat df = new DecimalFormat("#,###.##");
+                    BigDecimal totalRevenueBigDecimal = rsRevenue.getBigDecimal("totalRevenue");
+                    double totalRevenue = totalRevenueBigDecimal != null ? totalRevenueBigDecimal.doubleValue() : 0.0;
+                    lblDoanhThu.setText(df.format(totalRevenue)+ " " + "VNĐ");
+                }
+            }
+
+           
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Error executing query: " + e.getMessage(),
+                    "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     
-    // Gọi phương thức tính tổng doanh thu mà không cần ngày
-    double revenue = revenueCalculator.getTotalRevenue();
-    lblDoanhThu.setText("Doanh thu: " + revenue);
-}
 
+    
+    }
 
+    
+    private String getMonthName(int monthNumber) {
+        String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        if (monthNumber >= 1 && monthNumber <= 12) {
+            return monthNames[monthNumber - 1];
+        } else {
+            return "Invalid Month";
+        }
+    }
+    
     @Override
     protected void paintComponent(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs;

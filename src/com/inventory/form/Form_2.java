@@ -5,15 +5,25 @@
 package com.inventory.form;
 
 import com.inventory.entity.ImportForm;
+import com.inventory.swing.ScrollBar;
 import com.inventory.swing.TableActionCellEditor;
 import com.inventory.swing.TableActionCellRender;
 import com.inventory.swing.TableActionEvent;
+import com.inventory.swing.TableHeader;
 import com.inventory.utils.XJdbc;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,7 +40,73 @@ public class Form_2 extends javax.swing.JPanel {
     public Form_2() {
         initComponents();
         loadData();
+        customizeTable();
     }
+    
+    
+    
+     private void customizeTable() {
+
+        tblNhapHang.setShowHorizontalLines(true);
+        tblNhapHang.setGridColor(new Color(230, 230, 230));
+        tblNhapHang.setRowHeight(40);
+
+        // Renderer for column headers
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        tblNhapHang.getTableHeader().setDefaultRenderer(headerRenderer);
+        tblNhapHang.getTableHeader().setReorderingAllowed(false);
+        tblNhapHang.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                TableHeader header = new TableHeader(value.toString());
+                header.setHorizontalAlignment(JLabel.CENTER); // Center-align the header text
+                return header;
+            }
+        });
+
+        // Default renderer for table cells
+        tblNhapHang.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                com.setBackground(Color.WHITE);
+                setBorder(noFocusBorder);
+                com.setFont(new Font("sansserif", Font.PLAIN, 13)); // Set font size to 13
+                com.setForeground(isSelected ? new Color(36, 183, 194) : new Color(102, 102, 102));
+                com.setFont(com.getFont().deriveFont(Font.BOLD));
+                setHorizontalAlignment(JLabel.CENTER); // Center-align the cell text
+
+                if (column == 6) { // Status column
+                    StatusType type = (StatusType) value;
+                    JLabel label = new JLabel(type.getText());
+                    label.setFont(label.getFont().deriveFont(Font.BOLD));
+                    label.setFont(new Font("sansserif", Font.BOLD, 13)); // Set font size to 13 and bold for status column
+                    label.setHorizontalAlignment(JLabel.CENTER); // Center-align the status column text
+                    if (type == StatusType.DA_XOA) {
+                        label.setForeground(Color.RED); // Red text for "Đã xóa"
+                    } else if (type == StatusType.BINH_THUONG) {
+                        label.setForeground(Color.GREEN); // Green text for "Bình thường"
+                    }
+                    return label;
+                }
+                return com;
+            }
+        });
+
+        // Additional customization for JScrollPane
+        spTable.setVerticalScrollBar(new ScrollBar());
+        spTable.getVerticalScrollBar().setBackground(Color.WHITE);
+        spTable.getViewport().setBackground(Color.WHITE);
+        JPanel p = new JPanel();
+        p.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+    }
+    
+    
+    
+    
+    
     
    private void loadData() {
     String sql = "SELECT "
@@ -117,7 +193,7 @@ public class Form_2 extends javax.swing.JPanel {
         button3 = new com.inventory.swing.Button();
         btnAddExcel = new com.inventory.swing.Button();
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        spTable = new javax.swing.JScrollPane();
         tblNhapHang = new com.inventory.swing.Table();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -178,8 +254,8 @@ public class Form_2 extends javax.swing.JPanel {
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
-        jScrollPane1.setBorder(null);
+        spTable.setBackground(new java.awt.Color(255, 255, 255));
+        spTable.setBorder(null);
 
         tblNhapHang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -200,9 +276,9 @@ public class Form_2 extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tblNhapHang);
+        spTable.setViewportView(tblNhapHang);
 
-        jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanel3.add(spTable, java.awt.BorderLayout.CENTER);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(0, 0, 0)));
@@ -315,7 +391,7 @@ public class Form_2 extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane spTable;
     private com.inventory.swing.Table tblNhapHang;
     private com.inventory.swing.TextField textField1;
     private com.inventory.swing.TextField textField3;

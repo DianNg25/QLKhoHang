@@ -242,6 +242,7 @@ public class Form_9 extends javax.swing.JPanel {
         // Ví dụ đơn giản tạo mã CAPTCHA ngẫu nhiên
         int length = 6;
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        
         StringBuilder captcha = new StringBuilder();
         Random random = new Random();
 

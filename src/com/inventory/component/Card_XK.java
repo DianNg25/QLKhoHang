@@ -4,67 +4,71 @@
  */
 package com.inventory.component;
 
+import com.inventory.entity.ModelData;
 import com.inventory.form.Model_Card;
+import com.inventory.swing.chart.ModelChart;
+import com.inventory.utils.XJdbc;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.math.BigDecimal;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author ADMIN
  */
 public class Card_XK extends javax.swing.JPanel {
-    
+
     public Card_XK(Color color1, Color color2, JLabel lblIcon, JLabel lblTitle, JLabel lblValue) {
         this.color1 = color1;
         this.color2 = color2;
         this.lblIcon = lblIcon;
         this.lblTitle = lblTitle;
-        this.lblValue = lblValue;
+
     }
-    
+
     public Color getColor1() {
         return color1;
     }
-    
+
     public void setColor1(Color color1) {
         this.color1 = color1;
     }
-    
+
     public Color getColor2() {
         return color2;
     }
-    
+
     public void setColor2(Color color2) {
         this.color2 = color2;
     }
-    
+
     public JLabel getLblIcon() {
         return lblIcon;
     }
-    
+
     public void setLblIcon(JLabel lblIcon) {
         this.lblIcon = lblIcon;
     }
-    
+
     public JLabel getLblTitle() {
         return lblTitle;
     }
-    
+
     public void setLblTitle(JLabel lblTitle) {
         this.lblTitle = lblTitle;
     }
-    
-    public JLabel getLblValue() {
-        return lblValue;
-    }
-    
-    public void setLblValue(JLabel lblValue) {
-        this.lblValue = lblValue;
-    }
+
     private Color color1;
     private Color color2;
 
@@ -77,11 +81,11 @@ public class Card_XK extends javax.swing.JPanel {
         color1 = Color.BLACK;
         color2 = Color.WHITE;
     }
-    
+
     public void setData(Model_Card data) {
         lblIcon.setIcon(data.getIcon());
         lblTitle.setText(data.getTitle());
-        lblValue.setText(data.getValues());
+
     }
 
     /**
@@ -95,7 +99,7 @@ public class Card_XK extends javax.swing.JPanel {
 
         lblIcon = new javax.swing.JLabel();
         lblTitle = new javax.swing.JLabel();
-        lblValue = new javax.swing.JLabel();
+        lblXuatKho = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -105,12 +109,11 @@ public class Card_XK extends javax.swing.JPanel {
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
         lblTitle.setText("Title: ");
 
-        lblValue.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        lblValue.setForeground(new java.awt.Color(255, 255, 255));
-        lblValue.setText("Value");
-        lblValue.addAncestorListener(new javax.swing.event.AncestorListener() {
+        lblXuatKho.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblXuatKho.setForeground(new java.awt.Color(255, 255, 255));
+        lblXuatKho.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                lblValueAncestorAdded(evt);
+                lblXuatKhoAncestorAdded(evt);
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -125,10 +128,10 @@ public class Card_XK extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblXuatKho, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTitle)
-                    .addComponent(lblIcon)
-                    .addComponent(lblValue))
-                .addContainerGap(216, Short.MAX_VALUE))
+                    .addComponent(lblIcon))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,15 +141,77 @@ public class Card_XK extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(lblTitle)
                 .addGap(18, 18, 18)
-                .addComponent(lblValue)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addComponent(lblXuatKho, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void lblValueAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_lblValueAncestorAdded
+    private void lblXuatKhoAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_lblXuatKhoAncestorAdded
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_lblValueAncestorAdded
+        setProcedure();
+    }//GEN-LAST:event_lblXuatKhoAncestorAdded
+
+    private void setProcedure() {
+        List<ModelData> listData = new ArrayList<>();
+        for (int month = 1; month <= 12; month++) {
+            listData.add(new ModelData(getMonthName(month), 0, 0, 0, 0)); // Khởi tạo với giá trị 0 cho tất cả các tháng
+        }
+
+        try (Connection con = XJdbc.getConnection(); CallableStatement stmt = con.prepareCall("{CALL GetMonthlyStats()}"); // Thêm các CallableStatement cho các SP khác
+                 CallableStatement cstmtImported = con.prepareCall("{CALL GetTotalImportedQuantity()}"); CallableStatement cstmtExported = con.prepareCall("{CALL GetTotalExportedQuantity()}"); CallableStatement cstmtInventory = con.prepareCall("{CALL GetCurrentInventory()}"); CallableStatement cstmtRevenue = con.prepareCall("{CALL GetTotalRevenue()}")) {
+
+            // Lấy dữ liệu từ GetMonthlyStats và cập nhật listData
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int monthNumber = rs.getInt("Month");
+                    String month = getMonthName(monthNumber);
+                    double imported = rs.getDouble("totalImported");
+                    double exported = rs.getDouble("totalExported");
+                    double revenue = rs.getDouble("totalRevenue");
+                    double endingInventory = rs.getDouble("endingInventory");
+
+                    System.out.println("Month: " + month
+                            + ", Imported: " + imported
+                            + ", Exported: " + exported
+                            + ", Revenue: " + revenue
+                            + ", Ending Inventory: " + endingInventory);
+
+                    for (ModelData data : listData) {
+                        if (data.getMonth().equals(month)) {
+                            data.setImported(imported);
+                            data.setExported(exported);
+                            data.setRevenue(revenue);
+                            data.setEndingInventory(endingInventory);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            try (ResultSet rsExported = cstmtExported.executeQuery()) {
+                if (rsExported.next()) {
+                    int totalExported = rsExported.getInt("totalExportedQuantity");
+                    lblXuatKho.setText(String.valueOf(totalExported));
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                    "Error executing query: " + e.getMessage(),
+                    "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private String getMonthName(int monthNumber) {
+        String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        if (monthNumber >= 1 && monthNumber <= 12) {
+            return monthNames[monthNumber - 1];
+        } else {
+            return "Invalid Month";
+        }
+    }
 
     @Override
     protected void paintComponent(Graphics grphcs) {
@@ -164,6 +229,6 @@ public class Card_XK extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblIcon;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JLabel lblValue;
+    private javax.swing.JLabel lblXuatKho;
     // End of variables declaration//GEN-END:variables
 }

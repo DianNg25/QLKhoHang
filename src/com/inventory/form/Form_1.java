@@ -7,6 +7,7 @@ package com.inventory.form;
 import com.inventory.dao.ProductsDAO;
 import com.inventory.entity.Products;
 import com.inventory.entity.ProductsTable;
+import com.inventory.swing.ScrollBar;
 import com.inventory.swing.TableHeader;
 import com.inventory.utils.XJdbc;
 import java.awt.Color;
@@ -182,6 +183,13 @@ public class Form_1 extends javax.swing.JPanel {
                 return com;
             }
         });
+        // Additional customization for JScrollPane
+        spTable.setVerticalScrollBar(new ScrollBar());
+        spTable.getVerticalScrollBar().setBackground(Color.WHITE);
+        spTable.getViewport().setBackground(Color.WHITE);
+      
+        p.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
     }
 
     /**

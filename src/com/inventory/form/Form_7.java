@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import com.inventory.message.*;
+import com.inventory.swing.ScrollBar;
 import com.inventory.swing.TableHeader;
 import com.inventory.swing.glasspanepopup.GlassPanePopup;
 import java.awt.Color;
@@ -37,6 +38,72 @@ public class Form_7 extends javax.swing.JPanel {
         loadData();
     }
 
+     private void customizeTable() {
+        spTable.setVerticalScrollBar(new JScrollBar()); // Use JScrollBar instead of ScrollBar
+        spTable.getVerticalScrollBar().setBackground(Color.WHITE);
+        spTable.getViewport().setBackground(Color.WHITE);
+
+        JPanel p = new JPanel();
+        p.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+
+        tblTable.setShowHorizontalLines(true);
+        tblTable.setGridColor(new Color(230, 230, 230));
+        tblTable.setRowHeight(40);
+
+        // Renderer for column headers
+        // Renderer for column headers
+        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        tblTable.getTableHeader().setDefaultRenderer(headerRenderer);
+        tblTable.getTableHeader().setReorderingAllowed(false);
+        tblTable.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                TableHeader header = new TableHeader(value.toString());
+                header.setHorizontalAlignment(JLabel.CENTER); // Center-align the header text
+                return header;
+            }
+        });
+
+        // Default renderer for table cells
+        // Default renderer for table cells
+        tblTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                com.setBackground(Color.WHITE);
+                setBorder(noFocusBorder);
+                com.setFont(new Font("sansserif", Font.PLAIN, 13)); // Set font size to 13
+                com.setForeground(isSelected ? new Color(36, 183, 194) : new Color(102, 102, 102));
+                com.setFont(com.getFont().deriveFont(Font.BOLD));
+                setHorizontalAlignment(JLabel.CENTER); // Center-align the cell text
+
+                // Custom renderer for specific columns (example: status column)
+                if (column == 6) { // Status column
+                    JLabel label = new JLabel(value.toString());
+                    label.setFont(new Font("sansserif", Font.BOLD, 13));
+                    if ("Đã xóa".equals(value)) {
+                        label.setForeground(Color.RED); // Màu đỏ cho trạng thái đã xóa
+                    } else {
+                        label.setForeground(Color.GREEN); // Màu khác cho trạng thái khác
+                    }
+                    label.setHorizontalAlignment(JLabel.CENTER); // Center align status column
+                    return label;
+                }
+                return com;
+            }
+        });
+        // Additional customization for JScrollPane
+        spTable.setVerticalScrollBar(new ScrollBar());
+        spTable.getVerticalScrollBar().setBackground(Color.WHITE);
+        spTable.getViewport().setBackground(Color.WHITE);
+      
+        p.setBackground(Color.WHITE);
+        spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+    }
+
+    
     private void loadData() {
         String sql = "SELECT * FROM Employees ORDER BY CASE WHEN Status = 'Nghỉ làm' THEN 1 ELSE 0 END";
 
@@ -98,62 +165,6 @@ protected List<EmployeesTable> selectBySql(String sql, Object... args) {
     return list;
 }
 
-
-  private void customizeTable() {
-    spTable.setVerticalScrollBar(new JScrollBar()); // Use JScrollBar instead of ScrollBar
-    spTable.getVerticalScrollBar().setBackground(Color.WHITE);
-    spTable.getViewport().setBackground(Color.WHITE);
-
-    JPanel p = new JPanel();
-    p.setBackground(Color.WHITE);
-    spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
-
-    tblTable.setShowHorizontalLines(true);
-    tblTable.setGridColor(new Color(230, 230, 230));
-    tblTable.setRowHeight(40);
-
-    // Renderer for column headers
-    DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-    headerRenderer.setHorizontalAlignment(JLabel.CENTER);
-    tblTable.getTableHeader().setDefaultRenderer(headerRenderer);
-    tblTable.getTableHeader().setReorderingAllowed(false);
-    tblTable.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            TableHeader header = new TableHeader(value.toString());
-            header.setHorizontalAlignment(JLabel.CENTER); // Center-align the header text
-            return header;
-        }
-    });
-
-    // Default renderer for table cells
-    tblTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component com = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            com.setBackground(Color.WHITE);
-            setBorder(noFocusBorder);
-            com.setFont(new Font("sansserif", Font.PLAIN, 13)); // Set font size to 13
-            com.setForeground(isSelected ? new Color(36, 183, 194) : new Color(102, 102, 102));
-            com.setFont(com.getFont().deriveFont(Font.BOLD));
-            setHorizontalAlignment(JLabel.CENTER); // Center-align the cell text
-
-            // Custom renderer for specific columns (example: status column)
-            if (column == 6) { // Status column
-                JLabel label = new JLabel(value.toString());
-                label.setFont(new Font("sansserif", Font.BOLD, 13));
-                if ("Nghỉ làm".equals(value)) {
-                    label.setForeground(Color.RED); // Red for deleted status
-                } else {
-                    label.setForeground(Color.GREEN); // Different color for other statuses
-                }
-                label.setHorizontalAlignment(JLabel.CENTER); // Center align status column
-                return label;
-            }
-            return com;
-        }
-    });
-}
 
 
     /**
@@ -315,7 +326,7 @@ protected List<EmployeesTable> selectBySql(String sql, Object... args) {
             String em = tblTable.getValueAt(selectedRow, 0).toString();
 
             EmployeesDAO dao = new EmployeesDAO();
-            JOptionPane.showMessageDialog(this, "Product status updated to 'Deleted'!");
+            JOptionPane.showMessageDialog(this, "Bạn có muốn xóa nhân viên này không?");
             // Sử dụng hàm updateStatus để cập nhật trạng thái sản phẩm
             dao.updateStatus(em, "Nghỉ làm");
 
