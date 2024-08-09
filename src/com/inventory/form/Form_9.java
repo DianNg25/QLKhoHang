@@ -10,6 +10,7 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 import com.inventory.message.*;
 import com.inventory.swing.glasspanepopup.GlassPanePopup;
+import com.inventory.utils.UserSession;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -26,6 +27,9 @@ public class Form_9 extends javax.swing.JPanel {
 
     public Form_9() {
         initComponents();
+        generateAndDisplayCaptcha();
+            clear();
+  setUsernameField();
     }
 
     @SuppressWarnings("unchecked")
@@ -105,7 +109,7 @@ public class Form_9 extends javax.swing.JPanel {
         txtXacNhanMatKhau.setLabelText("Xác nhận lại mật khẩu");
 
         txtMatKhauCu.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        txtMatKhauCu.setLabelText("Mật khẩu củ");
+        txtMatKhauCu.setLabelText("Mật khẩu cũ");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -202,6 +206,7 @@ public class Form_9 extends javax.swing.JPanel {
 
         // Kiểm tra mã CAPTCHA
          if (!currentCaptchaCode.equals(txtMaCapcha.getText())) {
+              generateAndDisplayCaptcha();
             CaptchaNull obj = new CaptchaNull();
             obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
             GlassPanePopup.showPopup(obj);
@@ -217,6 +222,7 @@ public class Form_9 extends javax.swing.JPanel {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Lỗi đổi mật khẩu: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+        clear();
     }//GEN-LAST:event_btnThayDoiMatKhauActionPerformed
 
 
@@ -240,15 +246,35 @@ public class Form_9 extends javax.swing.JPanel {
     }//GEN-LAST:event_txtMaCapchaActionPerformed
 
     private void btnCapchaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapchaActionPerformed
-         currentCaptchaCode = generateCaptchaCode();
-        BufferedImage captchaImage = createCaptchaImage(currentCaptchaCode);
-        lblMaCapcha.setIcon(new ImageIcon(captchaImage));
+          generateAndDisplayCaptcha();
     }//GEN-LAST:event_btnCapchaActionPerformed
 
     private void txtTenDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenDangNhapActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_txtTenDangNhapActionPerformed
 
+    public void clear(){
+        txtMaCapcha.setText("");
+    }
+  private void setUsernameField() {
+        String username = UserSession.getLoggedInUsername();
+        if (username != null) {
+            EmployeesDAO employeesDAO = new EmployeesDAO();
+            Employees employee = employeesDAO.selectById(username);
+            if (employee != null) {
+                txtTenDangNhap.setText(employee.getUsername());
+            }
+        }
+    }
+    
+      private void generateAndDisplayCaptcha() {
+        currentCaptchaCode = generateCaptchaCode();
+        BufferedImage captchaImage = createCaptchaImage(currentCaptchaCode);
+        lblMaCapcha.setIcon(new ImageIcon(captchaImage));
+    }
+    
+    
      private BufferedImage createCaptchaImage(String captchaText) {
         int width = 190;
         int height = 50;

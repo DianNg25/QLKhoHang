@@ -8,7 +8,9 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 
 public class DeleteEmployees extends javax.swing.JPanel {
-
+    private int option; // Để lưu tùy chọn của người dùng
+    public static final int OPTION_YES = 1;
+    public static final int OPTION_NO = 0;
     public DeleteEmployees() {
         initComponents();
         setOpaque(false);
@@ -33,6 +35,7 @@ public class DeleteEmployees extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         txt = new javax.swing.JTextPane();
         btnOK = new com.inventory.swing.Button();
+        btnHuy = new com.inventory.swing.Button();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 25, 25, 25));
@@ -51,10 +54,19 @@ public class DeleteEmployees extends javax.swing.JPanel {
 
         btnOK.setBackground(new java.awt.Color(26, 48, 131));
         btnOK.setForeground(new java.awt.Color(255, 255, 255));
-        btnOK.setText("OK");
+        btnOK.setText("Có");
         btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOKActionPerformed(evt);
+            }
+        });
+
+        btnHuy.setBackground(new java.awt.Color(255, 0, 51));
+        btnHuy.setForeground(new java.awt.Color(255, 255, 255));
+        btnHuy.setText("Không");
+        btnHuy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHuyActionPerformed(evt);
             }
         });
 
@@ -67,6 +79,8 @@ public class DeleteEmployees extends javax.swing.JPanel {
                 .addComponent(txt, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
@@ -82,7 +96,9 @@ public class DeleteEmployees extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -91,11 +107,26 @@ public class DeleteEmployees extends javax.swing.JPanel {
         GlassPanePopup.closePopupLast();
     }//GEN-LAST:event_btnOKActionPerformed
 
+    private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
+        // TODO add your handling code here:
+          option = OPTION_NO; // Đặt tùy chọn là "NO"
+        GlassPanePopup.closePopupLast(); // Đóng popup
+    }//GEN-LAST:event_btnHuyActionPerformed
+
+     public void setMessage(String message) {
+        txt.setText(message);
+    }
+      public int getOption() {
+        return option;
+    }
     public void eventOK(ActionListener event) {
-        btnOK.addActionListener(event);
+             option = OPTION_YES; // Đặt tùy chọn là "YES"
+      btnOK.addActionListener(event);
+     
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.inventory.swing.Button btnHuy;
     private com.inventory.swing.Button btnOK;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextPane txt;

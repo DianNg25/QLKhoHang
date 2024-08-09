@@ -104,7 +104,7 @@ public class Form_7 extends javax.swing.JPanel {
     }
 
     
-    private void loadData() {
+   private void loadData() {
     EmployeesDAO dao = new EmployeesDAO();
     List<Employees> employees = dao.selectAll(); // Lấy tất cả nhân viên
 
@@ -123,17 +123,21 @@ public class Form_7 extends javax.swing.JPanel {
     model.setRowCount(0); // Xóa các hàng cũ
 
     for (Employees employee : employees) {
+        // Chuyển đổi giá trị từ 1 và 0 thành "Quản lý" và "Nhân viên"
+        String position = employee.getPosition() == 1 ? "Quản lý" : "Nhân viên";
+
         model.addRow(new Object[] {
             employee.getEmployeeID(),
             employee.getUsername(),
             employee.getFullName(),
             employee.getPhone(),
             employee.getEmail(),
-            employee.getPassword(),
+            position, // Hiển thị "Quản lý" hoặc "Nhân viên"
             employee.getStatus()
         });
     }
 }
+
 
 
 protected List<EmployeesTable> selectBySql(String sql, Object... args) {
@@ -325,7 +329,7 @@ protected List<EmployeesTable> selectBySql(String sql, Object... args) {
     }//GEN-LAST:event_button1ActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-       // Lấy hàng đã chọn trong bảng
+        // Lấy hàng đã chọn trong bảng
     int selectedRow = tblTable.getSelectedRow();
     
     // Kiểm tra xem có hàng nào được chọn không
@@ -340,30 +344,30 @@ protected List<EmployeesTable> selectBySql(String sql, Object... args) {
         // Kiểm tra trạng thái hiện tại
         if ("Nghỉ làm".equals(currentStatus)) {
             // Nếu trạng thái đã là "Nghỉ làm", hiển thị thông báo rằng nhân viên đã bị xóa
-            JOptionPane.showMessageDialog(this, "Nhân viên này đã được xóa rồi.");
+            DeleteEmployees1 obj = new DeleteEmployees1();
+           
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
         } else {
             // Hiển thị hộp thoại xác nhận
-            int confirm = JOptionPane.showConfirmDialog(this, 
-                "Bạn có muốn xóa nhân viên này không?", 
-                "Xác nhận xóa", 
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-
-            // Kiểm tra phản hồi của người dùng
-            if (confirm == JOptionPane.YES_OPTION) {
-                // Cập nhật trạng thái của nhân viên
-                dao.updateStatus(em, "Nghỉ làm");
-                
-                // Tải lại dữ liệu để cập nhật bảng
-                loadData();
-            } else {
-                // Nếu người dùng chọn "No", không làm gì cả
-                JOptionPane.showMessageDialog(this, "Hành động đã bị hủy.");
-            }
+            DeleteEmployees obj = new DeleteEmployees();
+            obj.setMessage("Bạn có chắc chắn xóa nhân viên này không?");
+            obj.eventOK((ae) -> {
+                if (obj.getOption() == DeleteEmployees.OPTION_YES) {
+                    // Cập nhật trạng thái của nhân viên
+                    dao.updateStatus(em, "Nghỉ làm");
+                    
+                    // Tải lại dữ liệu để cập nhật bảng
+                    loadData();
+                } 
+            });
+            GlassPanePopup.showPopup(obj);
         }
     } else {
         // Thông báo nếu không có hàng nào được chọn
-        JOptionPane.showMessageDialog(this, "Please select a product to delete.");
+          DeleteEmployees obj = new DeleteEmployees();
+            obj.setMessage("Vui lòng chọn nhân viên để xóa.");
+           obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
     }
     }//GEN-LAST:event_btnXoaActionPerformed
 

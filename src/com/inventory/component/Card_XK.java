@@ -191,7 +191,7 @@ public class Card_XK extends javax.swing.JPanel {
             try (ResultSet rsExported = cstmtExported.executeQuery()) {
                 if (rsExported.next()) {
                     int totalExported = rsExported.getInt("totalExportedQuantity");
-                    lblXuatKho.setText(String.valueOf(totalExported));
+                    lblXuatKho.setText(String.valueOf(totalExported)+ " " + "Sản phẩm");
                 }
             }
 
