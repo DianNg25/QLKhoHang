@@ -17,6 +17,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import javax.swing.SwingUtilities;
+import com.inventory.message.*;
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
 
 /**
  *
@@ -50,25 +52,33 @@ public class Model_update_Employees1 extends javax.swing.JPanel {
 
             // Kiểm tra dữ liệu trống
             if (id.isEmpty() || hoten.isEmpty() || email.isEmpty() || sodt.isEmpty() || tk.isEmpty() || mk.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin.");
+                ErrorBoTrong obj = new ErrorBoTrong();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
                 return;
             }
 
             // Kiểm tra định dạng email
             if (!email.matches("^[\\w-_.+]+@[\\w-]+\\.[a-zA-Z]{2,}$")) {
-                JOptionPane.showMessageDialog(null, "Địa chỉ email không hợp lệ.");
+                EmailError obj = new EmailError();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
                 return;
             }
 
             // Kiểm tra định dạng số điện thoại
             if (!sodt.matches("^(0)\\d{9}$")) {
-                JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ. Nó phải bắt đầu bằng số 0 có 10 chữ số.");
+                PhoneError obj = new PhoneError();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
                 return;
             }
 
             // Kiểm tra mật khẩu
             if (mk.length() < 6) {
-                JOptionPane.showMessageDialog(null, "Mật khẩu phải có ít nhất 6 ký tự.");
+                Password6Kytu obj = new Password6Kytu();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
                 return;
             }
 
@@ -81,7 +91,9 @@ public class Model_update_Employees1 extends javax.swing.JPanel {
             statement.setString(1, id);
             resultSet = statement.executeQuery();
             if (!resultSet.next() || resultSet.getInt(1) == 0) {
-                JOptionPane.showMessageDialog(null, "ID không tồn tại. Vui lòng kiểm tra lại.");
+                IDErrorNull obj = new IDErrorNull();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
                 return;
             }
 
@@ -102,9 +114,13 @@ public class Model_update_Employees1 extends javax.swing.JPanel {
 
             // Kiểm tra kết quả và hiển thị thông báo
             if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Cập nhật Thành Công!");
+                UpdateThanhCong obj = new UpdateThanhCong();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
             } else {
-                JOptionPane.showMessageDialog(null, "Cập nhật Thất Bại.");
+                UpdateThatBai obj = new UpdateThatBai();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
             }
         } catch (Exception e) {
             e.printStackTrace();

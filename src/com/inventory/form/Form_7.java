@@ -23,6 +23,9 @@ import java.awt.Component;
 import java.awt.Font;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 /**
  *
@@ -38,7 +41,7 @@ public class Form_7 extends javax.swing.JPanel {
         loadData();
     }
 
-     private void customizeTable() {
+    private void customizeTable() {
         spTable.setVerticalScrollBar(new JScrollBar()); // Use JScrollBar instead of ScrollBar
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
@@ -98,98 +101,137 @@ public class Form_7 extends javax.swing.JPanel {
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
-      
+
         p.setBackground(Color.WHITE);
         spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
     }
 
-    
-   private void loadData() {
-    EmployeesDAO dao = new EmployeesDAO();
-    List<Employees> employees = dao.selectAll(); // Lấy tất cả nhân viên
+    private void loadData() {
+        EmployeesDAO dao = new EmployeesDAO();
+        List<Employees> employees = dao.selectAll(); // Lấy tất cả nhân viên
 
-    // Sắp xếp dữ liệu sao cho trạng thái "Nghỉ làm" nằm ở cuối bảng
-    employees.sort((e1, e2) -> {
-        if ("Nghỉ làm".equals(e1.getStatus()) && !"Nghỉ làm".equals(e2.getStatus())) {
-            return 1; // e1 nên xuất hiện sau e2
-        } else if (!"Nghỉ làm".equals(e1.getStatus()) && "Nghỉ làm".equals(e2.getStatus())) {
-            return -1; // e1 nên xuất hiện trước e2
-        }
-        return 0; // Giữ nguyên vị trí nếu cả hai có cùng trạng thái
-    });
-
-    // Cập nhật dữ liệu vào bảng
-    DefaultTableModel model = (DefaultTableModel) tblTable.getModel();
-    model.setRowCount(0); // Xóa các hàng cũ
-
-    for (Employees employee : employees) {
-        // Chuyển đổi giá trị từ 1 và 0 thành "Quản lý" và "Nhân viên"
-        String position = employee.getPosition() == 1 ? "Quản lý" : "Nhân viên";
-
-        model.addRow(new Object[] {
-            employee.getEmployeeID(),
-            employee.getUsername(),
-            employee.getFullName(),
-            employee.getPhone(),
-            employee.getEmail(),
-            position, // Hiển thị "Quản lý" hoặc "Nhân viên"
-            employee.getStatus()
+        // Sắp xếp dữ liệu sao cho trạng thái "Nghỉ làm" nằm ở cuối bảng
+        employees.sort((e1, e2) -> {
+            if ("Nghỉ làm".equals(e1.getStatus()) && !"Nghỉ làm".equals(e2.getStatus())) {
+                return 1; // e1 nên xuất hiện sau e2
+            } else if (!"Nghỉ làm".equals(e1.getStatus()) && "Nghỉ làm".equals(e2.getStatus())) {
+                return -1; // e1 nên xuất hiện trước e2
+            }
+            return 0; // Giữ nguyên vị trí nếu cả hai có cùng trạng thái
         });
-    }
-}
 
+        // Cập nhật dữ liệu vào bảng
+        DefaultTableModel model = (DefaultTableModel) tblTable.getModel();
+        model.setRowCount(0); // Xóa các hàng cũ
 
+        for (Employees employee : employees) {
+            // Chuyển đổi giá trị từ 1 và 0 thành "Quản lý" và "Nhân viên"
+            String position = employee.getPosition() == 1 ? "Quản lý" : "Nhân viên";
 
-protected List<EmployeesTable> selectBySql(String sql, Object... args) {
-    List<EmployeesTable> list = new ArrayList<>();
-    try {
-        java.sql.ResultSet rs = null;
-        try {
-            rs = XJdbc.query(sql, args);
-            while (rs.next()) {
-                EmployeesTable entity = new EmployeesTable();
-                entity.setEmployeeID(rs.getString("EmployeeID"));
-                entity.setUsername(rs.getString("Username"));
-                entity.setFullName(rs.getString("FullName"));
-
-                // Đọc số điện thoại dưới dạng String
-               entity.setPhone(rs.getInt("Phone"));
-
-                entity.setEmail(rs.getString("Email"));
-                entity.setPosition(rs.getByte("Position"));
-                entity.setImage(rs.getString("Image"));
-                entity.setPassword(rs.getString("Password"));
-                entity.setStatus(rs.getString("Status"));
-                list.add(entity);
-            }
-        } finally {
-            if (rs != null) {
-                rs.getStatement().getConnection().close();
-            }
+            model.addRow(new Object[]{
+                employee.getEmployeeID(),
+                employee.getUsername(),
+                employee.getFullName(),
+                employee.getPhone(),
+                employee.getEmail(),
+                position, // Hiển thị "Quản lý" hoặc "Nhân viên"
+                employee.getStatus()
+            });
         }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        throw new RuntimeException(ex);
     }
-    return list;
-}
 
+    protected List<EmployeesTable> selectBySql(String sql, Object... args) {
+        List<EmployeesTable> list = new ArrayList<>();
+        try {
+            java.sql.ResultSet rs = null;
+            try {
+                rs = XJdbc.query(sql, args);
+                while (rs.next()) {
+                    EmployeesTable entity = new EmployeesTable();
+                    entity.setEmployeeID(rs.getString("EmployeeID"));
+                    entity.setUsername(rs.getString("Username"));
+                    entity.setFullName(rs.getString("FullName"));
 
+                    // Đọc số điện thoại dưới dạng String
+                    entity.setPhone(rs.getInt("Phone"));
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+                    entity.setEmail(rs.getString("Email"));
+                    entity.setPosition(rs.getByte("Position"));
+                    entity.setImage(rs.getString("Image"));
+                    entity.setPassword(rs.getString("Password"));
+                    entity.setStatus(rs.getString("Status"));
+                    list.add(entity);
+                }
+            } finally {
+                if (rs != null) {
+                    rs.getStatement().getConnection().close();
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
+        return list;
+    }
+
+    private void timKiemNhanVienTheoTen() {
+        String employeesName = txtTimKiem.getText();
+        if (employeesName.isEmpty()) {
+            SearchEmployees_Null obj = new SearchEmployees_Null();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tblTable.getModel();
+        model.setRowCount(0);
+
+        try {
+            Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost;databaseName=QuanLyKhoHang;user=sa;password=123");
+            CallableStatement stmt = con.prepareCall("{call sp_TimKiemNhanVien(?)}");
+            stmt.setString(1, employeesName);
+            java.sql.ResultSet rs = stmt.executeQuery();
+
+            boolean hasResults = false;
+            while (rs.next()) {
+                hasResults = true;
+                String id = rs.getString("EmployeeID");
+                String username = rs.getString("Username");
+                String fullname = rs.getString("FullName");
+                 int phone = rs.getInt("Phone");
+                String email = rs.getString("Email");
+                String password = rs.getString("Password");
+
+                
+                byte position = rs.getByte("Position");
+                String image = rs.getString("Image");
+                String status = rs.getString("Status");
+
+                // Thêm dữ liệu vào model (hoặc bất kỳ đối tượng nào bạn đang sử dụng)
+                model.addRow(new Object[]{id, username, fullname, phone, email, password, position, image, status});
+            }
+
+            if (!hasResults) {
+                Employees_NullName obj = new Employees_NullName();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        textField1 = new com.inventory.swing.TextField();
+        txtTimKiem = new com.inventory.swing.TextField();
         button1 = new com.inventory.swing.Button();
-        button2 = new com.inventory.swing.Button();
+        btnTimKiemNhanVien = new com.inventory.swing.Button();
         btnXoa = new com.inventory.swing.Button();
         btnSua = new com.inventory.swing.Button();
         jPanel2 = new javax.swing.JPanel();
@@ -207,7 +249,7 @@ protected List<EmployeesTable> selectBySql(String sql, Object... args) {
         jLabel2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel2.setText("Tên nhân viên");
 
-        textField1.setBackground(new java.awt.Color(72, 142, 174));
+        txtTimKiem.setBackground(new java.awt.Color(72, 142, 174));
 
         button1.setBackground(new java.awt.Color(102, 102, 255));
         button1.setForeground(new java.awt.Color(255, 255, 255));
@@ -219,10 +261,15 @@ protected List<EmployeesTable> selectBySql(String sql, Object... args) {
             }
         });
 
-        button2.setBackground(new java.awt.Color(102, 102, 255));
-        button2.setForeground(new java.awt.Color(255, 255, 255));
-        button2.setText("Tìm kiếm");
-        button2.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        btnTimKiemNhanVien.setBackground(new java.awt.Color(102, 102, 255));
+        btnTimKiemNhanVien.setForeground(new java.awt.Color(255, 255, 255));
+        btnTimKiemNhanVien.setText("Tìm kiếm");
+        btnTimKiemNhanVien.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        btnTimKiemNhanVien.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemNhanVienActionPerformed(evt);
+            }
+        });
 
         btnXoa.setBackground(new java.awt.Color(102, 102, 255));
         btnXoa.setForeground(new java.awt.Color(255, 255, 255));
@@ -254,7 +301,7 @@ protected List<EmployeesTable> selectBySql(String sql, Object... args) {
                         .addGap(42, 42, 42)
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
-                        .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -262,7 +309,7 @@ protected List<EmployeesTable> selectBySql(String sql, Object... args) {
                         .addGap(35, 35, 35)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnTimKiemNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(161, 161, 161))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -276,8 +323,8 @@ protected List<EmployeesTable> selectBySql(String sql, Object... args) {
                 .addContainerGap(9, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTimKiemNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -330,45 +377,45 @@ protected List<EmployeesTable> selectBySql(String sql, Object... args) {
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         // Lấy hàng đã chọn trong bảng
-    int selectedRow = tblTable.getSelectedRow();
-    
-    // Kiểm tra xem có hàng nào được chọn không
-    if (selectedRow >= 0) {
-        // Lấy giá trị từ hàng đã chọn
-        String em = tblTable.getValueAt(selectedRow, 0).toString();
-        
-        // Tạo đối tượng EmployeesDAO để truy xuất thông tin trạng thái
-        EmployeesDAO dao = new EmployeesDAO();
-        String currentStatus = dao.getStatus(em); // Giả sử có phương thức getStatus để lấy trạng thái hiện tại của nhân viên
+        int selectedRow = tblTable.getSelectedRow();
 
-        // Kiểm tra trạng thái hiện tại
-        if ("Nghỉ làm".equals(currentStatus)) {
-            // Nếu trạng thái đã là "Nghỉ làm", hiển thị thông báo rằng nhân viên đã bị xóa
-            DeleteEmployees1 obj = new DeleteEmployees1();
-           
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
+        // Kiểm tra xem có hàng nào được chọn không
+        if (selectedRow >= 0) {
+            // Lấy giá trị từ hàng đã chọn
+            String em = tblTable.getValueAt(selectedRow, 0).toString();
+
+            // Tạo đối tượng EmployeesDAO để truy xuất thông tin trạng thái
+            EmployeesDAO dao = new EmployeesDAO();
+            String currentStatus = dao.getStatus(em); // Giả sử có phương thức getStatus để lấy trạng thái hiện tại của nhân viên
+
+            // Kiểm tra trạng thái hiện tại
+            if ("Nghỉ làm".equals(currentStatus)) {
+                // Nếu trạng thái đã là "Nghỉ làm", hiển thị thông báo rằng nhân viên đã bị xóa
+                DeleteEmployees1 obj = new DeleteEmployees1();
+
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+            } else {
+                // Hiển thị hộp thoại xác nhận
+                DeleteEmployees obj = new DeleteEmployees();
+                obj.setMessage("Bạn có chắc chắn xóa nhân viên này không?");
+                obj.eventOK((ae) -> {
+                    if (obj.getOption() == DeleteEmployees.OPTION_YES) {
+                        // Cập nhật trạng thái của nhân viên
+                        dao.updateStatus(em, "Nghỉ làm");
+
+                        // Tải lại dữ liệu để cập nhật bảng
+                        loadData();
+                    }
+                });
+                GlassPanePopup.showPopup(obj);
+            }
         } else {
-            // Hiển thị hộp thoại xác nhận
+            // Thông báo nếu không có hàng nào được chọn
             DeleteEmployees obj = new DeleteEmployees();
-            obj.setMessage("Bạn có chắc chắn xóa nhân viên này không?");
-            obj.eventOK((ae) -> {
-                if (obj.getOption() == DeleteEmployees.OPTION_YES) {
-                    // Cập nhật trạng thái của nhân viên
-                    dao.updateStatus(em, "Nghỉ làm");
-                    
-                    // Tải lại dữ liệu để cập nhật bảng
-                    loadData();
-                } 
-            });
-            GlassPanePopup.showPopup(obj);
-        }
-    } else {
-        // Thông báo nếu không có hàng nào được chọn
-          DeleteEmployees obj = new DeleteEmployees();
             obj.setMessage("Vui lòng chọn nhân viên để xóa.");
-           obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-    }
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+        }
     }//GEN-LAST:event_btnXoaActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
@@ -450,17 +497,21 @@ protected List<EmployeesTable> selectBySql(String sql, Object... args) {
         }
     }//GEN-LAST:event_tblTableMouseClicked
 
+    private void btnTimKiemNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemNhanVienActionPerformed
+        timKiemNhanVienTheoTen();
+    }//GEN-LAST:event_btnTimKiemNhanVienActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button btnSua;
+    private com.inventory.swing.Button btnTimKiemNhanVien;
     private com.inventory.swing.Button btnXoa;
     private com.inventory.swing.Button button1;
-    private com.inventory.swing.Button button2;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane spTable;
     private com.inventory.swing.Table tblTable;
-    private com.inventory.swing.TextField textField1;
+    private com.inventory.swing.TextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 }

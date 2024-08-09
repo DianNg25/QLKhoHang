@@ -16,6 +16,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import javax.swing.SwingUtilities;
+import com.inventory.message.*;
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
 
 /**
  *
@@ -31,103 +33,116 @@ public class Model_Add_Employees extends javax.swing.JPanel {
     }
 
     @SuppressWarnings("empty-statement")
-private void addTable() {
-    Connection connection = null;
-    PreparedStatement statement = null;
-    ResultSet resultSet = null;
-    try {
-        // Lấy dữ liệu từ các trường nhập liệu
-        String id = txtId.getText().trim();
-        String hoten = txtHoTen.getText().trim();
-        String email = txtEmail.getText().trim();
-        String sodt = txtSdt.getText().trim();
-        byte gender = jRadioButton2.isSelected() ? (byte) 1 : (byte) 0; // 1 nếu là Admin, 0 nếu là User
-        String tk = txtTaiKhoan.getText().trim();
-        String mk = textField7.getText().trim(); // Đảm bảo mật khẩu là String
-        String hinh = txtHinh.getText().trim();
-        String trangthai = "Đang làm"; // Trạng thái mặc định
-
-        // Kiểm tra dữ liệu trống
-        if (id.isEmpty() || hoten.isEmpty() || email.isEmpty() || sodt.isEmpty() || tk.isEmpty() || mk.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin.");
-            return;
-        }
-
-        // Kiểm tra định dạng email
-        if (!email.matches("^[\\w-_.+]+@[\\w-]+\\.[a-zA-Z]{2,}$")) {
-            JOptionPane.showMessageDialog(null, "Địa chỉ email không hợp lệ.");
-            return;
-        }
-
-        // Kiểm tra định dạng số điện thoại (phải bắt đầu bằng 03 hoặc 09 và có 10 chữ số)
-        if (!sodt.matches("^(0)\\d{9}$")) {
-            JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ. Nó phải bắt đầu bằng số 0 có 10 chữ số.");
-            return;
-        }
-
-        // Kiểm tra mật khẩu (giả định mật khẩu phải dài ít nhất 6 ký tự)
-        if (mk.length() < 6) {
-            JOptionPane.showMessageDialog(null, "Mật khẩu phải có ít nhất 6 ký tự.");
-            return;
-        }
-
-        // Kết nối đến cơ sở dữ liệu
-        connection = DatabaseUtils.getConnection();
-
-        // Kiểm tra xem ID đã tồn tại hay chưa
-        String checkIdQuery = "SELECT COUNT(*) FROM Employees WHERE EmployeeID = ?";
-        statement = connection.prepareStatement(checkIdQuery);
-        statement.setString(1, id);
-        resultSet = statement.executeQuery();
-        if (resultSet.next() && resultSet.getInt(1) > 0) {
-            JOptionPane.showMessageDialog(null, "ID đã tồn tại. Vui lòng chọn ID khác.");
-            return;
-        }
-
-        // Chuẩn bị câu lệnh SQL để chèn dữ liệu
-        String query = "INSERT INTO Employees (EmployeeID, Username, FullName, Phone, Email, Password, Position, Image, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        statement = connection.prepareStatement(query);
-        statement.setString(1, id);
-        statement.setString(2, tk);
-        statement.setString(3, hoten);
-        statement.setString(4, sodt);
-        statement.setString(5, email);
-        statement.setString(6, mk);
-        statement.setByte(7, gender);
-        statement.setString(8, hinh);
-        statement.setString(9, trangthai); // Thêm trạng thái
-
-        // Thực hiện lệnh SQL
-        int rowsAffected = statement.executeUpdate();
-
-        // Kiểm tra kết quả và hiển thị thông báo
-        if (rowsAffected > 0) {
-            JOptionPane.showMessageDialog(null, "Thêm Thành Công!");
-            Clearform();
-        } else {
-            JOptionPane.showMessageDialog(null, "Thêm Thất Bại.");
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    } finally {
-        // Đảm bảo đóng tài nguyên
+    private void addTable() {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
-            if (resultSet != null) {
-                resultSet.close();
+            // Lấy dữ liệu từ các trường nhập liệu
+            String id = txtId.getText().trim();
+            String hoten = txtHoTen.getText().trim();
+            String email = txtEmail.getText().trim();
+            String sodt = txtSdt.getText().trim();
+            byte gender = jRadioButton2.isSelected() ? (byte) 1 : (byte) 0; // 1 nếu là Admin, 0 nếu là User
+            String tk = txtTaiKhoan.getText().trim();
+            String mk = textField7.getText().trim(); // Đảm bảo mật khẩu là String
+            String hinh = txtHinh.getText().trim();
+            String trangthai = "Đang làm"; // Trạng thái mặc định
+
+            // Kiểm tra dữ liệu trống
+            if (id.isEmpty() || hoten.isEmpty() || email.isEmpty() || sodt.isEmpty() || tk.isEmpty() || mk.isEmpty()) {
+                ErrorBoTrong obj = new ErrorBoTrong();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+                return;
             }
-            if (statement != null) {
-                statement.close();
+
+            // Kiểm tra định dạng email
+            if (!email.matches("^[\\w-_.+]+@[\\w-]+\\.[a-zA-Z]{2,}$")) {
+                EmailError obj = new EmailError();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+                return;
             }
-            if (connection != null) {
-                connection.close();
+
+            // Kiểm tra định dạng số điện thoại (phải bắt đầu bằng 03 hoặc 09 và có 10 chữ số)
+            if (!sodt.matches("^(0)\\d{9}$")) {
+                PhoneError obj = new PhoneError();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+                return;
             }
-        } catch (SQLException e) {
+
+            // Kiểm tra mật khẩu (giả định mật khẩu phải dài ít nhất 6 ký tự)
+            if (mk.length() < 6) {
+                Password6Kytu obj = new Password6Kytu();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+                return;
+            }
+
+            // Kết nối đến cơ sở dữ liệu
+            connection = DatabaseUtils.getConnection();
+
+            // Kiểm tra xem ID đã tồn tại hay chưa
+            String checkIdQuery = "SELECT COUNT(*) FROM Employees WHERE EmployeeID = ?";
+            statement = connection.prepareStatement(checkIdQuery);
+            statement.setString(1, id);
+            resultSet = statement.executeQuery();
+            if (resultSet.next() && resultSet.getInt(1) > 0) {
+                IDError obj = new IDError();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+                return;
+            }
+
+            // Chuẩn bị câu lệnh SQL để chèn dữ liệu
+            String query = "INSERT INTO Employees (EmployeeID, Username, FullName, Phone, Email, Password, Position, Image, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, id);
+            statement.setString(2, tk);
+            statement.setString(3, hoten);
+            statement.setString(4, sodt);
+            statement.setString(5, email);
+            statement.setString(6, mk);
+            statement.setByte(7, gender);
+            statement.setString(8, hinh);
+            statement.setString(9, trangthai); // Thêm trạng thái
+
+            // Thực hiện lệnh SQL
+            int rowsAffected = statement.executeUpdate();
+
+            // Kiểm tra kết quả và hiển thị thông báo
+            if (rowsAffected > 0) {
+                AddThanhCong obj = new AddThanhCong();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+                Clearform();
+            } else {
+                AddThatBai obj = new AddThatBai();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            // Đảm bảo đóng tài nguyên
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-}
-
 
     private void Clearform() {
         txtId.setText("");

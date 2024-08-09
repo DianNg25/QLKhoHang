@@ -23,6 +23,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import com.inventory.message.*;
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 /**
  *
@@ -41,7 +46,47 @@ public class Form_8 extends javax.swing.JPanel {
         customizeTable();
     }
 
-     private void customizeTable() {
+    private void timKiemKhachHang() {
+        String customerName = txtTenKH.getText();
+        if (customerName.isEmpty()) {
+            SearchCustomers_Null obj = new SearchCustomers_Null();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tblTable.getModel();
+        model.setRowCount(0);
+
+        try {
+            Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost;databaseName=QuanLyKhoHang;user=sa;password=123");
+            CallableStatement stmt = con.prepareCall("{call sp_TimKiemKhachHang(?)}");
+            stmt.setString(1, customerName);
+            java.sql.ResultSet rs = stmt.executeQuery();
+
+            boolean hasResults = false;
+            while (rs.next()) {
+                hasResults = true;
+                String id = rs.getString("CustomerID");
+                String name = rs.getString("CustomerName");
+                String address = rs.getString("Address");
+                String phone = rs.getString("Phone");
+                model.addRow(new Object[]{id, name, address, phone});
+            }
+
+            if (!hasResults) {
+                Customers_NullName obj = new Customers_NullName();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + e.getMessage());
+        }
+    }
+
+    private void customizeTable() {
 
         tblTable.setShowHorizontalLines(true);
         tblTable.setGridColor(new Color(230, 230, 230));
@@ -98,16 +143,7 @@ public class Form_8 extends javax.swing.JPanel {
         p.setBackground(Color.WHITE);
         spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     private void loadData() {
         String sql = "SELECT * FROM Customers";
 
@@ -170,8 +206,8 @@ public class Form_8 extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        textField1 = new com.inventory.swing.TextField();
-        button2 = new com.inventory.swing.Button();
+        txtTenKH = new com.inventory.swing.TextField();
+        btnTimKiemKhachHang = new com.inventory.swing.Button();
         btnXoa = new com.inventory.swing.Button();
         btnSua = new com.inventory.swing.Button();
         button1 = new com.inventory.swing.Button();
@@ -188,12 +224,17 @@ public class Form_8 extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel2.setText("Tên khách hàng");
 
-        textField1.setBackground(new java.awt.Color(72, 142, 174));
+        txtTenKH.setBackground(new java.awt.Color(72, 142, 174));
 
-        button2.setBackground(new java.awt.Color(102, 102, 255));
-        button2.setForeground(new java.awt.Color(255, 255, 255));
-        button2.setText("Tìm kiếm");
-        button2.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        btnTimKiemKhachHang.setBackground(new java.awt.Color(102, 102, 255));
+        btnTimKiemKhachHang.setForeground(new java.awt.Color(255, 255, 255));
+        btnTimKiemKhachHang.setText("Tìm kiếm");
+        btnTimKiemKhachHang.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        btnTimKiemKhachHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemKhachHangActionPerformed(evt);
+            }
+        });
 
         btnXoa.setBackground(new java.awt.Color(102, 102, 255));
         btnXoa.setForeground(new java.awt.Color(255, 255, 255));
@@ -235,7 +276,7 @@ public class Form_8 extends javax.swing.JPanel {
                         .addGap(42, 42, 42)
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
-                        .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTenKH, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -243,7 +284,7 @@ public class Form_8 extends javax.swing.JPanel {
                         .addGap(35, 35, 35)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnTimKiemKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(161, 161, 161))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -257,8 +298,8 @@ public class Form_8 extends javax.swing.JPanel {
                 .addContainerGap(9, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTenKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTimKiemKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -372,17 +413,21 @@ public class Form_8 extends javax.swing.JPanel {
         add.setVisible(true);
     }//GEN-LAST:event_button1ActionPerformed
 
+    private void btnTimKiemKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemKhachHangActionPerformed
+        timKiemKhachHang();
+    }//GEN-LAST:event_btnTimKiemKhachHangActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button btnSua;
+    private com.inventory.swing.Button btnTimKiemKhachHang;
     private com.inventory.swing.Button btnXoa;
     private com.inventory.swing.Button button1;
-    private com.inventory.swing.Button button2;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane spTable;
     private com.inventory.swing.Table tblTable;
-    private com.inventory.swing.TextField textField1;
+    private com.inventory.swing.TextField txtTenKH;
     // End of variables declaration//GEN-END:variables
 }

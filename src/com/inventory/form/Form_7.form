@@ -53,7 +53,7 @@
                           <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="textField1" min="-2" pref="260" max="-2" attributes="0"/>
+                          <Component id="txtTimKiem" min="-2" pref="260" max="-2" attributes="0"/>
                           <EmptySpace pref="46" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
@@ -64,7 +64,7 @@
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="button2" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Component id="btnTimKiemNhanVien" min="-2" pref="110" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="161" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
@@ -83,8 +83,8 @@
                   <EmptySpace pref="9" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="textField1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="button2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtTimKiem" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnTimKiemNhanVien" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -106,7 +106,7 @@
             <Property name="text" type="java.lang.String" value="T&#xea;n nh&#xe2;n vi&#xea;n"/>
           </Properties>
         </Component>
-        <Component class="com.inventory.swing.TextField" name="textField1">
+        <Component class="com.inventory.swing.TextField" name="txtTimKiem">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ae" green="8e" red="48" type="rgb"/>
@@ -130,7 +130,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button1ActionPerformed"/>
           </Events>
         </Component>
-        <Component class="com.inventory.swing.Button" name="button2">
+        <Component class="com.inventory.swing.Button" name="btnTimKiemNhanVien">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="66" red="66" type="rgb"/>
@@ -143,6 +143,9 @@
               <Font name="SansSerif" size="16" style="1"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnTimKiemNhanVienActionPerformed"/>
+          </Events>
         </Component>
         <Component class="com.inventory.swing.Button" name="btnXoa">
           <Properties>
