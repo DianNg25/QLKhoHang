@@ -176,6 +176,7 @@ public class Form_7 extends javax.swing.JPanel {
 
     private void timKiemNhanVienTheoTen() {
         String employeesName = txtTimKiem.getText();
+
         if (employeesName.isEmpty()) {
             SearchEmployees_Null obj = new SearchEmployees_Null();
             obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
@@ -194,21 +195,20 @@ public class Form_7 extends javax.swing.JPanel {
 
             boolean hasResults = false;
             while (rs.next()) {
+
                 hasResults = true;
                 String id = rs.getString("EmployeeID");
                 String username = rs.getString("Username");
                 String fullname = rs.getString("FullName");
-                 int phone = rs.getInt("Phone");
+                int phone = rs.getInt("Phone");
                 String email = rs.getString("Email");
-                String password = rs.getString("Password");
-
-                
                 byte position = rs.getByte("Position");
-                String image = rs.getString("Image");
                 String status = rs.getString("Status");
 
+                // Chuyển đổi giá trị Position
+                String positionString = (position == 0) ? "Nhân viên" : "Quản lý";
                 // Thêm dữ liệu vào model (hoặc bất kỳ đối tượng nào bạn đang sử dụng)
-                model.addRow(new Object[]{id, username, fullname, phone, email, password, position, image, status});
+                model.addRow(new Object[]{id, username, fullname, phone, email, positionString, status});
             }
 
             if (!hasResults) {

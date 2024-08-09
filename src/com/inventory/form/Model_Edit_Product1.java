@@ -17,6 +17,8 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import com.inventory.message.*;
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
 
 /**
  *
@@ -44,7 +46,9 @@ public class Model_Edit_Product1 extends javax.swing.JPanel {
         if (txtMaSanPham.getText().trim().isEmpty() || txtTenSanPham.getText().trim().isEmpty()
                 || txtGia.getText().trim().isEmpty() || cboMau.getSelectedItem() == null
                 || (!rdoMini.isSelected() && !rdoNho.isSelected() && !rdoVua.isSelected() && !rdoLon.isSelected())) {
-            JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            ErrorBoTrong obj = new ErrorBoTrong();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
             return;
         }
 
@@ -73,8 +77,20 @@ public class Model_Edit_Product1 extends javax.swing.JPanel {
         double gia;
         try {
             gia = Double.parseDouble(giaSP);
+            if (gia < 0) {
+
+                EditProducts_ErrorPrice obj = new EditProducts_ErrorPrice();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+
+                return;
+            }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Giá sản phẩm phải là số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+            EditProducts_PriceNumber obj = new EditProducts_PriceNumber();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
+
             return;
         }
 
@@ -87,7 +103,11 @@ public class Model_Edit_Product1 extends javax.swing.JPanel {
 
             try (java.sql.ResultSet rs = stmtCheck.executeQuery()) {
                 if (rs.next() && rs.getInt(1) == 0) {
-                    JOptionPane.showMessageDialog(this, "Mã sản phẩm không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+                    EditProducts_IdNull obj = new EditProducts_IdNull();
+                    obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                    GlassPanePopup.showPopup(obj);
+
                     return;
                 }
             }
@@ -111,9 +131,16 @@ public class Model_Edit_Product1 extends javax.swing.JPanel {
             stmtUpdate.executeUpdate();
 
             // Thông báo thành công
-            JOptionPane.showMessageDialog(this, "Đã cập nhật thành công!");
+            EditThanhCong obj = new EditThanhCong();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Cập nhật không thành công: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+            EditThatBai obj = new EditThatBai();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
+
         }
     }
 

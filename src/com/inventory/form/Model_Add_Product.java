@@ -15,13 +15,17 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import com.inventory.message.*;
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
 
 /**
  *
  * @author Nguyen
  */
 public class Model_Add_Product extends javax.swing.JPanel {
- private SuppliersDAO suppliersDAO;
+
+    private SuppliersDAO suppliersDAO;
+
     /**
      * Creates new form Model_Add_Product
      */
@@ -29,8 +33,7 @@ public class Model_Add_Product extends javax.swing.JPanel {
         initComponents();
         setOpaque(false);
         populateComboBox();
-        
-     
+
         this.suppliersDAO = new SuppliersDAO();
 //                fillComboBox();
 
@@ -249,16 +252,55 @@ public class Model_Add_Product extends javax.swing.JPanel {
         addProducts();
         clearForm();
     }//GEN-LAST:event_btnOKActionPerformed
-    
-    
-    
-       private void addProducts() {
+
+    private void addProducts() {
         // Lấy dữ liệu từ các trường nhập liệu
         String maSP = txtMaSanPham.getText().trim();
         String tenSP = txtTenSanPham.getText().trim();
         String giaSP = txtGia.getText().trim();
-      
         String mau = cboMau.getSelectedItem().toString().trim(); // Sử dụng getSelectedItem() thay vì getText()
+
+        // Kiểm tra nếu các trường nhập liệu không được để trống
+        if (maSP.isEmpty() || tenSP.isEmpty() || giaSP.isEmpty()) {
+
+            ErrorBoTrong obj = new ErrorBoTrong();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
+
+            return;
+        }
+
+        // Kiểm tra xem mã sản phẩm có bị trùng không
+        ProductsDAO dao = new ProductsDAO();
+        if (dao.selectById(maSP) != null) {
+            
+            IDError obj = new IDError();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
+            
+            return;
+        }
+
+        // Kiểm tra nếu giá sản phẩm phải là số và không được nhỏ hơn 0
+        double gia;
+        try {
+            gia = Double.parseDouble(giaSP);
+            if (gia < 0) {
+               
+                EditProducts_ErrorPrice obj = new EditProducts_ErrorPrice();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
+
+                return;
+            }
+        } catch (NumberFormatException e) {
+           
+            EditProducts_PriceNumber obj = new EditProducts_PriceNumber();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
+            
+            return;
+        }
 
         // Xác định loại sản phẩm từ radio buttons
         String loai = "";
@@ -274,9 +316,6 @@ public class Model_Add_Product extends javax.swing.JPanel {
 
         // Đặt trạng thái sản phẩm mặc định là "Hoạt động"
         String trangThai = "Hoạt động";
-        // Chuyển đổi giaSP và soluong từ String sang kiểu dữ liệu phù hợp nếu cần
-        double gia = Double.parseDouble(giaSP);
-      
 
         // Tạo đối tượng Product
         Products product = new Products();
@@ -286,72 +325,34 @@ public class Model_Add_Product extends javax.swing.JPanel {
         product.setColor(mau);
         product.setWeight(loai);
         product.setStatus(trangThai); // Thiết lập trạng thái là "Hoạt động"
-        // Tạo đối tượng ProductsDAO
-        ProductsDAO dao = new ProductsDAO();
 
         // Thêm sản phẩm vào cơ sở dữ liệu
         dao.insert(product);
 
         // Thông báo thành công
-        JOptionPane.showMessageDialog(this, "Đã thêm thành công!");
+        AddThanhCong obj = new AddThanhCong();
+        obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+        GlassPanePopup.showPopup(obj);
     }
 
-   private void clearForm() {
-    // Xóa văn bản trong các trường nhập liệu
-    txtMaSanPham.setText("");
-    txtTenSanPham.setText("");
-    txtGia.setText("");
-    // Đặt lại các hộp thoại lựa chọn (ComboBox)
-    cboMau.setSelectedIndex(-1); // Bỏ chọn tất cả các mục
-    // Đặt lại các nút radio (RadioButton)
-    rdoLon.setSelected(false);
-    rdoMini.setSelected(false);
-    rdoNho.setSelected(false);
-    rdoVua.setSelected(false);
-}
+    private void clearForm() {
+        // Xóa văn bản trong các trường nhập liệu
+        txtMaSanPham.setText("");
+        txtTenSanPham.setText("");
+        txtGia.setText("");
+        // Đặt lại các hộp thoại lựa chọn (ComboBox)
+        cboMau.setSelectedIndex(-1); // Bỏ chọn tất cả các mục
+        // Đặt lại các nút radio (RadioButton)
+        rdoLon.setSelected(false);
+        rdoMini.setSelected(false);
+        rdoNho.setSelected(false);
+        rdoVua.setSelected(false);
+    }
 
-//    private void fillComboBox() {
-//        try {
-//            List<Suppliers> suppliersList = suppliersDAO.selectAll(); // Đảm bảo phương thức này không bị gọi nhiều lần
-//          
-//            for (Suppliers supplier : suppliersList) {
-//               
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            JOptionPane.showMessageDialog(null, "Error loading supplier names into ComboBox.", "Error", JOptionPane.ERROR_MESSAGE);
-//        }
-//    }
-
-   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     public void eventOK(ActionListener event) {
         btnOK.addActionListener(event);
     }
-    
+
     @Override
     protected void paintComponent(Graphics graphics) {
         Graphics2D g2 = (Graphics2D) graphics;
@@ -360,7 +361,7 @@ public class Model_Add_Product extends javax.swing.JPanel {
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
         super.paintComponent(graphics);
     }
-    
+
     private void populateComboBox() {
         cboMau.addItem("Xám");
         cboMau.addItem("Xanh");
