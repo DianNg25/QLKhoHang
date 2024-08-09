@@ -22,6 +22,8 @@ import java.util.Properties;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 public class DoiMatKhau extends javax.swing.JPanel {
 
@@ -87,7 +89,7 @@ public class DoiMatKhau extends javax.swing.JPanel {
         jLabel5.setText("Mật khẩu mới");
 
         txtEmail.setBackground(new java.awt.Color(190, 213, 243));
-        txtEmail.setForeground(new java.awt.Color(255, 255, 255));
+        txtEmail.setForeground(new java.awt.Color(51, 51, 51));
         txtEmail.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         txtEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,7 +98,7 @@ public class DoiMatKhau extends javax.swing.JPanel {
         });
 
         txtXacNhanMa.setBackground(new java.awt.Color(190, 213, 243));
-        txtXacNhanMa.setForeground(new java.awt.Color(255, 255, 255));
+        txtXacNhanMa.setForeground(new java.awt.Color(0, 0, 0));
         txtXacNhanMa.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
 
         lblCheckPass.setPreferredSize(new java.awt.Dimension(0, 16));
@@ -105,11 +107,11 @@ public class DoiMatKhau extends javax.swing.JPanel {
         lblStatus.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
 
         txtUserName.setBackground(new java.awt.Color(190, 213, 243));
-        txtUserName.setForeground(new java.awt.Color(255, 255, 255));
+        txtUserName.setForeground(new java.awt.Color(0, 0, 0));
         txtUserName.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
 
         txtMatKhauMoi.setBackground(new java.awt.Color(190, 213, 243));
-        txtMatKhauMoi.setForeground(new java.awt.Color(255, 255, 255));
+        txtMatKhauMoi.setForeground(new java.awt.Color(0, 0, 0));
         txtMatKhauMoi.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
         txtMatKhauMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -259,6 +261,13 @@ public class DoiMatKhau extends javax.swing.JPanel {
             return;
         }
 
+        // Kiểm tra xem email có tồn tại trong cơ sở dữ liệu hay không
+        if (!isEmailExist(email)) {
+            lblStatus.setText("Email này không tồn tại trong hệ thống!");
+            lblStatus.setForeground(Color.RED);
+            return;
+        }
+
         // Kiểm tra thời gian hết hạn của OTP trước đó
         if (otp != null && otpGeneratedTime != null) {
             Instant currentTime = Instant.now();
@@ -348,6 +357,25 @@ public class DoiMatKhau extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnChangePasswordActionPerformed
 
+    ///// check email trong hệ thống  
+    private boolean isEmailExist(String email) {
+        String sql = "SELECT COUNT(*) FROM Employees WHERE Email = ?";
+        try (Connection con = DriverManager.getConnection("jdbc:sqlserver://localhost;databaseName=QuanLyKhoHang;user=sa;password=123"); java.sql.PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0; // Email tồn tại nếu count > 0
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // Email không tồn tại
+    }
+    
+    
+///////////////////////////////////////
+    
     private boolean checkUserExists(String username) {
         String sql = "SELECT COUNT(*) FROM Employees WHERE Username=?";
         try (ResultSet rs = XJdbc.query(sql, username)) {
