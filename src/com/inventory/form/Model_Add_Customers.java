@@ -5,6 +5,7 @@ import com.inventory.utils.XJdbc;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import com.inventory.message.*;
 
 /**
  *
@@ -208,27 +209,37 @@ public class Model_Add_Customers extends javax.swing.JPanel {
 
     private boolean validateFields() {
         if (txtMaKH.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Mã Khách Hàng không được để trống!");
+            ErrorBoTrong obj = new ErrorBoTrong();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
             txtMaKH.requestFocus();
             return false;
         }
         if (txtTenKH.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Tên Khách Hàng không được để trống!");
+            ErrorBoTrong obj = new ErrorBoTrong();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
             txtTenKH.requestFocus();
             return false;
         }
         if (txtDiaChi.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Địa chỉ không được để trống!");
+            ErrorBoTrong obj = new ErrorBoTrong();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
             txtDiaChi.requestFocus();
             return false;
         }
         if (txtSDT.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Số điện thoại không được để trống!");
+            ErrorBoTrong obj = new ErrorBoTrong();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
             txtSDT.requestFocus();
             return false;
         }
         if (!txtSDT.getText().matches("\\d+")) {
-            JOptionPane.showMessageDialog(null, "Số điện thoại chỉ được chứa chữ số!");
+            PhoneError obj = new PhoneError();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
             txtSDT.requestFocus();
             return false;
         }
@@ -259,7 +270,9 @@ public class Model_Add_Customers extends javax.swing.JPanel {
             statement.setString(1, customerID);
             resultSet = statement.executeQuery();
             if (resultSet.next() && resultSet.getInt(1) > 0) {
-                JOptionPane.showMessageDialog(null, "Mã khách hàng đã tồn tại. Vui lòng kiểm tra lại.");
+                IDError obj = new IDError();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
                 return;
             }
 
@@ -275,13 +288,17 @@ public class Model_Add_Customers extends javax.swing.JPanel {
             statement.executeUpdate();
 
             // Hiển thị thông báo thành công
-            JOptionPane.showMessageDialog(null, "Khách hàng đã được thêm thành công!");
+            AddThanhCong obj = new AddThanhCong();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
 
             // Xóa các trường trong form
             clearFields();
         } catch (Exception e) {
             // Hiển thị thông báo lỗi nếu có lỗi xảy ra
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm khách hàng: " + e.getMessage());
+            AddThatBai obj = new AddThatBai();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
         } finally {
             // Đóng các kết nối và tài nguyên
             try {

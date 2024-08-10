@@ -407,7 +407,9 @@ public class Model_Edit_Product1 extends javax.swing.JPanel {
         dao.insert(product);
 
         // Thông báo thành công
-        JOptionPane.showMessageDialog(this, "Đã thêm thành công!");
+        UpdateThanhCong obj = new UpdateThanhCong();
+        obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+        GlassPanePopup.showPopup(obj);
     }
 
     public void setProductData(ProductsTable productsTable) {

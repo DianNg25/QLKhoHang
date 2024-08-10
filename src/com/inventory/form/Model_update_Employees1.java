@@ -182,7 +182,7 @@ public class Model_update_Employees1 extends javax.swing.JPanel {
         jLabel9.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("THÊM NHÂN VIÊN");
+        jLabel9.setText("SỬA NHÂN VIÊN");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

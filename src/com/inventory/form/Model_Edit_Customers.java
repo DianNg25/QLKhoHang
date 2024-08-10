@@ -6,6 +6,7 @@ import com.inventory.utils.XJdbc;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import com.inventory.message.*;
 
 /**
  *
@@ -37,13 +38,17 @@ public class Model_Edit_Customers extends javax.swing.JPanel {
 
             // Kiểm tra dữ liệu trống
             if (id.isEmpty() || name.isEmpty() || address.isEmpty() || phone.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin.");
+                ErrorBoTrong obj = new ErrorBoTrong();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
                 return;
             }
 
             // Kiểm tra định dạng số điện thoại (ví dụ: phải bắt đầu bằng số 0 và có 10 chữ số)
             if (!phone.matches("^(0)\\d{9}$")) {
-                JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ. Nó phải bắt đầu bằng số 0 có 10 chữ số.");
+                PhoneError obj = new PhoneError();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
                 return;
             }
 
@@ -56,7 +61,9 @@ public class Model_Edit_Customers extends javax.swing.JPanel {
             statement.setString(1, id);
             resultSet = statement.executeQuery();
             if (!resultSet.next() || resultSet.getInt(1) == 0) {
-                JOptionPane.showMessageDialog(null, "ID không tồn tại. Vui lòng kiểm tra lại.");
+                IDErrorNull obj = new IDErrorNull();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
                 return;
             }
 
@@ -73,10 +80,14 @@ public class Model_Edit_Customers extends javax.swing.JPanel {
 
             // Kiểm tra kết quả và hiển thị thông báo
             if (rowsAffected > 0) {
-                JOptionPane.showMessageDialog(null, "Cập nhật Thành Công!");
+                UpdateThanhCong obj = new UpdateThanhCong();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
                 clearFields();
             } else {
-                JOptionPane.showMessageDialog(null, "Cập nhật Thất Bại.");
+                UpdateThatBai obj = new UpdateThatBai();
+                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                GlassPanePopup.showPopup(obj);
             }
         } catch (Exception e) {
             e.printStackTrace();

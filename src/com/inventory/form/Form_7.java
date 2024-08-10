@@ -411,10 +411,10 @@ public class Form_7 extends javax.swing.JPanel {
                 GlassPanePopup.showPopup(obj);
             }
         } else {
-            // Thông báo nếu không có hàng nào được chọn
-            DeleteEmployees obj = new DeleteEmployees();
-            obj.setMessage("Vui lòng chọn nhân viên để xóa.");
+            // Thông báo nếu không có nhân viên nào được chọn
+            DeleteEmployees2 obj = new DeleteEmployees2();
             obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
         }
     }//GEN-LAST:event_btnXoaActionPerformed
 
@@ -445,7 +445,9 @@ public class Form_7 extends javax.swing.JPanel {
             add.setVisible(true);
         } else {
             // Xử lý khi không có nhân viên nào được chọn
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhân viên để chỉnh sửa.");
+            EditEmployees obj = new EditEmployees();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
         }
     }//GEN-LAST:event_btnSuaActionPerformed
 

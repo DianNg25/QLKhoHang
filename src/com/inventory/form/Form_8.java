@@ -355,15 +355,21 @@ public class Form_8 extends javax.swing.JPanel {
 
                 // Hiển thị thông báo thành công hoặc thất bại
                 if (success) {
-                    JOptionPane.showMessageDialog(this, "Khách hàng đã được xóa thành công!");
+                    DeleteThanhCong obj = new DeleteThanhCong();
+                    obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                    GlassPanePopup.showPopup(obj);
                     // Tải lại dữ liệu để cập nhật bảng
                     loadData();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Xóa khách hàng thất bại.");
+                    DeleteThatBai obj = new DeleteThatBai();
+                    obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                    GlassPanePopup.showPopup(obj);
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một khách hàng để xóa.");
+            DeleteCustomer obj = new DeleteCustomer();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
         }
     }//GEN-LAST:event_btnXoaActionPerformed
 
@@ -398,8 +404,7 @@ public class Form_8 extends javax.swing.JPanel {
             // Đặt đối tượng CustomersTable vào biến toàn cục
             this.customersTable = customer;
 
-//            // Optional: Hiển thị thông báo để kiểm tra dữ liệu đã được lưu vào đối tượng
-//            JOptionPane.showMessageDialog(this, "Selected Customer: " + customer.getCustomerName() + "\nPhone: " + customer.getPhone());
+            
         }
     }//GEN-LAST:event_tblTableMouseClicked
 

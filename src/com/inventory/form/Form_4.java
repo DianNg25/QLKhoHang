@@ -450,12 +450,9 @@ public class Form_4 extends javax.swing.JPanel {
             supplier.setEmail((String) tblNCC.getValueAt(selectedRow, 4));
 
             // Đặt dữ liệu vào các trường nhập liệu  // Ví dụ cho trường email
-
             // Đặt đối tượng Suppliers vào biến toàn cục nếu cần
             this.suppliersTable = supplier;
 
-            // Hiển thị thông báo để kiểm tra dữ liệu đã được lưu vào đối tượng
-            JOptionPane.showMessageDialog(this, "Nhà cung cấp đã chọn: " + supplier.getSupplierName());
         }
     }//GEN-LAST:event_tblNCCMouseClicked
 
@@ -477,7 +474,9 @@ public class Form_4 extends javax.swing.JPanel {
             add.setVisible(true);
         } else {
             // Xử lý khi không có nhân viên nào được chọn
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhân viên để chỉnh sửa.");
+            EditSuppliers obj = new EditSuppliers();
+            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+            GlassPanePopup.showPopup(obj);
         }
     }//GEN-LAST:event_button1ActionPerformed
 
