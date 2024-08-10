@@ -262,7 +262,7 @@
                       <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="52" max="32767" attributes="0"/>
+                  <EmptySpace pref="69" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -471,7 +471,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Ph&#xed; g&#x1eed;i h&#xe0;ng(ng&#xe0;y)"/>
+            <Property name="text" type="java.lang.String" value="Ph&#xed; g&#x1eed;i (ng&#xe0;y)"/>
           </Properties>
         </Component>
         <Component class="com.inventory.swing.TextField" name="txtMaPX">
@@ -520,7 +520,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Ph&#xed; g&#x1eed;i h&#xe0;ng(s&#x1ed1; l&#x1b0;&#x1ee3;ng)"/>
+            <Property name="text" type="java.lang.String" value="Ph&#xed; g&#x1eed;i (s&#x1ed1; l&#x1b0;&#x1ee3;ng)"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblHoaHong">

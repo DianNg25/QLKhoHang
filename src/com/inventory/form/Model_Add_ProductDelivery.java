@@ -360,7 +360,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("Phí gửi hàng(ngày)");
+        jLabel6.setText("Phí gửi (ngày)");
 
         txtMaPX.setPreferredSize(new java.awt.Dimension(25, 40));
 
@@ -388,7 +388,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Phí gửi hàng(số lượng)");
+        jLabel8.setText("Phí gửi (số lượng)");
 
         lblHoaHong.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblHoaHong.setForeground(new java.awt.Color(255, 255, 255));
@@ -463,7 +463,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                     .addComponent(jLabel7)
                     .addComponent(jLabel8)
                     .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -782,13 +782,13 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
     //Tính hoa hồng
     private double calculateCommission(long days) {
         if (days < 30) {
-            return 10.0;
+            return 0.10; // 10% dưới dạng số thực
         } else if (days < 60) {
-            return 15.0;
+            return 0.15; // 15% dưới dạng số thực
         } else if (days < 90) {
-            return 20.0;
+            return 0.20; // 20% dưới dạng số thực
         } else {
-            return 25.0;
+            return 0.25; // 25% dưới dạng số thực
         }
     }
 
@@ -804,25 +804,22 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                 long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
                 double hoaHong = calculateCommission(diff);
-                lblHoaHong.setText(String.format("%.2f", hoaHong)); // Định dạng giá trị hoa hồng
 
+                // Lấy giá trị từ lblPhiVanChuyen (JLabel) và txtPhiSL (JTextField)
                 String phiVanChuyenText = lblPhiVanChuyen.getText();
                 double phiVanChuyen = parseDoubleOrZero(phiVanChuyenText);
-                System.out.println("VC" + phiVanChuyenText);
 
-                System.out.println("HH" + hoaHong);
-
-                // Lấy giá trị từ txtPhiSL (JTextField)
                 String phiSLText = txtPhiSL.getText();
                 double phiSL = parseDoubleOrZero(phiSLText);
-                System.out.println("SL" + phiSLText);
 
-                // Tính toán tổng
-                double tong = hoaHong * phiSL + phiVanChuyen;
+                // Tính toán giá trị của lblHoaHong = (lblPhiVanChuyen + txtPhiSL) * hoaHong
+                double lblHoaHongValue = (phiVanChuyen + phiSL) * hoaHong;
+                System.out.println("phi hoa hong:" + lblHoaHongValue);
+                // Cập nhật giá trị vào lblHoaHong và txtTong
+                lblHoaHong.setText(String.format("%.2f", lblHoaHongValue));
 
-                System.out.println(tong);
-                // Cập nhật giá trị vào txtTong
-                txtTong.setText(String.valueOf(tong));
+                double tong = lblHoaHongValue + phiSL + phiVanChuyen; // Cập nhật tổng giá trị vào txtTong
+                txtTong.setText(String.format("%.2f", tong));
 
             } catch (Exception ex) {
                 lblHoaHong.setText("Định dạng ngày không hợp lệ!");
