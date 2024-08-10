@@ -203,23 +203,13 @@
                                   </Group>
                               </Group>
                           </Group>
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="txtGia" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="cboMau" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="txtTenSanPham" max="32767" attributes="0"/>
-                                      <Component id="comboBoxSuggestion1" max="32767" attributes="0"/>
-                                      <Component id="txtMaSanPham" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
+                              <Component id="txtGia" alignment="1" max="32767" attributes="0"/>
+                              <Component id="txtTenSanPham" max="32767" attributes="0"/>
+                              <Component id="comboBoxProductID" max="32767" attributes="0"/>
+                              <Component id="txtMaSanPham" alignment="0" max="32767" attributes="0"/>
+                              <Component id="cboMau" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -231,7 +221,7 @@
                           <Component id="rdoVua" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="rdoLon" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="100" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="94" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
@@ -248,7 +238,7 @@
                   </Group>
                   <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="comboBoxSuggestion1" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                      <Component id="comboBoxProductID" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                       <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -439,12 +429,15 @@
             <Property name="text" type="java.lang.String" value="M&#xe3; NCC"/>
           </Properties>
         </Component>
-        <Component class="com.inventory.swing.ComboBoxSuggestion" name="comboBoxSuggestion1">
+        <Component class="com.inventory.swing.ComboBoxSuggestion" name="comboBoxProductID">
           <Properties>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[151, 30]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboBoxProductIDActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

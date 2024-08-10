@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import com.inventory.message.*;
 import com.inventory.swing.glasspanepopup.GlassPanePopup;
+import com.inventory.utils.XJdbc;
 
 /**
  *
@@ -33,6 +34,7 @@ public class Model_Add_Product extends javax.swing.JPanel {
         initComponents();
         setOpaque(false);
         populateComboBox();
+        loadSupplierIDsIntoComboBox();
 
         this.suppliersDAO = new SuppliersDAO();
 //                fillComboBox();
@@ -65,7 +67,7 @@ public class Model_Add_Product extends javax.swing.JPanel {
         cboMau = new com.inventory.swing.ComboBoxSuggestion();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        comboBoxSuggestion1 = new com.inventory.swing.ComboBoxSuggestion();
+        comboBoxProductID = new com.inventory.swing.ComboBoxSuggestion();
 
         setBackground(new java.awt.Color(39, 74, 89));
         setOpaque(false);
@@ -189,7 +191,12 @@ public class Model_Add_Product extends javax.swing.JPanel {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Mã NCC");
 
-        comboBoxSuggestion1.setPreferredSize(new java.awt.Dimension(151, 30));
+        comboBoxProductID.setPreferredSize(new java.awt.Dimension(151, 30));
+        comboBoxProductID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxProductIDActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -214,19 +221,13 @@ public class Model_Add_Product extends javax.swing.JPanel {
                                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(txtGia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(cboMau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtTenSanPham, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(comboBoxSuggestion1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtMaSanPham, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                            .addComponent(txtGia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtTenSanPham, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(comboBoxProductID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtMaSanPham, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cboMau, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
                         .addGap(178, 178, 178)
                         .addComponent(rdoMini)
@@ -236,7 +237,7 @@ public class Model_Add_Product extends javax.swing.JPanel {
                         .addComponent(rdoVua)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rdoLon)
-                        .addGap(0, 100, Short.MAX_VALUE)))
+                        .addGap(0, 94, Short.MAX_VALUE)))
                 .addGap(63, 63, 63))
         );
         jPanel3Layout.setVerticalGroup(
@@ -248,7 +249,7 @@ public class Model_Add_Product extends javax.swing.JPanel {
                     .addComponent(txtMaSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(17, 17, 17)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboBoxSuggestion1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboBoxProductID, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -290,6 +291,29 @@ public class Model_Add_Product extends javax.swing.JPanel {
         clearForm();
     }//GEN-LAST:event_btnOKActionPerformed
 
+    private void comboBoxProductIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxProductIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBoxProductIDActionPerformed
+
+    private void loadSupplierIDsIntoComboBox() {
+        String query = "SELECT SupplierID FROM Suppliers";
+        try (java.sql.Connection conn = XJdbc.getConnection(); java.sql.PreparedStatement pstmt = conn.prepareStatement(query); java.sql.ResultSet rs = pstmt.executeQuery()) {
+
+            // Xóa tất cả các phần tử hiện có trong combobox trước khi thêm mới
+            comboBoxProductID.removeAllItems();
+
+            // Thêm các SupplierID vào JComboBox
+            while (rs.next()) {
+                String supplierID = rs.getString("SupplierID");
+                comboBoxProductID.addItem(supplierID);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu nhà cung cấp: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void addProducts() {
         // Lấy dữ liệu từ các trường nhập liệu
         String maSP = txtMaSanPham.getText().trim();
@@ -297,79 +321,95 @@ public class Model_Add_Product extends javax.swing.JPanel {
         String giaSP = txtGia.getText().trim();
         String mau = cboMau.getSelectedItem().toString().trim(); // Sử dụng getSelectedItem() thay vì getText()
 
-        // Kiểm tra nếu các trường nhập liệu không được để trống
-        if (maSP.isEmpty() || tenSP.isEmpty() || giaSP.isEmpty()) {
+        // Lấy SupplierID từ comboBoxProductID
+        String supplierID = (String) comboBoxProductID.getSelectedItem();
 
+        // Kiểm tra nếu các trường nhập liệu không được để trống
+        if (maSP.isEmpty() || tenSP.isEmpty() || giaSP.isEmpty() || supplierID == null) {
             ErrorBoTrong obj = new ErrorBoTrong();
             obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
             GlassPanePopup.showPopup(obj);
-
             return;
         }
 
         // Kiểm tra xem mã sản phẩm có bị trùng không
-        ProductsDAO dao = new ProductsDAO();
-        if (dao.selectById(maSP) != null) {
-            
-            IDError obj = new IDError();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
-            
-            return;
-        }
+        try (java.sql.Connection conn = XJdbc.getConnection()) {
+            String checkProductQuery = "SELECT COUNT(*) FROM Products WHERE ProductID = ?";
+            try (java.sql.PreparedStatement pstmtCheck = conn.prepareStatement(checkProductQuery)) {
+                pstmtCheck.setString(1, maSP);
+                try (java.sql.ResultSet rs = pstmtCheck.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        IDError obj = new IDError();
+                        obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                        GlassPanePopup.showPopup(obj);
+                        return;
+                    }
+                }
+            }
 
-        // Kiểm tra nếu giá sản phẩm phải là số và không được nhỏ hơn 0
-        double gia;
-        try {
-            gia = Double.parseDouble(giaSP);
-            if (gia < 0) {
-               
-                EditProducts_ErrorPrice obj = new EditProducts_ErrorPrice();
+            // Kiểm tra nếu giá sản phẩm phải là số và không được nhỏ hơn 0
+            double gia;
+            try {
+                gia = Double.parseDouble(giaSP);
+                if (gia < 0) {
+                    EditProducts_ErrorPrice obj = new EditProducts_ErrorPrice();
+                    obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                    GlassPanePopup.showPopup(obj);
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                EditProducts_PriceNumber obj = new EditProducts_PriceNumber();
                 obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
                 GlassPanePopup.showPopup(obj);
-
                 return;
             }
-        } catch (NumberFormatException e) {
-           
-            EditProducts_PriceNumber obj = new EditProducts_PriceNumber();
-            obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-            GlassPanePopup.showPopup(obj);
-            
-            return;
+
+            // Xác định loại sản phẩm từ radio buttons
+            String loai = "";
+            if (rdoMini.isSelected()) {
+                loai = "Mini";
+            } else if (rdoNho.isSelected()) {
+                loai = "Nhỏ";
+            } else if (rdoVua.isSelected()) {
+                loai = "Vừa";
+            } else if (rdoLon.isSelected()) {
+                loai = "Lớn";
+            }
+
+            // Đặt trạng thái sản phẩm mặc định là "Hoạt động"
+            String trangThai = "Hoạt động";
+
+            // Câu lệnh SQL để chèn dữ liệu vào bảng Products, với Quantity mặc định là 1
+            String insertProductQuery = "INSERT INTO Products (ProductID, ProductName, Price, Color, Weight, Status, SupplierID, Quantity) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+            try (java.sql.PreparedStatement pstmtInsert = conn.prepareStatement(insertProductQuery)) {
+                pstmtInsert.setString(1, maSP);
+                pstmtInsert.setString(2, tenSP);
+                pstmtInsert.setDouble(3, gia);
+                pstmtInsert.setString(4, mau);
+                pstmtInsert.setString(5, loai);
+                pstmtInsert.setString(6, trangThai);
+                pstmtInsert.setString(7, supplierID);
+                pstmtInsert.setInt(8, 1); // Đặt Quantity mặc định là 1
+
+                // Thực thi câu lệnh chèn dữ liệu
+                int rowsInserted = pstmtInsert.executeUpdate();
+
+                // Thông báo thành công
+                if (rowsInserted > 0) {
+                    AddThanhCong obj = new AddThanhCong();
+                    obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+                    GlassPanePopup.showPopup(obj);
+                } else {
+                    // Xử lý nếu không có bản ghi nào được chèn
+                    // Có thể thêm thông báo lỗi hoặc xử lý khác nếu cần
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Xử lý lỗi nếu cần
         }
-
-        // Xác định loại sản phẩm từ radio buttons
-        String loai = "";
-        if (rdoMini.isSelected()) {
-            loai = "Mini";
-        } else if (rdoNho.isSelected()) {
-            loai = "Nhỏ";
-        } else if (rdoVua.isSelected()) {
-            loai = "Vừa";
-        } else if (rdoLon.isSelected()) {
-            loai = "Lớn";
-        }
-
-        // Đặt trạng thái sản phẩm mặc định là "Hoạt động"
-        String trangThai = "Hoạt động";
-
-        // Tạo đối tượng Product
-        Products product = new Products();
-        product.setProductID(maSP);
-        product.setProductName(tenSP);
-        product.setPrice(gia);
-        product.setColor(mau);
-        product.setWeight(loai);
-        product.setStatus(trangThai); // Thiết lập trạng thái là "Hoạt động"
-
-        // Thêm sản phẩm vào cơ sở dữ liệu
-        dao.insert(product);
-
-        // Thông báo thành công
-        AddThanhCong obj = new AddThanhCong();
-        obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
-        GlassPanePopup.showPopup(obj);
     }
 
     private void clearForm() {
@@ -410,7 +450,7 @@ public class Model_Add_Product extends javax.swing.JPanel {
     private com.inventory.swing.Button btnOK;
     private com.inventory.swing.Button button2;
     private com.inventory.swing.ComboBoxSuggestion cboMau;
-    private com.inventory.swing.ComboBoxSuggestion comboBoxSuggestion1;
+    private com.inventory.swing.ComboBoxSuggestion comboBoxProductID;
     private javax.swing.ButtonGroup grpLoai;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

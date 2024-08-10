@@ -6,11 +6,14 @@ package com.inventory.form;
 
 import com.inventory.log.Province;
 import com.inventory.log.ShippingFee;
+import com.inventory.main.Login;
 import com.inventory.utils.XJdbc;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,9 +69,10 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
     }
 
     private void updateFieldsBasedOnImportFormID(String importFormID) {
-        String query = "SELECT i.ImportFormID, i.SupplierID, i.ImportDate, d.Quantity "
+        String query = "SELECT s.SupplierName, i.ImportDate, d.Quantity "
                 + "FROM ImportForms i "
                 + "JOIN ImportFormDetails d ON i.ImportFormID = d.ImportFormID "
+                + "JOIN Suppliers s ON i.SupplierID = s.SupplierID "
                 + "WHERE i.ImportFormID = ?";
 
         try (java.sql.Connection connection = XJdbc.getConnection(); java.sql.PreparedStatement statement = connection.prepareStatement(query)) {
@@ -76,49 +80,26 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
             statement.setString(1, importFormID);
             try (java.sql.ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    // Lấy thông tin phiếu nhập
-                    String supplierID = resultSet.getString("SupplierID");
+                    // Lấy thông tin
+                    String supplierName = resultSet.getString("SupplierName");
                     String importDate = resultSet.getDate("ImportDate").toString();
                     int quantity = resultSet.getInt("Quantity");
 
-                    // Lấy tên nhà cung cấp và cập nhật vào txtNCC
-                    String supplierName = getSupplierName(supplierID);
+                    // Cập nhật giao diện
                     txtTenNCC.setText(supplierName);
-                    txtSoLuong.setText(String.valueOf(quantity));
                     txtNgayNhap.setText(importDate);
+                    txtSoLuong.setText(String.valueOf(quantity));
 
-                    // Lấy tổng giá của sản phẩm từ nhà cung cấp
-                    double totalPrice = getTotalPriceBySupplierName(supplierName);
+                    // Tính tổng giá bằng số lượng * 500
+                    double totalPrice = quantity * 500;
                     txtPhiSL.setText(String.valueOf(totalPrice));
                 } else {
-                    txtMaPX.setText("Không tìm thấy thông tin cho ID phiếu nhập này.");
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi truy vấn dữ liệu phiếu nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private double getTotalPriceBySupplierName(String supplierName) {
-        String query = "SELECT SUM(p.Quantity * 500) AS TotalPrice "
-                + "FROM Suppliers s "
-                + "JOIN Products p ON s.SupplierID = p.SupplierID "
-                + "WHERE s.SupplierName = ?";
-        try (java.sql.Connection connection = XJdbc.getConnection(); java.sql.PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setString(1, supplierName);
-            try (java.sql.ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getDouble("TotalPrice");
-                } else {
-                    return 0.0; // Trả về 0 nếu không có kết quả
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi lấy tổng giá của sản phẩm.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return 0.0;
         }
     }
 
@@ -166,7 +147,6 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                     String customerName = resultSet.getString("CustomerName");
                     txtName.setText(customerName);
                 } else {
-                    txtMaPX.setText("Không tìm thấy thông tin cho ID khách hàng này.");
                     txtName.setText("");
                 }
             }
@@ -181,7 +161,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
     }
 
     private String getCurrentDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy"); // Định dạng ngày
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // Định dạng ngày
         return sdf.format(new Date());
     }
 
@@ -202,6 +182,8 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         btnOK = new com.inventory.swing.Button();
         jLabel15 = new javax.swing.JLabel();
         txtTong = new com.inventory.swing.TextField();
+        jLabel16 = new javax.swing.JLabel();
+        uername = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -293,10 +275,28 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setText("Tổng tiền");
 
+        txtTong.setEditable(false);
         txtTong.setPreferredSize(new java.awt.Dimension(25, 40));
         txtTong.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTongActionPerformed(evt);
+            }
+        });
+
+        jLabel16.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel16.setText("Tên nhân viên :");
+
+        uername.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        uername.setForeground(new java.awt.Color(255, 255, 255));
+        uername.setText("Bảo");
+        uername.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                uernameAncestorAdded(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
 
@@ -309,7 +309,11 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                 .addComponent(jLabel15)
                 .addGap(18, 18, 18)
                 .addComponent(txtTong, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 440, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel16)
+                .addGap(18, 18, 18)
+                .addComponent(uername, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -323,7 +327,9 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                     .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15)
-                    .addComponent(txtTong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16)
+                    .addComponent(uername))
                 .addGap(16, 16, 16))
         );
 
@@ -358,7 +364,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
 
         txtMaPX.setPreferredSize(new java.awt.Dimension(25, 40));
 
-        txtNgayXuat.setEnabled(false);
+        txtNgayXuat.setEditable(false);
         txtNgayXuat.setPreferredSize(new java.awt.Dimension(25, 40));
         txtNgayXuat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -394,13 +400,13 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Phí vận chuyển");
 
-        txtNgayNhap.setEnabled(false);
+        txtNgayNhap.setEditable(false);
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Tên NCC");
 
-        txtSoLuong.setEnabled(false);
+        txtSoLuong.setEditable(false);
         txtSoLuong.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSoLuongActionPerformed(evt);
@@ -415,7 +421,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Tên khách hàng");
 
-        txtTenNCC.setEnabled(false);
+        txtTenNCC.setEditable(false);
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
@@ -425,6 +431,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("Phường/Xã");
 
+        txtName.setEditable(false);
         txtName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNameActionPerformed(evt);
@@ -576,13 +583,14 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         Province selectedProvince = (Province) cbo2.getSelectedItem();
         if (selectedProvince != null) {
             int fee = ShippingFee.calculateFee(selectedProvince.getDistance());
-            lblPhiVanChuyen.setText(String.valueOf(fee) + " VND");
+            lblPhiVanChuyen.setText(String.valueOf(fee));
         }
 
     }//GEN-LAST:event_cbo2ActionPerformed
 
     private void txtNgayXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNgayXuatActionPerformed
         // TODO add your handling code here:
+        loadDateNow();
     }//GEN-LAST:event_txtNgayXuatActionPerformed
 
     private void cboImportFormIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboImportFormIDActionPerformed
@@ -593,92 +601,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
         // TODO add your handling code here:
-        String exportFormID = txtMaPX.getText().trim();
-        String customerId = (String) cboImportFormID1.getSelectedItem();
-        String exportDateStr = txtNgayXuat.getText().trim();
-        String totalAmountStr = txtTong.getText().trim();
-        String hoaHongStr = lblHoaHong.getText().trim();
-        String phiVanChuyenStr = lblPhiVanChuyen.getText().trim();
-        String status = "Đã xuất"; // Giá trị cố định
-
-        String quantityStr = txtSoLuong.getText().trim();
-        String priceStr = txtTong.getText().trim();
-
-        // Kiểm tra mã phiếu xuất không được bỏ trống
-        if (exportFormID.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Mã phiếu xuất không được bỏ trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Kiểm tra mã phiếu xuất đã tồn tại
-        if (isExportFormIDExists(exportFormID)) {
-            JOptionPane.showMessageDialog(this, "Mã phiếu xuất đã tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Chuyển đổi dữ liệu sang kiểu phù hợp
-        double totalAmount = parseDoubleOrZero(totalAmountStr);
-        double hoaHong = parseDoubleOrZero(hoaHongStr);
-        double phiVanChuyen = parseDoubleOrZero(phiVanChuyenStr);
-        double price = parseDoubleOrZero(priceStr);
-        int quantity = parseIntOrZero(quantityStr);
-
-        java.sql.Date exportDate = null;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            java.util.Date date = sdf.parse(exportDateStr);
-            exportDate = new java.sql.Date(date.getTime());
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Kiểm tra mã khách hàng không bị null
-        if (customerId == null || customerId.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Câu lệnh SQL để chèn dữ liệu vào bảng ExportForms
-        String queryExportForms = "INSERT INTO ExportForms (ExportFormID, CustomerID, ExportDate, TotalAmount, CommissionFee, ShippingFee, Status) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        String queryExportFormDetails = "INSERT INTO ExportFormDetails (ExportFormDetailID, ExportFormID, Quantity, Price) "
-                + "VALUES (?, ?, ?, ?)";
-
-        try (java.sql.Connection connection = XJdbc.getConnection(); java.sql.PreparedStatement statementExportForms = connection.prepareStatement(queryExportForms); java.sql.PreparedStatement statementExportFormDetails = connection.prepareStatement(queryExportFormDetails)) {
-
-            // Đặt giá trị vào câu lệnh PreparedStatement cho ExportForms
-            statementExportForms.setString(1, exportFormID);
-            statementExportForms.setString(2, customerId);
-            statementExportForms.setDate(3, exportDate);
-            statementExportForms.setDouble(4, totalAmount);
-            statementExportForms.setDouble(5, hoaHong);
-            statementExportForms.setDouble(6, phiVanChuyen);
-            statementExportForms.setString(7, status);
-
-            // Thực thi câu lệnh cho ExportForms
-            int rowsInsertedExportForms = statementExportForms.executeUpdate();
-
-            // Đặt giá trị vào câu lệnh PreparedStatement cho ExportFormDetails
-            statementExportFormDetails.setString(1, exportFormID);
-            statementExportFormDetails.setString(2, exportFormID);
-            statementExportFormDetails.setInt(3, quantity);
-            statementExportFormDetails.setDouble(4, price);
-
-            // Thực thi câu lệnh cho ExportFormDetails
-            int rowsInsertedExportFormDetails = statementExportFormDetails.executeUpdate();
-
-            // Kiểm tra kết quả và hiển thị thông báo
-            if (rowsInsertedExportForms > 0 && rowsInsertedExportFormDetails > 0) {
-                JOptionPane.showMessageDialog(this, "Thông tin phiếu xuất đã được lưu thành công.", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Không thể lưu thông tin phiếu xuất.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi lưu thông tin phiếu xuất.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
+        addExportForm();
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void cboImportFormID1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboImportFormID1ActionPerformed
@@ -698,6 +621,128 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
     private void txtSoLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoLuongActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSoLuongActionPerformed
+
+    private void uernameAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_uernameAncestorAdded
+        // TODO add your handling code here:
+        String empId = Login.employeeId;
+        String fullName = getFullNameByEmployeeId(empId);
+        if (!fullName.isEmpty()) {
+            uername.setText(fullName);
+        } else {
+            uername.setText("Unknown User");
+        }
+    }//GEN-LAST:event_uernameAncestorAdded
+
+    private String getFullNameByEmployeeId(String employeeId) {
+        String fullName = "";
+
+        try (ResultSet rs = XJdbc.query("SELECT FullName FROM Employees WHERE EmployeeID = ?", employeeId)) {
+            if (rs.next()) {
+                fullName = rs.getString("FullName");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Xử lý lỗi ở đây (ví dụ: hiển thị thông báo lỗi)
+        }
+        return fullName;
+    }
+
+    private void addExportForm() {
+        String exportFormID = txtMaPX.getText().trim();
+        String customerId = (String) cboImportFormID1.getSelectedItem();
+        String exportDateStr = txtNgayXuat.getText().trim();
+        String totalAmountStr = txtTong.getText().trim();
+        String hoaHongStr = lblHoaHong.getText().trim();
+        String phiSLStr = txtPhiSL.getText().trim(); // Phí thêm vào để cộng với hoa hồng
+        String phiVanChuyenStr = lblPhiVanChuyen.getText().trim();
+        String status = "Đã xuất"; // Giá trị cố định
+
+        String quantityStr = txtSoLuong.getText().trim();
+
+        // Kiểm tra mã phiếu xuất không được bỏ trống
+        if (exportFormID.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Mã phiếu xuất không được bỏ trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Kiểm tra mã phiếu xuất đã tồn tại
+        if (isExportFormIDExists(exportFormID)) {
+            JOptionPane.showMessageDialog(this, "Mã phiếu xuất đã tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Kiểm tra trường txtPHX không được để trống
+        if (txtPHX.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Trường Phường Sã không được bỏ trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Chuyển đổi dữ liệu sang kiểu phù hợp
+        double totalAmount = parseDoubleOrZero(totalAmountStr);
+        double hoaHong = parseDoubleOrZero(hoaHongStr) + parseDoubleOrZero(phiSLStr); // Hoa hồng cộng thêm phí
+        double phiVanChuyen = parseDoubleOrZero(phiVanChuyenStr);
+        int quantity = parseIntOrZero(quantityStr);
+
+        java.sql.Date exportDate = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            java.util.Date date = sdf.parse(exportDateStr);
+            exportDate = new java.sql.Date(date.getTime());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Kiểm tra mã khách hàng không bị null
+        if (customerId == null || customerId.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String employeeID = Login.employeeId; // Lấy EmployeeID từ thông tin đăng nhập
+        String employeeName = getFullNameByEmployeeId(employeeID); // Lấy tên đầy đủ của nhân viên
+
+        // Câu lệnh SQL để chèn dữ liệu vào bảng ExportForms
+        String queryExportForms = "INSERT INTO ExportForms (ExportFormID, CustomerID, ExportDate, TotalAmount, CommissionFee, ShippingFee, Status, EmployeeID) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String queryExportFormDetails = "INSERT INTO ExportFormDetails (ExportFormDetailID, ExportFormID, Quantity) "
+                + "VALUES (?, ?, ?)";
+
+        try (java.sql.Connection connection = XJdbc.getConnection(); java.sql.PreparedStatement statementExportForms = connection.prepareStatement(queryExportForms); java.sql.PreparedStatement statementExportFormDetails = connection.prepareStatement(queryExportFormDetails)) {
+
+            // Đặt giá trị vào câu lệnh PreparedStatement cho ExportForms
+            statementExportForms.setString(1, exportFormID);
+            statementExportForms.setString(2, customerId);
+            statementExportForms.setDate(3, exportDate);
+            statementExportForms.setDouble(4, totalAmount);
+            statementExportForms.setDouble(5, hoaHong);
+            statementExportForms.setDouble(6, phiVanChuyen);
+            statementExportForms.setString(7, status);
+            statementExportForms.setString(8, employeeID); // Thêm EmployeeID vào câu lệnh
+
+            // Thực thi câu lệnh cho ExportForms
+            int rowsInsertedExportForms = statementExportForms.executeUpdate();
+
+            // Đặt giá trị vào câu lệnh PreparedStatement cho ExportFormDetails
+            statementExportFormDetails.setString(1, exportFormID);
+            statementExportFormDetails.setString(2, exportFormID);
+            statementExportFormDetails.setInt(3, quantity);
+
+            // Thực thi câu lệnh cho ExportFormDetails
+            int rowsInsertedExportFormDetails = statementExportFormDetails.executeUpdate();
+
+            // Kiểm tra kết quả và hiển thị thông báo
+            if (rowsInsertedExportForms > 0 && rowsInsertedExportFormDetails > 0) {
+                JOptionPane.showMessageDialog(this, "Thông tin phiếu xuất đã được lưu thành công. Nhân viên: " + employeeName, "Thành công", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Không thể lưu thông tin phiếu xuất.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi lưu thông tin phiếu xuất.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     // Hàm kiểm tra mã phiếu xuất đã tồn tại hay chưa
     private boolean isExportFormIDExists(String exportFormID) {
@@ -765,9 +810,6 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                 double phiVanChuyen = parseDoubleOrZero(phiVanChuyenText);
                 System.out.println("VC" + phiVanChuyenText);
 
-                // Lấy giá trị từ lblHoaHong (JLabel)
-//        String hoaHongText = lblHoaHong.getText();
-//        double hoaHong = parseDoubleOrZero(hoaHongText);
                 System.out.println("HH" + hoaHong);
 
                 // Lấy giá trị từ txtPhiSL (JTextField)
@@ -778,7 +820,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                 // Tính toán tổng
                 double tong = hoaHong * phiSL + phiVanChuyen;
 
-                System.out.println("" + tong);
+                System.out.println(tong);
                 // Cập nhật giá trị vào txtTong
                 txtTong.setText(String.valueOf(tong));
 
@@ -791,34 +833,6 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         }
     }
 
-//     private void updateLabel() {
-//        String ngayNhapStr = txtNgayNhap.getText();
-//        String commissionText = "";
-//        if (!ngayNhapStr.isEmpty()) {
-//            try {
-//                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-//                Date ngayNhap = sdf.parse(ngayNhapStr);
-//                Date ngayHienTai = new Date();
-//
-//                long diffInMillies = Math.abs(ngayHienTai.getTime() - ngayNhap.getTime());
-//                long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-//
-//                double hoaHong = calculateCommission(diff);
-//                commissionText = "Hoa Hồng: " + hoaHong + "%";
-//            } catch (Exception ex) {
-//                commissionText = "Định dạng ngày không hợp lệ!";
-//            }
-//        }
-//
-//        Province selectedProvince = (Province) cbo2.getSelectedItem();
-//        String shippingFeeText = "";
-//        if (selectedProvince != null) {
-//            int fee = ShippingFee.calculateFee(selectedProvince.getDistance());
-//            shippingFeeText = "Phí Vận Chuyển: " + fee;
-//        }
-//
-//        lblPhiVanChuyen.setText(shippingFeeText + " | " + commissionText);
-//    }
     //thêm tỉnh vào cbo
     private void addProvinces() {
         // Danh sách các tỉnh và khoảng cách từ Cần Thơ (km)
@@ -906,6 +920,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -928,5 +943,6 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
     private com.inventory.swing.TextField txtSoLuong;
     private com.inventory.swing.TextField txtTenNCC;
     private com.inventory.swing.TextField txtTong;
+    private javax.swing.JLabel uername;
     // End of variables declaration//GEN-END:variables
 }

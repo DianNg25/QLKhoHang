@@ -118,7 +118,11 @@
                   <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="txtTong" min="-2" pref="95" max="-2" attributes="0"/>
-                  <EmptySpace pref="440" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="uername" min="-2" pref="253" max="-2" attributes="0"/>
+                  <EmptySpace pref="42" max="32767" attributes="0"/>
                   <Component id="button1" min="-2" pref="90" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnOK" min="-2" pref="90" max="-2" attributes="0"/>
@@ -135,6 +139,8 @@
                       <Component id="btnOK" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtTong" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="uername" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
               </Group>
@@ -189,12 +195,38 @@
         </Component>
         <Component class="com.inventory.swing.TextField" name="txtTong">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[25, 40]"/>
             </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTongActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel16">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="SansSerif" size="14" style="1"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="T&#xea;n nh&#xe2;n vi&#xea;n :"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="uername">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="SansSerif" size="14" style="1"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="B&#x1ea3;o"/>
+          </Properties>
+          <Events>
+            <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="uernameAncestorAdded"/>
           </Events>
         </Component>
       </SubComponents>
@@ -451,7 +483,7 @@
         </Component>
         <Component class="com.inventory.swing.TextField" name="txtNgayXuat">
           <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[25, 40]"/>
             </Property>
@@ -524,7 +556,7 @@
         </Component>
         <Component class="com.inventory.swing.TextField" name="txtNgayNhap">
           <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="editable" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel10">
@@ -540,7 +572,7 @@
         </Component>
         <Component class="com.inventory.swing.TextField" name="txtSoLuong">
           <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="editable" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtSoLuongActionPerformed"/>
@@ -570,7 +602,7 @@
         </Component>
         <Component class="com.inventory.swing.TextField" name="txtTenNCC">
           <Properties>
-            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="editable" type="boolean" value="false"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel13">
@@ -598,6 +630,9 @@
         <Component class="com.inventory.swing.TextField" name="txtPHX">
         </Component>
         <Component class="com.inventory.swing.TextField" name="txtName">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNameActionPerformed"/>
           </Events>
