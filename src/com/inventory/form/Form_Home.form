@@ -117,10 +117,10 @@
             <Container class="com.inventory.swing.chart.PanelShadow" name="panelShadow1">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="9a" green="63" red="1e" type="rgb"/>
+                  <Color blue="45" green="3b" red="22" type="rgb"/>
                 </Property>
                 <Property name="colorGradient" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="9a" green="63" red="0" type="rgb"/>
+                  <Color blue="2f" green="26" red="11" type="rgb"/>
                 </Property>
               </Properties>
               <Constraints>
@@ -155,6 +155,7 @@
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="45" green="3b" red="22" type="rgb"/>
                     </Property>
+                    <Property name="autoscrolls" type="boolean" value="true"/>
                   </Properties>
                 </Component>
               </SubComponents>

@@ -192,10 +192,11 @@ public class Form_Home extends javax.swing.JPanel {
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        panelShadow1.setBackground(new java.awt.Color(30, 99, 154));
-        panelShadow1.setColorGradient(new java.awt.Color(0, 99, 154));
+        panelShadow1.setBackground(new java.awt.Color(34, 59, 69));
+        panelShadow1.setColorGradient(new java.awt.Color(17, 38, 47));
 
         chart.setBackground(new java.awt.Color(34, 59, 69));
+        chart.setAutoscrolls(true);
 
         javax.swing.GroupLayout panelShadow1Layout = new javax.swing.GroupLayout(panelShadow1);
         panelShadow1.setLayout(panelShadow1Layout);

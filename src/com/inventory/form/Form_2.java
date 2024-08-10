@@ -36,16 +36,13 @@ public class Form_2 extends javax.swing.JPanel {
     /**
      * Creates new form Form_1
      */
-    
     public Form_2() {
         initComponents();
         loadData();
         customizeTable();
     }
-    
-    
-    
-     private void customizeTable() {
+
+    private void customizeTable() {
 
         tblNhapHang.setShowHorizontalLines(true);
         tblNhapHang.setGridColor(new Color(230, 230, 230));
@@ -102,82 +99,72 @@ public class Form_2 extends javax.swing.JPanel {
         p.setBackground(Color.WHITE);
         spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
     }
-    
-    
-    
-    
-    
-    
-   private void loadData() {
-    String sql = "SELECT "
-               + "ifm.ImportFormID, "
-               + "s.SupplierName, "
-               + "ifm.ImportDate, "
-               + "COALESCE(SUM(p.Quantity), 0) AS TotalQuantityProducts, "
-               + "COALESCE(SUM(ifd.Quantity), 0) AS TotalQuantityImports "
-               + "FROM ImportForms ifm "
-               + "JOIN Suppliers s ON ifm.SupplierID = s.SupplierID "
-               + "LEFT JOIN ImportFormDetails ifd ON ifm.ImportFormID = ifd.ImportFormID "
-               + "LEFT JOIN Products p ON s.SupplierID = p.SupplierID "
-               + "GROUP BY ifm.ImportFormID, s.SupplierName, ifm.ImportDate";
 
-    try (java.sql.Connection conn = XJdbc.getConnection();
-         java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    private void loadData() {
+        String sql = "SELECT "
+                + "ifm.ImportFormID, "
+                + "s.SupplierName, "
+                + "ifm.ImportDate, "
+                + "COALESCE(SUM(p.Quantity), 0) AS TotalQuantityProducts, "
+                + "COALESCE(SUM(ifd.Quantity), 0) AS TotalQuantityImports "
+                + "FROM ImportForms ifm "
+                + "JOIN Suppliers s ON ifm.SupplierID = s.SupplierID "
+                + "LEFT JOIN ImportFormDetails ifd ON ifm.ImportFormID = ifd.ImportFormID "
+                + "LEFT JOIN Products p ON s.SupplierID = p.SupplierID "
+                + "GROUP BY ifm.ImportFormID, s.SupplierName, ifm.ImportDate";
 
-        try (java.sql.ResultSet rs = pstmt.executeQuery()) {
-            DefaultTableModel tableModel = (DefaultTableModel) tblNhapHang.getModel();
-            tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
+        try (java.sql.Connection conn = XJdbc.getConnection(); java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            while (rs.next()) {
-                Object[] row = new Object[]{
-                    rs.getString("ImportFormID"),          // Mã phiếu nhập
-                    rs.getString("SupplierName"),          // Tên nhà cung cấp
-                    rs.getDate("ImportDate"),              // Ngày nhập
-                    rs.getInt("TotalQuantityProducts"),    // Tổng số lượng sản phẩm từ bảng Products
-                    rs.getInt("TotalQuantityImports")      // Tổng số lượng sản phẩm nhập từ bảng ImportFormDetails
-                };
-                tableModel.addRow(row);
+            try (java.sql.ResultSet rs = pstmt.executeQuery()) {
+                DefaultTableModel tableModel = (DefaultTableModel) tblNhapHang.getModel();
+                tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
+
+                while (rs.next()) {
+                    Object[] row = new Object[]{
+                        rs.getString("ImportFormID"), // Mã phiếu nhập
+                        rs.getString("SupplierName"), // Tên nhà cung cấp
+                        rs.getDate("ImportDate"), // Ngày nhập
+                        rs.getInt("TotalQuantityProducts"), // Tổng số lượng sản phẩm từ bảng Products
+                        rs.getInt("TotalQuantityImports") // Tổng số lượng sản phẩm nhập từ bảng ImportFormDetails
+                    };
+                    tableModel.addRow(row);
+                }
+
+                tblNhapHang.setModel(tableModel);
+
             }
 
-            tblNhapHang.setModel(tableModel);
-
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu từ cơ sở dữ liệu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu từ cơ sở dữ liệu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
-}
 
-    
-    
     protected List<ImportForm> selectBySql(String sql, Object... args) {
-    List<ImportForm> list = new ArrayList<>();
-    try {
-        java.sql.ResultSet rs = null;
+        List<ImportForm> list = new ArrayList<>();
         try {
-            rs = XJdbc.query(sql, args);
-            while (rs.next()) {
-                ImportForm entity = new ImportForm();
-                entity.setImportFormID(rs.getString("ImportFormID"));
-                entity.setSupplierName(rs.getString("SupplierName"));
-                entity.setImportDate(rs.getDate("ImportDate"));
-                entity.setTotalAmount(rs.getBigDecimal("TotalAmount"));
-                list.add(entity);
+            java.sql.ResultSet rs = null;
+            try {
+                rs = XJdbc.query(sql, args);
+                while (rs.next()) {
+                    ImportForm entity = new ImportForm();
+                    entity.setImportFormID(rs.getString("ImportFormID"));
+                    entity.setSupplierName(rs.getString("SupplierName"));
+                    entity.setImportDate(rs.getDate("ImportDate"));
+                    entity.setTotalAmount(rs.getBigDecimal("TotalAmount"));
+                    list.add(entity);
+                }
+            } finally {
+                if (rs != null) {
+                    rs.getStatement().getConnection().close();
+                }
             }
-        } finally {
-            if (rs != null) {
-                rs.getStatement().getConnection().close();
-            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        throw new RuntimeException(ex);
+        return list;
     }
-    return list;
-}
-
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -372,6 +359,8 @@ public class Form_2 extends javax.swing.JPanel {
 
     private void btnAddExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddExcelActionPerformed
         JDialog add = new JDialog();
+
+        add.setModal(true);
         ImportExcel model = new ImportExcel();
         add.setUndecorated(true);
         add.getContentPane().add(model);

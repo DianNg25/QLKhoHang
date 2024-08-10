@@ -358,6 +358,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
 
         txtMaPX.setPreferredSize(new java.awt.Dimension(25, 40));
 
+        txtNgayXuat.setEnabled(false);
         txtNgayXuat.setPreferredSize(new java.awt.Dimension(25, 40));
         txtNgayXuat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -393,10 +394,13 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Phí vận chuyển");
 
+        txtNgayNhap.setEnabled(false);
+
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Tên NCC");
 
+        txtSoLuong.setEnabled(false);
         txtSoLuong.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSoLuongActionPerformed(evt);
@@ -410,6 +414,8 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Tên khách hàng");
+
+        txtTenNCC.setEnabled(false);
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));

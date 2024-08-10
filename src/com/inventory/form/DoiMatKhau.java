@@ -35,7 +35,6 @@ public class DoiMatKhau extends javax.swing.JPanel {
 
     public DoiMatKhau() {
         initComponents();
-
     }
 
     @SuppressWarnings("unchecked")

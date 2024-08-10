@@ -10,8 +10,14 @@ import com.inventory.dao.ProductsDAO;
 import com.inventory.entity.ImportForm;
 import com.inventory.entity.ImportFormDetail;
 import com.inventory.entity.Products;
+import com.inventory.message.DeleteEmployees1;
+import com.inventory.message.ErrorAll;
+import com.inventory.message.InformationSuppliers_Null;
 import com.inventory.swing.ScrollBar;
 import com.inventory.swing.TableHeader;
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
+import com.inventory.swing.glasspanepopup.ModalErrorGlassPanePopup;
+import com.inventory.swing.glasspanepopup.ModalErrorOption;
 import com.inventory.utils.XJdbc;
 import com.sun.jdi.connect.spi.Connection;
 
@@ -50,6 +56,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.io.IOException;
 import java.sql.SQLException;
+import javax.swing.JDialog;
 
 /**
  *
@@ -349,10 +356,25 @@ public class ImportExcel extends javax.swing.JPanel {
         } else {
             // Nhập sản phẩm từ tệp Excel
             if (importProductsFromExcel(file)) {
-                JOptionPane.showMessageDialog(this, "Import danh sách sản phẩm thành công!");
+//                JOptionPane.showMessageDialog(this, "Import danh sách sản phẩm thành công!");
                 // Cập nhật bảng sản phẩm nếu cần
 //                updateProductTable(); // Ensure this method updates the table correctly
+//                ErrorAll obj = new ErrorAll();
+//                obj.setMessage("Đã thêm thành công");
+////                obj.eventOK((ae) -> GlassPanePopup.closePopupLast());
+//                GlassPanePopup.showPopup(obj);
+
+                SwingUtilities.invokeLater(() -> {
+                    ErrorAll errorPanel = new ErrorAll();
+                    errorPanel.eventOK((ae) -> {
+                        errorPanel.setMessage("Đã thêm thành công!");
+                        ModalErrorGlassPanePopup.closePopupLast();
+                    });
+                    ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+                });
+
             } else {
+
                 JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi nhập danh sách sản phẩm!");
             }
         }
