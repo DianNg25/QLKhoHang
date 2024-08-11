@@ -51,10 +51,10 @@ public class MenuEmployee extends javax.swing.JPanel {
         listMenu1.addItem(new Model_Menu("4", "Quản lý xuất hàng", Model_Menu.MenuType.MENU));
         listMenu1.addItem(new Model_Menu("5", "Quản lý nhà cung cấp", Model_Menu.MenuType.MENU));
 
-        listMenu1.addItem(new Model_Menu("7", "Quản lý khách hàng", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("7", "Hóa đơn", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("custommer", "Quản lý khách hàng", Model_Menu.MenuType.MENU));
 
-        listMenu1.addItem(new Model_Menu("7", "Đổi mật khẩu", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("changepass", "Đổi mật khẩu", Model_Menu.MenuType.MENU));
+        listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));

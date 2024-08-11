@@ -281,7 +281,7 @@ public class Form_1 extends javax.swing.JPanel {
             }
         });
 
-        btnDel.setBackground(new java.awt.Color(102, 102, 255));
+        btnDel.setBackground(new java.awt.Color(255, 0, 0));
         btnDel.setForeground(new java.awt.Color(255, 255, 255));
         btnDel.setText("Xóa");
         btnDel.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
@@ -291,7 +291,7 @@ public class Form_1 extends javax.swing.JPanel {
             }
         });
 
-        button1.setBackground(new java.awt.Color(102, 102, 255));
+        button1.setBackground(new java.awt.Color(0, 204, 51));
         button1.setForeground(new java.awt.Color(255, 255, 255));
         button1.setText("Sửa");
         button1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
@@ -306,11 +306,11 @@ public class Form_1 extends javax.swing.JPanel {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(534, Short.MAX_VALUE)
-                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addContainerGap(466, Short.MAX_VALUE)
                 .addComponent(btnDel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(50, 50, 50)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54)
                 .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
         );

@@ -271,9 +271,9 @@ public class Form_7 extends javax.swing.JPanel {
             }
         });
 
-        btnXoa.setBackground(new java.awt.Color(102, 102, 255));
+        btnXoa.setBackground(new java.awt.Color(255, 0, 0));
         btnXoa.setForeground(new java.awt.Color(255, 255, 255));
-        btnXoa.setText("xóa");
+        btnXoa.setText("Xóa");
         btnXoa.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -281,7 +281,7 @@ public class Form_7 extends javax.swing.JPanel {
             }
         });
 
-        btnSua.setBackground(new java.awt.Color(102, 102, 255));
+        btnSua.setBackground(new java.awt.Color(0, 204, 51));
         btnSua.setForeground(new java.awt.Color(255, 255, 255));
         btnSua.setText("Sửa");
         btnSua.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
