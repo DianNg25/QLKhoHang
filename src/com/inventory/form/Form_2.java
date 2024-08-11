@@ -1,41 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package com.inventory.form;
 
 import com.inventory.entity.ImportForm;
 import com.inventory.swing.ScrollBar;
-import com.inventory.swing.TableActionCellEditor;
-import com.inventory.swing.TableActionCellRender;
-import com.inventory.swing.TableActionEvent;
 import com.inventory.swing.TableHeader;
+import com.inventory.swing.datechooser.DateBetween;
+import com.inventory.swing.datechooser.DateChooser;
+import com.inventory.swing.datechooser.listener.DateChooserAction;
+import com.inventory.swing.datechooser.listener.DateChooserAdapter;
 import com.inventory.utils.XJdbc;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author ADMIN
- */
 public class Form_2 extends javax.swing.JPanel {
 
-    /**
-     * Creates new form Form_1
-     */
     public Form_2() {
         initComponents();
         loadData();
@@ -184,10 +174,10 @@ public class Form_2 extends javax.swing.JPanel {
         tblNhapHang = new com.inventory.swing.Table();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        textField3 = new com.inventory.swing.TextField();
         jLabel4 = new javax.swing.JLabel();
-        textField1 = new com.inventory.swing.TextField();
         button1 = new com.inventory.swing.Button();
+        dateForm = new javax.swing.JFormattedTextField();
+        toDate = new javax.swing.JFormattedTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(878, 633));
@@ -273,23 +263,24 @@ public class Form_2 extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel6.setText("Từ ngày");
 
-        textField3.setBackground(new java.awt.Color(72, 142, 174));
-        textField3.setForeground(new java.awt.Color(255, 255, 255));
-        textField3.setCaretColor(new java.awt.Color(255, 255, 255));
-        textField3.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-
         jLabel4.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel4.setText("Đến ngày");
-
-        textField1.setBackground(new java.awt.Color(72, 142, 174));
-        textField1.setForeground(new java.awt.Color(255, 255, 255));
-        textField1.setCaretColor(new java.awt.Color(255, 255, 255));
-        textField1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
 
         button1.setBackground(new java.awt.Color(102, 102, 255));
         button1.setForeground(new java.awt.Color(255, 255, 255));
         button1.setText("Tìm Kiếm");
         button1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
+
+        dateForm.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yyyy"))));
+        dateForm.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+
+        toDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yyyy"))));
+        toDate.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -298,27 +289,27 @@ public class Form_2 extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel6)
-                .addGap(34, 34, 34)
-                .addComponent(textField3, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addGap(18, 18, 18)
+                .addComponent(dateForm, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
                 .addComponent(jLabel4)
-                .addGap(34, 34, 34)
-                .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addGap(18, 18, 18)
+                .addComponent(toDate, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(textField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(15, 15, 15))
+                    .addComponent(jLabel6)
+                    .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dateForm, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(toDate, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -342,7 +333,7 @@ public class Form_2 extends javax.swing.JPanel {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 465, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -369,11 +360,72 @@ public class Form_2 extends javax.swing.JPanel {
         add.setVisible(true);
     }//GEN-LAST:event_btnAddExcelActionPerformed
 
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        // TODO add your handling code here:
+        try {
+            // Lấy ngày bắt đầu và ngày kết thúc từ JFormattedTextField
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date fromDate = dateFormat.parse(dateForm.getText());
+            java.util.Date toDate = dateFormat.parse(this.toDate.getText());
+
+            // Kiểm tra tính hợp lệ của ngày
+            if (fromDate.after(toDate)) {
+                JOptionPane.showMessageDialog(this, "Ngày bắt đầu không thể sau ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return; // Dừng xử lý nếu ngày không hợp lệ
+            }
+
+            // Câu truy vấn SQL với điều kiện lọc theo ngày
+            String sql = "SELECT "
+                    + "ifm.ImportFormID, "
+                    + "s.SupplierName, "
+                    + "ifm.ImportDate, "
+                    + "COALESCE(SUM(p.Quantity), 0) AS TotalQuantityProducts, "
+                    + "COALESCE(SUM(ifd.Quantity), 0) AS TotalQuantityImports "
+                    + "FROM ImportForms ifm "
+                    + "JOIN Suppliers s ON ifm.SupplierID = s.SupplierID "
+                    + "LEFT JOIN ImportFormDetails ifd ON ifm.ImportFormID = ifd.ImportFormID "
+                    + "LEFT JOIN Products p ON s.SupplierID = p.SupplierID "
+                    + "WHERE ifm.ImportDate BETWEEN ? AND ? " // Thêm điều kiện lọc theo ngày
+                    + "GROUP BY ifm.ImportFormID, s.SupplierName, ifm.ImportDate";
+
+            try (java.sql.Connection conn = XJdbc.getConnection(); java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                // Thiết lập giá trị cho các tham số trong câu truy vấn
+                pstmt.setDate(1, new java.sql.Date(fromDate.getTime()));
+                pstmt.setDate(2, new java.sql.Date(toDate.getTime()));
+
+                try (java.sql.ResultSet rs = pstmt.executeQuery()) {
+                    DefaultTableModel tableModel = (DefaultTableModel) tblNhapHang.getModel();
+                    tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
+
+                    while (rs.next()) {
+                        Object[] row = new Object[]{
+                            rs.getString("ImportFormID"),
+                            rs.getString("SupplierName"),
+                            rs.getDate("ImportDate"),
+                            rs.getInt("TotalQuantityProducts"),
+                            rs.getInt("TotalQuantityImports")
+                        };
+                        tableModel.addRow(row);
+                    }
+
+                    tblNhapHang.setModel(tableModel);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm dữ liệu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng ngày (dd/MM/yyyy).", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_button1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button btnAddExcel;
     private com.inventory.swing.Button button1;
     private com.inventory.swing.Button button3;
+    private javax.swing.JFormattedTextField dateForm;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
@@ -382,7 +434,6 @@ public class Form_2 extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane spTable;
     private com.inventory.swing.Table tblNhapHang;
-    private com.inventory.swing.TextField textField1;
-    private com.inventory.swing.TextField textField3;
+    private javax.swing.JFormattedTextField toDate;
     // End of variables declaration//GEN-END:variables
 }
