@@ -6,86 +6,128 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
+import javax.swing.JTable;
 
 public class Form_6 extends javax.swing.JPanel {
 
     public Form_6() {
         initComponents();
-        tbl.getColumnModel().getColumn(4).setCellRenderer(new TableCellRender());
-        tbl.getColumnModel().getColumn(4).setCellEditor(new TableCellEditor());
-        DefaultTableModel subTable = new DefaultTableModel();
-        subTable.addColumn("Mã SP");
-        subTable.addColumn("Tên SP");
-        subTable.addColumn("Số lượng");
-        subTable.addColumn("Giá");
-
+        setupTable();
+        updateComboBox();
         comboBoxSuggestion2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Lấy mã phiếu xuất được chọn
                 String selectedMaPhieuXuat = (String) comboBoxSuggestion2.getSelectedItem();
-
-                // Xóa dữ liệu cũ trên bảng
-                DefaultTableModel model = (DefaultTableModel) tbl.getModel();
-                model.setRowCount(0);
-
-                // Truy vấn dữ liệu từ cơ sở dữ liệu dựa trên mã phiếu xuất
-                loadDataToTable(selectedMaPhieuXuat);
+                if (selectedMaPhieuXuat != null) {
+                    loadDataToTable(selectedMaPhieuXuat);
+                }
             }
         });
+        // Gán giá trị mặc định cho selectedMaPhieuXuat hoặc để trống nếu không có giá trị mặc định
+        String defaultMaPhieuXuat = "MA_PHIEU_XUAT_CHUNG"; // Thay thế bằng giá trị mặc định thực tế nếu có
+        loadDataToTable(defaultMaPhieuXuat);
+
     }
 
-    private void loadDataToTable(String maPhieuXuat) {
+    private void setupTable() {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Tên khách hàng");
+        model.addColumn("Ngày xuất");
+        model.addColumn("Nhân viên");
+        model.addColumn("Tổng cộng");
+        model.addColumn("Chi tiết");
+
+        tbl.setModel(model);
+        tbl.getColumnModel().getColumn(4).setCellRenderer(new TableCellRender());
+        tbl.getColumnModel().getColumn(4).setCellEditor(new TableCellEditor());
+       
+
+    }
+
+    
+  private void loadDataToTable(String maPhieuXuat) {
+    System.out.println("Loading data for ExportFormID: " + maPhieuXuat);
     try {
-        // 1. Truy vấn dữ liệu từ cơ sở dữ liệu, bao gồm cả việc nối với các bảng khác
-        String query = "SELECT kh.CustomerName, px.ExportDate, px.TotalAmount, nv.FullName, ct.ProductID, sp.ProductName, ct.Quantity, ct.Price " +
-                       "FROM ExportForm px " +
-                       "JOIN ImportFormDetails ct ON px.ExportFormID = ct.ExportFormID " +
-                       "JOIN Employees nv ON px.EmployeeID = nv.EmployeeID " +
-                       "JOIN Products sp ON ct.ProductID = sp.ProductID " +
-                       "JOIN Customers kh ON px.CustomerID = kh.CustomerID " +
-                       "WHERE px.ExportFormID = ?";
+        // Lấy thông tin cơ bản từ bảng ExportForms
+        String query = "SELECT kh.CustomerName, px.ExportDate, px.TotalAmount, nv.FullName AS EmployeeName "
+                + "FROM ExportForms px "
+                + "JOIN Employees nv ON px.EmployeeID = nv.EmployeeID "
+                + "JOIN Customers kh ON px.CustomerID = kh.CustomerID "
+                + "WHERE px.ExportFormID = ?";
+
         ResultSet resultSet = XJdbc.query(query, maPhieuXuat);
+        if (resultSet.next()) {
+            String customerName = resultSet.getString("CustomerName");
+            java.sql.Date exportDate = resultSet.getDate("ExportDate");
+            double totalAmount = resultSet.getDouble("TotalAmount");
+            String employeeName = resultSet.getString("EmployeeName");
 
-        DefaultTableModel model = (DefaultTableModel) tbl.getModel();
+            // Cập nhật dữ liệu chính vào bảng
+            DefaultTableModel model = (DefaultTableModel) tbl.getModel();
+            model.setRowCount(0); // Xóa dữ liệu cũ
 
-        while (resultSet.next()) {
-            // 2. Tạo DefaultTableModel cho bảng con
-            DefaultTableModel subTable = new DefaultTableModel();
-            subTable.addColumn("Mã SP");
-            subTable.addColumn("Tên SP");
-            subTable.addColumn("Số lượng");
-            subTable.addColumn("Giá");
-
-            // Thêm dữ liệu vào bảng con
-            subTable.addRow(new Object[]{
-                resultSet.getString("ProductID"),
-                resultSet.getString("ProductName"), // Lấy tên sản phẩm từ bảng SanPham
-                resultSet.getInt("Quantity"),
-                resultSet.getDouble("Price")
-            });
-
-            // 3. Thêm dữ liệu vào bảng chính
             model.addRow(new Object[]{
-                resultSet.getString("CustomerName"),
-                resultSet.getDate("ExportDate"),
-                resultSet.getString("FullName"), // Lấy tên nhân viên từ bảng NhanVien
-                resultSet.getDouble("TotalAmount"),
-                subTable
+                customerName,
+                exportDate,
+                employeeName,
+                totalAmount,
+                "" // Cột chi tiết sẽ được cập nhật sau
             });
         }
 
-        // 4. Cập nhật giao diện bảng
-        model.fireTableDataChanged();
-
-        // Đóng ResultSet
         resultSet.close();
 
+        // Lấy thông tin nhà cung cấp từ bảng ExportForms
+        String supplierQuery = "SELECT sp.SupplierName "
+                + "FROM ExportForms ef "
+                + "JOIN Suppliers sp ON ef.SupplierID = sp.SupplierID "
+                + "WHERE ef.ExportFormID = ?";
+
+        ResultSet supplierResultSet = XJdbc.query(supplierQuery, maPhieuXuat);
+        String supplierName = "";
+        if (supplierResultSet.next()) {
+            supplierName = supplierResultSet.getString("SupplierName");
+        }
+        supplierResultSet.close();
+
+        // Cập nhật dữ liệu nhà cung cấp vào bảng
+        DefaultTableModel model = (DefaultTableModel) tbl.getModel();
+        int rowCount = model.getRowCount();
+        if (rowCount > 0) {
+            Object currentDetail = model.getValueAt(rowCount - 1, 4);
+            if (currentDetail != null && !currentDetail.toString().isEmpty()) {
+                model.setValueAt(currentDetail.toString() + "\n" + "Supplier: " + supplierName, rowCount - 1, 4);
+            } else {
+                model.setValueAt("Supplier: " + supplierName, rowCount - 1, 4);
+            }
+        }
+        System.out.println("Data loaded successfully.");
+
     } catch (Exception e) {
-        e.printStackTrace(); // Xử lý ngoại lệ phù hợp
+        e.printStackTrace(); // Ghi log lỗi
     }
 }
 
+
+
+private void updateComboBox() {
+    try {
+        String query = "SELECT ExportFormID FROM ExportForms";
+        ResultSet resultSet = XJdbc.query(query);
+
+        // Clear existing items
+        comboBoxSuggestion2.removeAllItems();
+
+        while (resultSet.next()) {
+            comboBoxSuggestion2.addItem(resultSet.getString("ExportFormID"));
+        }
+
+        resultSet.close();
+
+    } catch (Exception e) {
+        e.printStackTrace(); // Handle exceptions appropriately
+    }
+}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -105,6 +147,11 @@ public class Form_6 extends javax.swing.JPanel {
 
         comboBoxSuggestion2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         comboBoxSuggestion2.setPreferredSize(new java.awt.Dimension(186, 38));
+        comboBoxSuggestion2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxSuggestion2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -179,6 +226,11 @@ public class Form_6 extends javax.swing.JPanel {
                 .addGap(20, 20, 20))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void comboBoxSuggestion2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxSuggestion2ActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_comboBoxSuggestion2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

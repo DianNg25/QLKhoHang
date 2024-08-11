@@ -92,6 +92,9 @@
               <Dimension value="[186, 38]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboBoxSuggestion2ActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

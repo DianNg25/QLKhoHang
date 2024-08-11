@@ -430,7 +430,7 @@ public class Model_Add_EnterCoupon extends javax.swing.JPanel {
         BigDecimal price = parseBigDecimalOrZero(priceStr);
         java.sql.Date importDate = null;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date date = sdf.parse(importDateStr);
             importDate = new java.sql.Date(date.getTime());
         } catch (Exception e) {
@@ -520,7 +520,7 @@ public class Model_Add_EnterCoupon extends javax.swing.JPanel {
 
     private void setCurrentDate() {
         // Định dạng ngày tháng
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = sdf.format(new Date());
 
         // Cập nhật trường txtNgayHienTai

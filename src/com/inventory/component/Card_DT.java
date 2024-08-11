@@ -157,66 +157,32 @@ public class Card_DT extends javax.swing.JPanel {
         setProcedure();
     }//GEN-LAST:event_lblDoanhThuAncestorAdded
 
-    private void setProcedure() {
-        List<ModelData> listData = new ArrayList<>();
-        for (int month = 1; month <= 12; month++) {
-            listData.add(new ModelData(getMonthName(month), 0, 0, 0, 0)); // Khởi tạo với giá trị 0 cho tất cả các tháng
-        }
+private void setProcedure() {
+    // Clear previous data or initialize necessary variables
+    lblDoanhThu.setText("0 VNĐ");
 
-        try (Connection con = XJdbc.getConnection(); CallableStatement stmt = con.prepareCall("{CALL GetMonthlyStats()}"); // Thêm các CallableStatement cho các SP khác
-                 CallableStatement cstmtImported = con.prepareCall("{CALL GetTotalImportedQuantity()}"); CallableStatement cstmtExported = con.prepareCall("{CALL GetTotalExportedQuantity()}"); CallableStatement cstmtInventory = con.prepareCall("{CALL GetCurrentInventory()}"); CallableStatement cstmtRevenue = con.prepareCall("{CALL GetTotalRevenue()}")) {
+    try (Connection con = XJdbc.getConnection(); 
+         CallableStatement cstmtRevenue = con.prepareCall("{CALL GetRevenue_tong}")) {
 
-            // Lấy dữ liệu từ GetMonthlyStats và cập nhật listData
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    int monthNumber = rs.getInt("Month");
-                    String month = getMonthName(monthNumber);
-                    double imported = rs.getDouble("totalImported");
-                    double exported = rs.getDouble("totalExported");
-                    double revenue = rs.getDouble("totalRevenue");
-                    double endingInventory = rs.getDouble("endingInventory");
-
-                    System.out.println("Month: " + month
-                            + ", Imported: " + imported
-                            + ", Exported: " + exported
-                            + ", Revenue: " + revenue
-                            + ", Ending Inventory: " + endingInventory);
-
-                    for (ModelData data : listData) {
-                        if (data.getMonth().equals(month)) {
-                            data.setImported(imported);
-                            data.setExported(exported);
-                            data.setRevenue(revenue);
-                            data.setEndingInventory(endingInventory);
-                            break;
-                        }
-                    }
-                }
+        // Execute the stored procedure to get total revenue
+        try (ResultSet rsRevenue = cstmtRevenue.executeQuery()) {
+            if (rsRevenue.next()) {
+                DecimalFormat df = new DecimalFormat("#,###.##");
+                BigDecimal totalRevenueBigDecimal = rsRevenue.getBigDecimal("TotalRevenue");
+                double totalRevenue = totalRevenueBigDecimal != null ? totalRevenueBigDecimal.doubleValue() : 0.0;
+                lblDoanhThu.setText(df.format(totalRevenue) + " VNĐ");
             }
-
-            System.out.println("listData: " + listData);
-
-            try (ResultSet rsRevenue = cstmtRevenue.executeQuery()) {
-                if (rsRevenue.next()) {
-                    DecimalFormat df = new DecimalFormat("#,###.##");
-                    BigDecimal totalRevenueBigDecimal = rsRevenue.getBigDecimal("totalRevenue");
-                    double totalRevenue = totalRevenueBigDecimal != null ? totalRevenueBigDecimal.doubleValue() : 0.0;
-                    lblDoanhThu.setText(df.format(totalRevenue)+ " " + "VNĐ");
-                }
-            }
-
-           
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this,
-                    "Error executing query: " + e.getMessage(),
-                    "Database Error",
-                    JOptionPane.ERROR_MESSAGE);
         }
-    
-
-    
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this,
+                "Error executing query: " + e.getMessage(),
+                "Database Error",
+                JOptionPane.ERROR_MESSAGE);
     }
+}
+
+
 
     
     private String getMonthName(int monthNumber) {

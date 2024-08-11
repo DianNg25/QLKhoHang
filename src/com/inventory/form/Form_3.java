@@ -5,34 +5,55 @@
 package com.inventory.form;
 
 import com.inventory.entity.ExportFormsTable;
+import com.inventory.message.ErorrAll_Green;
+import com.inventory.message.ErrorAll;
+import com.inventory.swing.ExcelFontUtil;
 import com.inventory.swing.ScrollBar;
 import com.inventory.swing.TableHeader;
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
+import com.inventory.utils.XDate;
 import com.inventory.utils.XJdbc;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import java.util.List;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.*; // Apache POI Font
+import org.apache.poi.ss.util.CellRangeAddress;
 
 /**
  *
  * @author ADMIN
  */
 public class Form_3 extends javax.swing.JPanel {
-    
+
     private ExportFormsTable exportFormsTable;
-    
+
     public Form_3() {
         initComponents();
         loadExportFormsData();
         customizeTable();
     }
-    
-     private void customizeTable() {
+
+    private void customizeTable() {
         spTable.setVerticalScrollBar(new JScrollBar()); // Use JScrollBar instead of ScrollBar
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
@@ -77,8 +98,8 @@ public class Form_3 extends javax.swing.JPanel {
                 if (column == 4) { // Status column
                     JLabel label = new JLabel(value.toString());
                     label.setFont(new Font("sansserif", Font.BOLD, 13));
-                    if ("Đã xuất".equals(value)) {
-                        label.setForeground(Color.RED); // Màu đỏ cho trạng thái đã xóa
+                    if ("Thành công".equals(value)) {
+                        label.setForeground(Color.GREEN); // Màu đỏ cho trạng thái đã xóa
                     } else {
                         label.setForeground(Color.GREEN); // Màu khác cho trạng thái khác
                     }
@@ -92,68 +113,62 @@ public class Form_3 extends javax.swing.JPanel {
         spTable.setVerticalScrollBar(new ScrollBar());
         spTable.getVerticalScrollBar().setBackground(Color.WHITE);
         spTable.getViewport().setBackground(Color.WHITE);
-      
+
         p.setBackground(Color.WHITE);
         spTable.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
     }
 
-    
-    
-    
-    
     private void loadExportFormsData() {
-    String sql = "SELECT ExportFormID, CustomerID, ExportDate, TotalAmount, Status FROM ExportForms";
+        String sql = "SELECT ExportFormID, CustomerID, ExportDate, TotalAmount, Status FROM ExportForms";
 
-    try {
-        List<ExportFormsTable> exportFormsList = selectExportFormsBySql(sql);
-
-        DefaultTableModel tableModel = (DefaultTableModel) tblXuatKho.getModel(); // tblExportForms là JTable hiển thị dữ liệu
-        tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
-
-        for (ExportFormsTable exportForm : exportFormsList) {
-            Object[] row = new Object[]{
-                exportForm.getExportFormID(),
-                exportForm.getCustomerID(),
-                exportForm.getExportDate(),
-                exportForm.getTotalAmount(),
-                exportForm.getStatus()
-            };
-            tableModel.addRow(row);
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error loading data from database.", "Error", JOptionPane.ERROR_MESSAGE);
-    }
-}
-
-    
-    protected List<ExportFormsTable> selectExportFormsBySql(String sql, Object... args) {
-    List<ExportFormsTable> list = new ArrayList<>();
-    try {
-        java.sql.ResultSet rs = null;
         try {
-            rs = XJdbc.query(sql, args);
-            while (rs.next()) {
-                ExportFormsTable entity = new ExportFormsTable();
-                entity.setExportFormID(rs.getString("ExportFormID"));
-                entity.setCustomerID(rs.getString("CustomerID"));
-                entity.setExportDate(rs.getDate("ExportDate"));
-                entity.setTotalAmount(rs.getDouble("TotalAmount"));
-                entity.setStatus(rs.getString("Status"));
-                list.add(entity);
-            }
-        } finally {
-            if (rs != null) {
-                rs.getStatement().getConnection().close();
-            }
-        }
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        throw new RuntimeException(ex);
-    }
-    return list;
-}
+            List<ExportFormsTable> exportFormsList = selectExportFormsBySql(sql);
 
+            DefaultTableModel tableModel = (DefaultTableModel) tblXuatKho.getModel(); // tblExportForms là JTable hiển thị dữ liệu
+            tableModel.setRowCount(0); // Xóa tất cả các hàng hiện tại
+
+            for (ExportFormsTable exportForm : exportFormsList) {
+                Object[] row = new Object[]{
+                    exportForm.getExportFormID(),
+                    exportForm.getCustomerID(),
+                    exportForm.getExportDate(),
+                    exportForm.getTotalAmount(),
+                    exportForm.getStatus()
+                };
+                tableModel.addRow(row);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading data from database.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    protected List<ExportFormsTable> selectExportFormsBySql(String sql, Object... args) {
+        List<ExportFormsTable> list = new ArrayList<>();
+        try {
+            java.sql.ResultSet rs = null;
+            try {
+                rs = XJdbc.query(sql, args);
+                while (rs.next()) {
+                    ExportFormsTable entity = new ExportFormsTable();
+                    entity.setExportFormID(rs.getString("ExportFormID"));
+                    entity.setCustomerID(rs.getString("CustomerID"));
+                    entity.setExportDate(rs.getDate("ExportDate"));
+                    entity.setTotalAmount(rs.getDouble("TotalAmount"));
+                    entity.setStatus(rs.getString("Status"));
+                    list.add(entity);
+                }
+            } finally {
+                if (rs != null) {
+                    rs.getStatement().getConnection().close();
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
+        return list;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -166,7 +181,8 @@ public class Form_3 extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        button3 = new com.inventory.swing.Button();
+        btnXuatHoaDon = new com.inventory.swing.Button();
+        button4 = new com.inventory.swing.Button();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         textField3 = new com.inventory.swing.TextField();
@@ -186,13 +202,23 @@ public class Form_3 extends javax.swing.JPanel {
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
 
-        button3.setBackground(new java.awt.Color(102, 102, 255));
-        button3.setForeground(new java.awt.Color(255, 255, 255));
-        button3.setText("Tạo phiếu xuất");
-        button3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        button3.addActionListener(new java.awt.event.ActionListener() {
+        btnXuatHoaDon.setBackground(new java.awt.Color(102, 102, 255));
+        btnXuatHoaDon.setForeground(new java.awt.Color(255, 255, 255));
+        btnXuatHoaDon.setText("Xuất hóa đơn");
+        btnXuatHoaDon.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        btnXuatHoaDon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button3ActionPerformed(evt);
+                btnXuatHoaDonActionPerformed(evt);
+            }
+        });
+
+        button4.setBackground(new java.awt.Color(102, 102, 255));
+        button4.setForeground(new java.awt.Color(255, 255, 255));
+        button4.setText("Tạo phiếu xuất");
+        button4.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        button4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button4ActionPerformed(evt);
             }
         });
 
@@ -201,16 +227,20 @@ public class Form_3 extends javax.swing.JPanel {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(button3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35))
+                .addContainerGap(451, Short.MAX_VALUE)
+                .addComponent(btnXuatHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(button4, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(button3, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(button4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnXuatHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jPanel1.add(jPanel6, java.awt.BorderLayout.PAGE_END);
@@ -326,24 +356,156 @@ public class Form_3 extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
-       JDialog add = new JDialog();
-        Model_Add_ProductDelivery model = new  Model_Add_ProductDelivery();
-        add.setUndecorated(true);
-        add.getContentPane().add(model);
-        add.pack();
-        add.setLocationRelativeTo(this);
-        add.setVisible(true);
-    }//GEN-LAST:event_button3ActionPerformed
+    private void btnXuatHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXuatHoaDonActionPerformed
+        int selectedRow = tblXuatKho.getSelectedRow();
+
+        // Kiểm tra xem có dòng nào được chọn không
+        if (selectedRow >= 0) {
+            // Lấy dữ liệu từ dòng đã chọn
+            String exportFormID = tblXuatKho.getValueAt(selectedRow, 0).toString();
+
+            // Gọi phương thức để xuất dữ liệu ra file Excel
+            exportToExcel(exportFormID);
+        } else {
+             ErrorAll obj = new ErrorAll();
+            obj.setMessage("Vui lòng chọn một phiếu xuất.");
+            GlassPanePopup.showPopup(obj);
+            
+           
+        }
+
+
+    }//GEN-LAST:event_btnXuatHoaDonActionPerformed
+
+    private void exportToExcel(String exportFormID) {
+        // Tạo workbook và sheet
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Chi Tiết Phiếu Xuất");
+
+        // Tạo tiêu đề hóa đơn với ngày giờ hiện tại
+        Row titleRow = sheet.createRow(0);
+        Cell titleCell = titleRow.createCell(0);
+        titleCell.setCellValue("HÓA ĐƠN XUẤT KHO");
+
+        // Áp dụng style tiêu đề
+        CellStyle titleStyle = ExcelFontUtil.createTitleStyle(workbook);
+        titleCell.setCellStyle(titleStyle);
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 4)); // Merge cells for title
+
+        // Tạo hàng cho ngày giờ hiện tại
+        Row dateRow = sheet.createRow(1);
+        Cell dateLabelCell = dateRow.createCell(0);
+        dateLabelCell.setCellValue("Ngày Xuất:");
+
+        Cell dateValueCell = dateRow.createCell(1);
+        dateValueCell.setCellValue(XDate.toString(new java.util.Date(), "dd/MM/yyyy HH:mm:ss"));
+        // Áp dụng style ngày giờ
+        CellStyle dateStyle = ExcelFontUtil.createDateStyle(workbook);
+        dateValueCell.setCellStyle(dateStyle);
+
+        // Tạo tiêu đề cột
+        Row headerRow = sheet.createRow(3);
+        String[] columns = {"Mã Phiếu Xuất", "Tên Khách Hàng", "Ngày Xuất", "Tổng Số Tiền", "Tên Nhân Viên"};
+        for (int i = 0; i < columns.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(columns[i]);
+
+            // Áp dụng style tiêu đề cột
+            CellStyle headerStyle = ExcelFontUtil.createHeaderStyle(workbook);
+            cell.setCellStyle(headerStyle);
+        }
+
+        // Lấy dữ liệu từ cơ sở dữ liệu
+        try (java.sql.Connection conn = XJdbc.getConnection(); java.sql.PreparedStatement stmt = conn.prepareStatement(
+                "SELECT px.ExportFormID, c.CustomerName, px.ExportDate, px.TotalAmount, e.FullName AS EmployeeName "
+                + "FROM ExportForms px "
+                + "JOIN Customers c ON px.CustomerID = c.CustomerID "
+                + "JOIN Employees e ON px.EmployeeID = e.EmployeeID "
+                + "WHERE px.ExportFormID = ?")) {
+
+            stmt.setString(1, exportFormID);
+            try (java.sql.ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Row row = sheet.createRow(4);
+                    row.createCell(0).setCellValue(rs.getString("ExportFormID"));
+                    row.createCell(1).setCellValue(rs.getString("CustomerName"));
+                    row.createCell(2).setCellValue(XDate.toString(rs.getDate("ExportDate"), "dd/MM/yyyy HH:mm:ss"));
+                    row.createCell(3).setCellValue(rs.getDouble("TotalAmount"));
+                    row.createCell(4).setCellValue(rs.getString("EmployeeName"));
+
+                    // Áp dụng style dữ liệu
+                    CellStyle dataStyle = ExcelFontUtil.createDataStyle(workbook);
+                    for (int i = 0; i < columns.length; i++) {
+                        row.getCell(i).setCellStyle(dataStyle);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+             ErrorAll obj = new ErrorAll();
+            obj.setMessage("Lỗi khi truy xuất dữ liệu từ cơ sở dữ liệu.");
+            GlassPanePopup.showPopup(obj);
+            return;
+        }
+
+        // Định dạng cột tự động điều chỉnh chiều rộng
+        for (int i = 0; i < columns.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        // Cài đặt màu nền cho các cột
+     
+
+        // Hiển thị hộp thoại lưu file Excel
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Lưu file Excel");
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Excel Files", "xlsx"));
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            try (FileOutputStream fileOut = new FileOutputStream(fileChooser.getSelectedFile() + ".xlsx")) {
+                workbook.write(fileOut);
+                ErorrAll_Green obj = new ErorrAll_Green();
+            obj.setMessage("File Excel đã được lưu.");
+            GlassPanePopup.showPopup(obj);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                ErrorAll obj = new ErrorAll();
+            obj.setMessage("Lỗi khi lưu file Excel.");
+            GlassPanePopup.showPopup(obj);
+            }
+        }
+
+        // Đóng workbook
+        try {
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_button1ActionPerformed
 
+    private void button4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button4ActionPerformed
+        // TODO add your handling code here:
+        JDialog add = new JDialog();
+        Model_Add_ProductDelivery model = new Model_Add_ProductDelivery();
+        add.setUndecorated(true);
+        add.getContentPane().add(model);
+        add.pack();
+        add.setLocationRelativeTo(this);
+        add.setVisible(true);
+    }//GEN-LAST:event_button4ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.inventory.swing.Button btnXuatHoaDon;
     private com.inventory.swing.Button button1;
-    private com.inventory.swing.Button button3;
+    private com.inventory.swing.Button button4;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;

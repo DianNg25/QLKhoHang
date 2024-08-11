@@ -685,7 +685,7 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
 
         java.sql.Date exportDate = null;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date date = sdf.parse(exportDateStr);
             exportDate = new java.sql.Date(date.getTime());
         } catch (Exception e) {
@@ -779,24 +779,27 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
         }
     }
 
-    //Tính hoa hồng
-    private double calculateCommission(long days) {
-        if (days < 30) {
-            return 0.10; // 10% dưới dạng số thực
-        } else if (days < 60) {
-            return 0.15; // 15% dưới dạng số thực
-        } else if (days < 90) {
-            return 0.20; // 20% dưới dạng số thực
-        } else {
-            return 0.25; // 25% dưới dạng số thực
-        }
+    // Tính hoa hồng
+private double calculateCommission(long days) {
+    if (days < 30) {
+        return 0.10; // 10% dưới dạng số thực
+    } else if (days < 60) {
+        return 0.15; // 15% dưới dạng số thực
+    } else if (days < 90) {
+        return 0.20; // 20% dưới dạng số thực
+    } else if (days < 120) {
+        return 0.25; // 25% dưới dạng số thực
+    } else {
+        return 0.30; // 30% cho các sản phẩm đã lưu giữ trên 120 ngày
     }
+}
+
 
     private void txtNgayNhapFocusLost(FocusEvent evt) {
         String ngayNhapStr = txtNgayNhap.getText(); // Đảm bảo sử dụng đúng trường văn bản
         if (!ngayNhapStr.isEmpty()) {
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date ngayNhap = sdf.parse(ngayNhapStr);
                 Date ngayHienTai = new Date();
 

@@ -43,11 +43,10 @@ public class Main extends javax.swing.JFrame {
                 case 6 ->
                     setForm(new Form_5());
                 case 7 ->
-                    setForm(new Form_6());
-                case 8 ->
                     setForm(new Form_7());
-                case 9 ->
+                case 8 ->
                     setForm(new Form_9());
+              
                 default ->
                     logoutForm();
             }
@@ -101,7 +100,7 @@ public class Main extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
 
-        panelBorder1.setBackground(new java.awt.Color(13, 42, 118));
+        panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
 
         mainPanel.setBackground(new java.awt.Color(255, 255, 255));
         mainPanel.setPreferredSize(new java.awt.Dimension(900, 607));

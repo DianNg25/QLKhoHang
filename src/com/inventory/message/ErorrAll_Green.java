@@ -7,9 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 
-public class ErrorAll extends javax.swing.JPanel {
+public class ErorrAll_Green extends javax.swing.JPanel {
 
-    public ErrorAll() {
+    public ErorrAll_Green() {
         initComponents();
         setOpaque(false);
         txt.setBackground(new Color(0, 0, 0, 0));
@@ -38,7 +38,7 @@ public class ErrorAll extends javax.swing.JPanel {
         setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 25, 25, 25));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel1.setForeground(new java.awt.Color(0, 204, 51));
         jLabel1.setText("Thông báo");
 
         txt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
@@ -89,10 +89,12 @@ public class ErrorAll extends javax.swing.JPanel {
         // TODO add your handling code here:
         GlassPanePopup.closePopupLast();
     }//GEN-LAST:event_btnOKActionPerformed
-    public void setMessage(String message) {
+
+    
+     public void setMessage(String message) {
         txt.setText(message);
     }
-
+    
     public void eventOK(ActionListener event) {
         btnOK.addActionListener(event);
     }
@@ -102,5 +104,7 @@ public class ErrorAll extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextPane txt;
     // End of variables declaration//GEN-END:variables
+
+    
 
 }
