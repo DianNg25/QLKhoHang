@@ -4,22 +4,27 @@
  */
 package com.inventory.form;
 
-import com.inventory.dao.ImportFormsDAO;
-import com.inventory.entity.ImportForm;
 import com.inventory.main.Login;
+import com.inventory.message.AddThanhCong;
+import com.inventory.message.AddThatBai;
+import com.inventory.message.DeleteEmployees2_Er;
+import com.inventory.message.DeleteNhapHang;
+import com.inventory.message.DeleteSuppliers2;
+import com.inventory.message.ErrorrNhapHang;
+import com.inventory.message.ErrorrNhapHang1;
+import com.inventory.message.ErrorrNhapHang11;
+import com.inventory.swing.glasspanepopup.ModalErrorGlassPanePopup;
+import com.inventory.swing.glasspanepopup.ModalErrorOption;
 import com.inventory.utils.XJdbc;
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -335,7 +340,14 @@ public class Model_Add_EnterCoupon extends javax.swing.JPanel {
 
             } catch (SQLException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Lỗi khi tải số lượng sản phẩm hoặc thông tin nhà cung cấp.");
+                SwingUtilities.invokeLater(() -> {
+                    DeleteNhapHang errorPanel = new DeleteNhapHang();
+                    errorPanel.eventOK((ae) -> {
+                        ModalErrorGlassPanePopup.closePopupLast();
+                    });
+                    ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+                });
+
             }
         }
 
@@ -407,7 +419,14 @@ public class Model_Add_EnterCoupon extends javax.swing.JPanel {
         String selectedSupplierName = (String) cboTenNhaCungCap.getSelectedItem();
 
         if (selectedSupplierName == null) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhà cung cấp.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            SwingUtilities.invokeLater(() -> {
+                DeleteSuppliers2 errorPanel = new DeleteSuppliers2();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
+
             return;
         }
 
@@ -420,7 +439,13 @@ public class Model_Add_EnterCoupon extends javax.swing.JPanel {
         String priceStr = txtTong.getText().trim(); // Giá từ form
 
         if (importFormID.isEmpty() || importFormDetailID.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Mã phiếu nhập không được bỏ trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            SwingUtilities.invokeLater(() -> {
+                ErrorrNhapHang errorPanel = new ErrorrNhapHang();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
             return;
         }
 
@@ -448,7 +473,13 @@ public class Model_Add_EnterCoupon extends javax.swing.JPanel {
                 pstmtCheckID.setString(1, importFormID);
                 try (java.sql.ResultSet rsCheckID = pstmtCheckID.executeQuery()) {
                     if (rsCheckID.next() && rsCheckID.getInt(1) > 0) {
-                        JOptionPane.showMessageDialog(this, "Mã phiếu nhập đã tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        SwingUtilities.invokeLater(() -> {
+                            ErrorrNhapHang1 errorPanel = new ErrorrNhapHang1();
+                            errorPanel.eventOK((ae) -> {
+                                ModalErrorGlassPanePopup.closePopupLast();
+                            });
+                            ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+                        });
                         return;
                     }
                 }
@@ -482,7 +513,14 @@ public class Model_Add_EnterCoupon extends javax.swing.JPanel {
                 int rowsInsertedImportForms = pstmtImportForms.executeUpdate();
 
                 if (rowsInsertedImportForms <= 0) {
-                    JOptionPane.showMessageDialog(this, "Không thể thêm phiếu nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                     SwingUtilities.invokeLater(() -> {
+                            ErrorrNhapHang11 errorPanel = new ErrorrNhapHang11();
+                            errorPanel.eventOK((ae) -> {
+                                ModalErrorGlassPanePopup.closePopupLast();
+                            });
+                            ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+                        });
+                   
                     return;
                 }
             }
@@ -497,15 +535,28 @@ public class Model_Add_EnterCoupon extends javax.swing.JPanel {
                 int rowsInsertedImportFormDetails = pstmtImportFormDetails.executeUpdate();
 
                 if (rowsInsertedImportFormDetails > 0) {
-                    JOptionPane.showMessageDialog(this, "Đã thêm phiếu nhập thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                    SwingUtilities.invokeLater(() -> {
+                            AddThanhCong errorPanel = new AddThanhCong();
+                            errorPanel.eventOK((ae) -> {
+                                ModalErrorGlassPanePopup.closePopupLast();
+                            });
+                            ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+                        });
+                    
                 } else {
-                    JOptionPane.showMessageDialog(this, "Không thể thêm chi tiết phiếu nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi thêm phiếu nhập: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+             SwingUtilities.invokeLater(() -> {
+                            AddThatBai errorPanel = new AddThatBai();
+                            errorPanel.eventOK((ae) -> {
+                                ModalErrorGlassPanePopup.closePopupLast();
+                            });
+                            ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+                        });
+         
         }
     }
 

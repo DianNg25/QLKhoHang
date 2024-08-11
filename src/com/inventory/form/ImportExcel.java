@@ -4,23 +4,23 @@
  */
 package com.inventory.form;
 
-import com.inventory.dao.ImportFormDetailDAO;
-import com.inventory.dao.ImportFormsDAO;
 import com.inventory.dao.ProductsDAO;
-import com.inventory.entity.ImportForm;
-import com.inventory.entity.ImportFormDetail;
 import com.inventory.entity.Products;
-import com.inventory.message.DeleteEmployees1;
-import com.inventory.message.ErrorAll;
-import com.inventory.message.InformationSuppliers_Null;
+import com.inventory.message.AddThanhCong;
+import com.inventory.message.AddThatbai_1;
+import com.inventory.message.DeleteEmployees;
+import com.inventory.message.DeleteEmployees11;
+import com.inventory.message.DeleteEmployees2_Er;
+import com.inventory.message.DeleteEmployees2_X;
+import com.inventory.message.DeleteEmployees2_X1;
+import com.inventory.message.DeleteEmployees2_X11;
+import com.inventory.message.DeleteEmployees2_X111;
 import com.inventory.swing.ScrollBar;
 import com.inventory.swing.TableHeader;
 import com.inventory.swing.glasspanepopup.GlassPanePopup;
 import com.inventory.swing.glasspanepopup.ModalErrorGlassPanePopup;
 import com.inventory.swing.glasspanepopup.ModalErrorOption;
 import com.inventory.utils.XJdbc;
-import com.sun.jdi.connect.spi.Connection;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -34,16 +34,12 @@ import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.poi.ss.usermodel.Cell;
-import static org.apache.poi.ss.usermodel.CellType.BOOLEAN;
 import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
 import static org.apache.poi.ss.usermodel.CellType.STRING;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.sql.ResultSet;
-
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -51,9 +47,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Date;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.swing.JDialog;
@@ -352,7 +345,14 @@ public class ImportExcel extends javax.swing.JPanel {
     private void btnExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelActionPerformed
         File file = chooseExcelFile(); // Implement this method to open a file chooser and return the selected file
         if (file == null) {
-            JOptionPane.showMessageDialog(this, "Lỗi đọc tệp tin Excel!");
+            SwingUtilities.invokeLater(() -> {
+                DeleteEmployees2_Er errorPanel = new DeleteEmployees2_Er();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
+
         } else {
             // Nhập sản phẩm từ tệp Excel
             if (importProductsFromExcel(file)) {
@@ -365,17 +365,22 @@ public class ImportExcel extends javax.swing.JPanel {
 //                GlassPanePopup.showPopup(obj);
 
                 SwingUtilities.invokeLater(() -> {
-                    ErrorAll errorPanel = new ErrorAll();
+                    AddThanhCong errorPanel = new AddThanhCong();
                     errorPanel.eventOK((ae) -> {
-                        errorPanel.setMessage("Đã thêm thành công!");
                         ModalErrorGlassPanePopup.closePopupLast();
                     });
                     ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
                 });
 
             } else {
+                SwingUtilities.invokeLater(() -> {
+                    AddThatbai_1 errorPanel = new AddThatbai_1();
+                    errorPanel.eventOK((ae) -> {
+                        ModalErrorGlassPanePopup.closePopupLast();
+                    });
+                    ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+                });
 
-                JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi nhập danh sách sản phẩm!");
             }
         }
     }//GEN-LAST:event_btnExcelActionPerformed
@@ -384,29 +389,33 @@ public class ImportExcel extends javax.swing.JPanel {
         // TODO add your handling code here:  
         DefaultTableModel tableModel = (DefaultTableModel) tblExcel.getModel();
 
-        // Lấy chỉ số hàng được chọn
+// Lấy chỉ số hàng được chọn
         int selectedRow = tblExcel.getSelectedRow();
 
-        // Kiểm tra nếu có hàng nào được chọn
+// Kiểm tra nếu có hàng nào được chọn
         if (selectedRow != -1) {
             // Hiển thị hộp thoại xác nhận trước khi xóa
-            int confirm = JOptionPane.showConfirmDialog(this,
-                    "Bạn có chắc chắn muốn xóa hàng này?",
-                    "Xác nhận xóa",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE);
-
-            // Nếu người dùng chọn "Yes"
-            if (confirm == JOptionPane.YES_OPTION) {
-                // Xóa hàng được chọn khỏi bảng dữ liệu
-                tableModel.removeRow(selectedRow);
-
-                // Cập nhật tổng số lượng sau khi xóa hàng
-                updateTotalQuantity();
-            }
+            DeleteEmployees11 obj = new DeleteEmployees11();
+            SwingUtilities.invokeLater(() -> {
+                DeleteEmployees11 errorPanel = new DeleteEmployees11();
+                errorPanel.eventOK((ae) -> {
+                      tableModel.removeRow(selectedRow);
+                    ModalErrorGlassPanePopup.closePopupLast();
+                     updateTotalQuantity();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
+            // Hiển thị hộp thoại xác nhận
+            GlassPanePopup.showPopup(obj);
         } else {
-            // Thông báo người dùng nếu không có hàng nào được chọn
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một hàng để xóa.");
+            // Hiển thị thông báo lỗi nếu không có hàng nào được chọn
+            SwingUtilities.invokeLater(() -> {
+                DeleteEmployees2_X errorPanel = new DeleteEmployees2_X();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
         }
     }//GEN-LAST:event_btnDeleExcelActionPerformed
 
@@ -465,7 +474,14 @@ public class ImportExcel extends javax.swing.JPanel {
         String supplierID = getSupplierIDByName(supplierName);
 
         if (supplierID == null) {
-            JOptionPane.showMessageDialog(this, "Nhà cung cấp không tồn tại trong cơ sở dữ liệu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            SwingUtilities.invokeLater(() -> {
+                DeleteEmployees2_X1 errorPanel = new DeleteEmployees2_X1();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
+
             return false;
         }
 
@@ -501,12 +517,25 @@ public class ImportExcel extends javax.swing.JPanel {
                 }
 
                 conn.commit(); // Commit giao dịch
-                JOptionPane.showMessageDialog(this, "Dữ liệu đã được lưu vào cơ sở dữ liệu.", "Thông Báo", JOptionPane.INFORMATION_MESSAGE);
+                SwingUtilities.invokeLater(() -> {
+                    DeleteEmployees2_X11 errorPanel = new DeleteEmployees2_X11();
+                    errorPanel.eventOK((ae) -> {
+                        ModalErrorGlassPanePopup.closePopupLast();
+                    });
+                    ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+                });
                 return true;
 
             } catch (SQLException ex) {
                 conn.rollback(); // Rollback giao dịch nếu có lỗi
-                JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi lưu dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                SwingUtilities.invokeLater(() -> {
+                    DeleteEmployees2_X111 errorPanel = new DeleteEmployees2_X111();
+                    errorPanel.eventOK((ae) -> {
+                        ModalErrorGlassPanePopup.closePopupLast();
+                    });
+                    ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+                });
+
                 return false;
             }
 

@@ -429,7 +429,7 @@ public class Form_3 extends javax.swing.JPanel {
                     Row row = sheet.createRow(4);
                     row.createCell(0).setCellValue(rs.getString("ExportFormID"));
                     row.createCell(1).setCellValue(rs.getString("CustomerName"));
-                    row.createCell(2).setCellValue(XDate.toString(rs.getDate("ExportDate"), "dd/MM/yyyy HH:mm:ss"));
+                    row.createCell(2).setCellValue(XDate.toString(rs.getDate("ExportDate"), "dd-MM-yyyy"));
                     row.createCell(3).setCellValue(rs.getDouble("TotalAmount"));
                     row.createCell(4).setCellValue(rs.getString("EmployeeName"));
 
