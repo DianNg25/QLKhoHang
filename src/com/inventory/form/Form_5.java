@@ -280,109 +280,107 @@ public class Form_5 extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void updateTable(String type) {
-        // Xóa dữ liệu cũ và cấu hình cột mới cho bảng
-        tableModel.setRowCount(0);
-        tableModel.setColumnCount(0);
+ private void updateTable(String type) {
+    // Xóa dữ liệu cũ và cấu hình cột mới cho bảng
+    tableModel.setRowCount(0);
+    tableModel.setColumnCount(0);
 
-        // Đọc ngày bắt đầu và ngày kết thúc từ các trường văn bản
-        String startDateStr = txtStartDate.getText();
-        String endDateStr = txtEndDate.getText();
+    // Đọc ngày bắt đầu và ngày kết thúc từ các trường văn bản
+    String startDateStr = txtStartDate.getText();
+    String endDateStr = txtEndDate.getText();
 
-        // Định dạng ngày
-        String dateFormat = "yyyy-MM-dd";
-        java.sql.Date startDate = null;
-        java.sql.Date endDate = null;
+    // Định dạng ngày
+    String dateFormat = "yyyy-MM-dd";
+    java.sql.Date startDate = null;
+    java.sql.Date endDate = null;
 
-        try {
-            // Sử dụng XDate để chuyển đổi và định dạng ngày
-            java.util.Date startUtilDate = XDate.toDate(startDateStr, dateFormat);
-            java.util.Date endUtilDate = XDate.toDate(endDateStr, dateFormat);
+    try {
+        // Sử dụng XDate để chuyển đổi và định dạng ngày
+        java.util.Date startUtilDate = XDate.toDate(startDateStr, dateFormat);
+        java.util.Date endUtilDate = XDate.toDate(endDateStr, dateFormat);
 
-            // Kiểm tra ngày bắt đầu không lớn hơn ngày kết thúc
-            if (startUtilDate.after(endUtilDate)) {
-                ErrorAll obj = new ErrorAll();
-                obj.setMessage("Ngày bắt đầu không được lớn hơn ngày kết thúc. Vui lòng kiểm tra lại.");
-                GlassPanePopup.showPopup(obj);
-//            JOptionPane.showMessageDialog(this, "Ngày bắt đầu không được lớn hơn ngày kết thúc. Vui lòng kiểm tra lại.");
-                return;
-            }
-
-            startDate = new java.sql.Date(startUtilDate.getTime());
-            endDate = new java.sql.Date(endUtilDate.getTime());
-        } catch (RuntimeException e) {
-            e.printStackTrace();
+        // Kiểm tra ngày bắt đầu không lớn hơn ngày kết thúc
+        if (startUtilDate.after(endUtilDate)) {
             ErrorAll obj = new ErrorAll();
-            obj.setMessage("Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng yyyy-MM-dd.");
+            obj.setMessage("Ngày bắt đầu không được lớn hơn ngày kết thúc. Vui lòng kiểm tra lại.");
             GlassPanePopup.showPopup(obj);
-//        JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng yyyy-MM-dd.");
             return;
         }
 
-        // Xác định stored procedure và cấu hình cột bảng
-        String storedProcedure = "";
-        if (type.equals("Doanh Thu")) {
-            tableModel.setColumnIdentifiers(new Object[]{"Ngày", "Tổng Doanh Thu"});
-            storedProcedure = "GetRevenue";
-        } else if (type.equals("Xuất Kho")) {
-            tableModel.setColumnIdentifiers(new Object[]{"Phiếu Xuất", "Nhà Cung Cấp", "Số Lượng", "Ngày Xuất"});
-            storedProcedure = "GetExportDetails";
-        } else if (type.equals("Nhập Kho")) {
-            tableModel.setColumnIdentifiers(new Object[]{"Phiếu Nhập", "Nhà Cung Cấp", "Số Lượng", "Ngày Nhập"});
-            storedProcedure = "GetImportDetails";
-        } else {
-            JOptionPane.showMessageDialog(this, "Loại báo cáo không hợp lệ.");
-            return;
-        }
-
-        // Thực hiện stored procedure và cập nhật bảng
-        try (Connection conn = XJdbc.getConnection(); CallableStatement stmt = conn.prepareCall("{call " + storedProcedure + "(?, ?)}")) {
-
-            stmt.setDate(1, startDate);
-            stmt.setDate(2, endDate);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Object[] row;
-                    if (storedProcedure.equals("GetRevenue")) {
-                        java.sql.Date exportDate = rs.getDate("ExportDate");
-                        double totalRevenue = rs.getDouble("TotalRevenue");
-                        String formattedDate = XDate.toString(exportDate, "dd/MM/yyyy");
-                        row = new Object[]{formattedDate, totalRevenue};
-                    } else if (storedProcedure.equals("GetExportDetails")) {
-                        String exportFormID = rs.getString("ExportFormID");
-                        String supplierName = rs.getString("SupplierName");
-                        int quantity = rs.getInt("Quantity");
-                        java.sql.Date exportDate = rs.getDate("ExportDate");
-                        String formattedDate = XDate.toString(exportDate, "dd/MM/yyyy");
-                        row = new Object[]{exportFormID, supplierName, quantity, formattedDate};
-                    } else if (storedProcedure.equals("GetImportDetails")) {
-                        String importFormID = rs.getString("ImportFormID");
-                        String supplierName = rs.getString("SupplierName");
-                        int quantity = rs.getInt("Quantity");
-                        java.sql.Date importDate = rs.getDate("ImportDate");
-                        String formattedDate = XDate.toString(importDate, "dd/MM/yyyy");
-                        row = new Object[]{importFormID, supplierName, quantity, formattedDate};
-                    } else {
-                        continue; // Bỏ qua nếu loại không hợp lệ
-                    }
-                    tableModel.addRow(row);
-                }
-            }
-        } catch (java.sql.SQLException e) {
-            e.printStackTrace();
-             ErrorAll obj = new ErrorAll();
-            obj.setMessage("Lỗi khi truy xuất dữ liệu từ cơ sở dữ liệu. Vui lòng kiểm tra kết nối và cấu hình cơ sở dữ liệu.");
-            GlassPanePopup.showPopup(obj);
-//            JOptionPane.showMessageDialog(this, "Lỗi khi truy xuất dữ liệu từ cơ sở dữ liệu. Vui lòng kiểm tra kết nối và cấu hình cơ sở dữ liệu.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            ErrorAll obj = new ErrorAll();
-            obj.setMessage("Đã xảy ra lỗi không xác định. Vui lòng thử lại.");
-            GlassPanePopup.showPopup(obj);
-
-        }
+        startDate = new java.sql.Date(startUtilDate.getTime());
+        endDate = new java.sql.Date(endUtilDate.getTime());
+    } catch (RuntimeException e) {
+        e.printStackTrace();
+        ErrorAll obj = new ErrorAll();
+        obj.setMessage("Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng yyyy-MM-dd.");
+        GlassPanePopup.showPopup(obj);
+        return;
     }
+
+    // Xác định stored procedure và cấu hình cột bảng
+    String storedProcedure = "";
+    if (type.equals("Doanh Thu")) {
+        tableModel.setColumnIdentifiers(new Object[]{"Ngày", "Tổng Doanh Thu"});
+        storedProcedure = "GetRevenue";
+    } else if (type.equals("Xuất Kho")) {
+        tableModel.setColumnIdentifiers(new Object[]{"Mã Phiếu Xuất", "Tên Khách Hàng", "Ngày Xuất", "Tổng Tiền"});
+        storedProcedure = "GetExportDetails";
+    } else if (type.equals("Nhập Kho")) {
+        tableModel.setColumnIdentifiers(new Object[]{"Mã Phiếu Nhập", "Tên Nhà Cung Cấp", "Số Lượng", "Ngày Nhập"});
+        storedProcedure = "GetImportDetails";
+    } else {
+        JOptionPane.showMessageDialog(this, "Loại báo cáo không hợp lệ.");
+        return;
+    }
+
+    // Thực hiện stored procedure và cập nhật bảng
+    try (Connection conn = XJdbc.getConnection(); CallableStatement stmt = conn.prepareCall("{call " + storedProcedure + "(?, ?)}")) {
+
+        stmt.setDate(1, startDate);
+        stmt.setDate(2, endDate);
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Object[] row;
+                if (storedProcedure.equals("GetRevenue")) {
+                    java.sql.Date exportDate = rs.getDate("ExportDate");
+                    double totalRevenue = rs.getDouble("TotalRevenue");
+                    String formattedDate = XDate.toString(exportDate, "dd/MM/yyyy");
+                    row = new Object[]{formattedDate, totalRevenue};
+                } else if (storedProcedure.equals("GetExportDetails")) {
+                   String exportFormID = rs.getString("Mã phiếu xuất"); // Cập nhật theo tên cột trong stored procedure
+                    String customerName = rs.getString("Tên khách hàng"); // Cập nhật theo tên cột trong stored procedure
+                    java.sql.Date exportDate = rs.getDate("Ngày xuất"); // Cập nhật theo tên cột trong stored procedure
+                    double totalAmount = rs.getDouble("Tổng tiền"); // Cập nhật theo tên cột trong stored procedure
+                    String formattedDate = XDate.toString(exportDate, "dd/MM/yyyy");
+                    row = new Object[]{exportFormID, customerName, formattedDate, totalAmount};
+                } else if (storedProcedure.equals("GetImportDetails")) {
+                    String importFormID = rs.getString("ImportFormID");
+                    String supplierName = rs.getString("SupplierName");
+                    int quantity = rs.getInt("Quantity");
+                    java.sql.Date importDate = rs.getDate("ImportDate");
+                    String formattedDate = XDate.toString(importDate, "dd/MM/yyyy");
+                    row = new Object[]{importFormID, supplierName, quantity, formattedDate};
+                } else {
+                    continue; // Bỏ qua nếu loại không hợp lệ
+                }
+                tableModel.addRow(row);
+            }
+        }
+    } catch (java.sql.SQLException e) {
+        e.printStackTrace();
+        ErrorAll obj = new ErrorAll();
+        obj.setMessage("Lỗi khi truy xuất dữ liệu từ cơ sở dữ liệu. Vui lòng kiểm tra kết nối và cấu hình cơ sở dữ liệu.");
+        GlassPanePopup.showPopup(obj);
+    } catch (Exception e) {
+        e.printStackTrace();
+        ErrorAll obj = new ErrorAll();
+        obj.setMessage("Đã xảy ra lỗi không xác định. Vui lòng thử lại.");
+        GlassPanePopup.showPopup(obj);
+    }
+}
+
+
 
 //    private void updateTable(String type) {
 //    // Xóa dữ liệu cũ và cấu hình cột mới cho bảng
