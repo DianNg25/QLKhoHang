@@ -235,7 +235,7 @@ public class Form_4 extends javax.swing.JPanel {
             }
         });
 
-        button1.setBackground(new java.awt.Color(102, 102, 255));
+        button1.setBackground(new java.awt.Color(0, 204, 51));
         button1.setForeground(new java.awt.Color(255, 255, 255));
         button1.setText("Sửa");
         button1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
@@ -245,7 +245,7 @@ public class Form_4 extends javax.swing.JPanel {
             }
         });
 
-        btnDelete_Suppliers.setBackground(new java.awt.Color(102, 102, 255));
+        btnDelete_Suppliers.setBackground(new java.awt.Color(255, 0, 0));
         btnDelete_Suppliers.setForeground(new java.awt.Color(255, 255, 255));
         btnDelete_Suppliers.setText("Xóa");
         btnDelete_Suppliers.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
