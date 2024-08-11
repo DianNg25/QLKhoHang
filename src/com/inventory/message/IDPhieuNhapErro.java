@@ -7,9 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 
-public class DeleteEmployees2_X111 extends javax.swing.JPanel {
+public class IDPhieuNhapErro extends javax.swing.JPanel {
 
-    public DeleteEmployees2_X111() {
+    public IDPhieuNhapErro() {
         initComponents();
         setOpaque(false);
         txt.setBackground(new Color(0, 0, 0, 0));
@@ -39,11 +39,11 @@ public class DeleteEmployees2_X111 extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel1.setText("Thông báo");
+        jLabel1.setText("Lỗi SQL");
 
         txt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         txt.setForeground(new java.awt.Color(133, 133, 133));
-        txt.setText("Đã xảy ra lỗi kết nối cơ sở dữ liệu.");
+        txt.setText("Lỗi không tìm thấy phiếu nhập");
         txt.setToolTipText("");
         txt.setAutoscrolls(false);
         txt.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -64,7 +64,7 @@ public class DeleteEmployees2_X111 extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(txt, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE))
+                .addComponent(txt, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -101,6 +101,5 @@ public class DeleteEmployees2_X111 extends javax.swing.JPanel {
     private javax.swing.JTextPane txt;
     // End of variables declaration//GEN-END:variables
 
-    
 
 }

@@ -7,9 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 
-public class AddThatBai extends javax.swing.JPanel {
+public class AddThatBai_1 extends javax.swing.JPanel {
 
-    public AddThatBai() {
+    public AddThatBai_1() {
         initComponents();
         setOpaque(false);
         txt.setBackground(new Color(0, 0, 0, 0));

@@ -7,7 +7,6 @@ package com.inventory.form;
 import com.inventory.dao.ProductsDAO;
 import com.inventory.entity.Products;
 import com.inventory.message.AddThanhCong;
-import com.inventory.message.AddThatbai_1;
 import com.inventory.message.DeleteEmployees;
 import com.inventory.message.DeleteEmployees11;
 import com.inventory.message.DeleteEmployees2_Er;
@@ -371,16 +370,6 @@ public class ImportExcel extends javax.swing.JPanel {
                     });
                     ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
                 });
-
-            } else {
-                SwingUtilities.invokeLater(() -> {
-                    AddThatbai_1 errorPanel = new AddThatbai_1();
-                    errorPanel.eventOK((ae) -> {
-                        ModalErrorGlassPanePopup.closePopupLast();
-                    });
-                    ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
-                });
-
             }
         }
     }//GEN-LAST:event_btnExcelActionPerformed
@@ -399,9 +388,9 @@ public class ImportExcel extends javax.swing.JPanel {
             SwingUtilities.invokeLater(() -> {
                 DeleteEmployees11 errorPanel = new DeleteEmployees11();
                 errorPanel.eventOK((ae) -> {
-                      tableModel.removeRow(selectedRow);
+                    tableModel.removeRow(selectedRow);
                     ModalErrorGlassPanePopup.closePopupLast();
-                     updateTotalQuantity();
+                    updateTotalQuantity();
                 });
                 ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
             });
