@@ -7,9 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
 
-public class DeleteEmployees2_X111 extends javax.swing.JPanel {
+public class AddThatBaiPX extends javax.swing.JPanel {
 
-    public DeleteEmployees2_X111() {
+    public AddThatBaiPX() {
         initComponents();
         setOpaque(false);
         txt.setBackground(new Color(0, 0, 0, 0));
@@ -43,7 +43,7 @@ public class DeleteEmployees2_X111 extends javax.swing.JPanel {
 
         txt.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         txt.setForeground(new java.awt.Color(133, 133, 133));
-        txt.setText("Đã xảy ra lỗi kết nối cơ sở dữ liệu.");
+        txt.setText("Có lỗi khi thêm phiếu xuất");
         txt.setToolTipText("");
         txt.setAutoscrolls(false);
         txt.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));

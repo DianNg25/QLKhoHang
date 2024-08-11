@@ -21,6 +21,11 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import com.inventory.message.*;
+import com.inventory.swing.glasspanepopup.GlassPanePopup;
+import com.inventory.swing.glasspanepopup.ModalErrorGlassPanePopup;
+import com.inventory.swing.glasspanepopup.ModalErrorOption;
+import javax.swing.JDialog;
 
 /**
  *
@@ -64,7 +69,14 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi tải ID phiếu nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(this, "Lỗi khi tải ID phiếu nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            SwingUtilities.invokeLater(() -> {
+                IDPhieuNhapErro errorPanel = new IDPhieuNhapErro();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
         }
     }
 
@@ -94,12 +106,26 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
                     double totalPrice = quantity * 500;
                     txtPhiSL.setText(String.valueOf(totalPrice));
                 } else {
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+//                    JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    SwingUtilities.invokeLater(() -> {
+                        IDPhieuNhapErro errorPanel = new IDPhieuNhapErro();
+                        errorPanel.eventOK((ae) -> {
+                            ModalErrorGlassPanePopup.closePopupLast();
+                        });
+                        ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+                    });
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi truy vấn dữ liệu phiếu nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(this, "Lỗi khi truy vấn dữ liệu phiếu nhập.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            SwingUtilities.invokeLater(() -> {
+                IDPhieuNhapErro errorPanel = new IDPhieuNhapErro();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
         }
     }
 
@@ -132,7 +158,14 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi tải ID khách hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(this, "Lỗi khi tải ID khách hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            SwingUtilities.invokeLater(() -> {
+                IDKhachHangError errorPanel = new IDKhachHangError();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
         }
     }
 
@@ -152,7 +185,14 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi lấy thông tin khách hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(this, "Lỗi khi lấy thông tin khách hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            SwingUtilities.invokeLater(() -> {
+                IDKhachHangError errorPanel = new IDKhachHangError();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
         }
     }
 
@@ -661,19 +701,42 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
 
         // Kiểm tra mã phiếu xuất không được bỏ trống
         if (exportFormID.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Mã phiếu xuất không được bỏ trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(this, "Mã phiếu xuất không được bỏ trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);            
+            SwingUtilities.invokeLater(() -> {
+                ErrorBoTrong errorPanel = new ErrorBoTrong();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
             return;
         }
 
         // Kiểm tra mã phiếu xuất đã tồn tại
         if (isExportFormIDExists(exportFormID)) {
-            JOptionPane.showMessageDialog(this, "Mã phiếu xuất đã tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(this, "Mã phiếu xuất đã tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+            SwingUtilities.invokeLater(() -> {
+                IDError errorPanel = new IDError();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
             return;
         }
 
         // Kiểm tra trường txtPHX không được để trống
         if (txtPHX.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Trường Phường Sã không được bỏ trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(this, "Trường Phường Sã không được bỏ trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+            SwingUtilities.invokeLater(() -> {
+                ErrorBoTrong errorPanel = new ErrorBoTrong();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
             return;
         }
 
@@ -689,13 +752,29 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
             java.util.Date date = sdf.parse(exportDateStr);
             exportDate = new java.sql.Date(date.getTime());
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+            SwingUtilities.invokeLater(() -> {
+                Dinhdangngay errorPanel = new Dinhdangngay();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
+//            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         // Kiểm tra mã khách hàng không bị null
         if (customerId == null || customerId.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+            SwingUtilities.invokeLater(() -> {
+                ErrorBoTrong errorPanel = new ErrorBoTrong();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
             return;
         }
 
@@ -733,14 +812,38 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
 
             // Kiểm tra kết quả và hiển thị thông báo
             if (rowsInsertedExportForms > 0 && rowsInsertedExportFormDetails > 0) {
-                JOptionPane.showMessageDialog(this, "Thông tin phiếu xuất đã được lưu thành công. Nhân viên: " + employeeName, "Thành công", JOptionPane.INFORMATION_MESSAGE);
+//                JOptionPane.showMessageDialog(this, "Thông tin phiếu xuất đã được lưu thành công. Nhân viên: " + employeeName, "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+                SwingUtilities.invokeLater(() -> {
+                    AddThanhCong errorPanel = new AddThanhCong();
+                    errorPanel.eventOK((ae) -> {
+                        ModalErrorGlassPanePopup.closePopupLast();
+                    });
+                    ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+                });
             } else {
-                JOptionPane.showMessageDialog(this, "Không thể lưu thông tin phiếu xuất.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//                JOptionPane.showMessageDialog(this, "Không thể lưu thông tin phiếu xuất.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+                SwingUtilities.invokeLater(() -> {
+                    AddThatBai errorPanel = new AddThatBai();
+                    errorPanel.eventOK((ae) -> {
+                        ModalErrorGlassPanePopup.closePopupLast();
+                    });
+                    ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+                });
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi lưu thông tin phiếu xuất.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            JOptionPane.showMessageDialog(this, "Lỗi khi lưu thông tin phiếu xuất.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+
+            SwingUtilities.invokeLater(() -> {
+                AddThatBaiPX errorPanel = new AddThatBaiPX();
+                errorPanel.eventOK((ae) -> {
+                    ModalErrorGlassPanePopup.closePopupLast();
+                });
+                ModalErrorGlassPanePopup.showPopup((JDialog) SwingUtilities.getWindowAncestor(this), errorPanel, new ModalErrorOption());
+            });
         }
     }
 
@@ -780,20 +883,19 @@ public class Model_Add_ProductDelivery extends javax.swing.JPanel {
     }
 
     // Tính hoa hồng
-private double calculateCommission(long days) {
-    if (days < 30) {
-        return 0.10; // 10% dưới dạng số thực
-    } else if (days < 60) {
-        return 0.15; // 15% dưới dạng số thực
-    } else if (days < 90) {
-        return 0.20; // 20% dưới dạng số thực
-    } else if (days < 120) {
-        return 0.25; // 25% dưới dạng số thực
-    } else {
-        return 0.30; // 30% cho các sản phẩm đã lưu giữ trên 120 ngày
+    private double calculateCommission(long days) {
+        if (days < 30) {
+            return 0.10; // 10% dưới dạng số thực
+        } else if (days < 60) {
+            return 0.15; // 15% dưới dạng số thực
+        } else if (days < 90) {
+            return 0.20; // 20% dưới dạng số thực
+        } else if (days < 120) {
+            return 0.25; // 25% dưới dạng số thực
+        } else {
+            return 0.30; // 30% cho các sản phẩm đã lưu giữ trên 120 ngày
+        }
     }
-}
-
 
     private void txtNgayNhapFocusLost(FocusEvent evt) {
         String ngayNhapStr = txtNgayNhap.getText(); // Đảm bảo sử dụng đúng trường văn bản
