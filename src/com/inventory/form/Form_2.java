@@ -272,10 +272,15 @@ public class Form_2 extends javax.swing.JPanel {
             }
         });
 
-        dateForm.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yyyy"))));
+        dateForm.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("yyyy-MM-dd"))));
         dateForm.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        dateForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dateFormActionPerformed(evt);
+            }
+        });
 
-        toDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd-MM-yyyy"))));
+        toDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("yyyy-MM-dd"))));
         toDate.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -360,7 +365,7 @@ public class Form_2 extends javax.swing.JPanel {
         // TODO add your handling code here:
         try {
             // Lấy ngày bắt đầu và ngày kết thúc từ JFormattedTextField
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date fromDate = dateFormat.parse(dateForm.getText());
             java.util.Date toDate = dateFormat.parse(this.toDate.getText());
 
@@ -415,6 +420,10 @@ public class Form_2 extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng ngày (dd/MM/yyyy).", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_button1ActionPerformed
+
+    private void dateFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateFormActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dateFormActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

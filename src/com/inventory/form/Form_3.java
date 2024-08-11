@@ -18,6 +18,8 @@ import java.awt.Component;
 import java.awt.Font;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -185,10 +187,10 @@ public class Form_3 extends javax.swing.JPanel {
         button4 = new com.inventory.swing.Button();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        textField3 = new com.inventory.swing.TextField();
         jLabel4 = new javax.swing.JLabel();
-        textField1 = new com.inventory.swing.TextField();
         button1 = new com.inventory.swing.Button();
+        toDate = new javax.swing.JFormattedTextField();
+        dateForm = new javax.swing.JFormattedTextField();
         jPanel2 = new javax.swing.JPanel();
         spTable = new javax.swing.JScrollPane();
         tblXuatKho = new com.inventory.swing.Table();
@@ -251,18 +253,8 @@ public class Form_3 extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel6.setText("Từ ngày");
 
-        textField3.setBackground(new java.awt.Color(72, 142, 174));
-        textField3.setForeground(new java.awt.Color(255, 255, 255));
-        textField3.setCaretColor(new java.awt.Color(255, 255, 255));
-        textField3.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-
         jLabel4.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel4.setText("Đến ngày");
-
-        textField1.setBackground(new java.awt.Color(72, 142, 174));
-        textField1.setForeground(new java.awt.Color(255, 255, 255));
-        textField1.setCaretColor(new java.awt.Color(255, 255, 255));
-        textField1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
 
         button1.setBackground(new java.awt.Color(102, 102, 255));
         button1.setForeground(new java.awt.Color(255, 255, 255));
@@ -274,6 +266,22 @@ public class Form_3 extends javax.swing.JPanel {
             }
         });
 
+        toDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("yyyy-MM-dd"))));
+        toDate.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        toDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toDateActionPerformed(evt);
+            }
+        });
+
+        dateForm.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("yyyy-MM-dd"))));
+        dateForm.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        dateForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dateFormActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -281,15 +289,15 @@ public class Form_3 extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel6)
-                .addGap(34, 34, 34)
-                .addComponent(textField3, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addGap(29, 29, 29)
+                .addComponent(dateForm, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel4)
-                .addGap(34, 34, 34)
-                .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addGap(18, 18, 18)
+                .addComponent(toDate, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43)
                 .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,11 +305,11 @@ public class Form_3 extends javax.swing.JPanel {
                 .addGap(14, 14, 14)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(textField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel6)
+                    .addComponent(toDate, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dateForm, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel4, java.awt.BorderLayout.CENTER);
@@ -367,11 +375,10 @@ public class Form_3 extends javax.swing.JPanel {
             // Gọi phương thức để xuất dữ liệu ra file Excel
             exportToExcel(exportFormID);
         } else {
-             ErrorAll obj = new ErrorAll();
+            ErrorAll obj = new ErrorAll();
             obj.setMessage("Vui lòng chọn một phiếu xuất.");
             GlassPanePopup.showPopup(obj);
-            
-           
+
         }
 
 
@@ -442,7 +449,7 @@ public class Form_3 extends javax.swing.JPanel {
             }
         } catch (Exception e) {
             e.printStackTrace();
-             ErrorAll obj = new ErrorAll();
+            ErrorAll obj = new ErrorAll();
             obj.setMessage("Lỗi khi truy xuất dữ liệu từ cơ sở dữ liệu.");
             GlassPanePopup.showPopup(obj);
             return;
@@ -454,8 +461,6 @@ public class Form_3 extends javax.swing.JPanel {
         }
 
         // Cài đặt màu nền cho các cột
-     
-
         // Hiển thị hộp thoại lưu file Excel
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Lưu file Excel");
@@ -466,14 +471,14 @@ public class Form_3 extends javax.swing.JPanel {
             try (FileOutputStream fileOut = new FileOutputStream(fileChooser.getSelectedFile() + ".xlsx")) {
                 workbook.write(fileOut);
                 ErorrAll_Green obj = new ErorrAll_Green();
-            obj.setMessage("File Excel đã được lưu.");
-            GlassPanePopup.showPopup(obj);
+                obj.setMessage("File Excel đã được lưu.");
+                GlassPanePopup.showPopup(obj);
 
             } catch (IOException e) {
                 e.printStackTrace();
                 ErrorAll obj = new ErrorAll();
-            obj.setMessage("Lỗi khi lưu file Excel.");
-            GlassPanePopup.showPopup(obj);
+                obj.setMessage("Lỗi khi lưu file Excel.");
+                GlassPanePopup.showPopup(obj);
             }
         }
 
@@ -487,7 +492,56 @@ public class Form_3 extends javax.swing.JPanel {
 
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Lấy ngày bắt đầu và kết thúc từ JFormattedTextField
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date fromDate = dateFormat.parse(dateForm.getText());
+            java.util.Date toDate = dateFormat.parse(this.toDate.getText());
+
+            // Kiểm tra tính hợp lệ của ngày tháng
+            if (fromDate.after(toDate)) {
+                JOptionPane.showMessageDialog(this, "Ngày bắt đầu không thể sau ngày kết thúc!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Câu truy vấn SQL với điều kiện lọc
+            String sql = "SELECT ExportFormID, CustomerID, ExportDate, TotalAmount, Status FROM ExportForms "
+                    + "WHERE ExportDate BETWEEN ? AND ?";
+
+            try (java.sql.Connection conn = XJdbc.getConnection(); java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                // Thiết lập giá trị cho các tham số
+                pstmt.setDate(1, new java.sql.Date(fromDate.getTime()));
+                pstmt.setDate(2, new java.sql.Date(toDate.getTime()));
+
+                try (java.sql.ResultSet rs = pstmt.executeQuery()) {
+                    DefaultTableModel tableModel = (DefaultTableModel) tblXuatKho.getModel();
+                    tableModel.setRowCount(0); // Xóa dữ liệu cũ
+
+                    while (rs.next()) {
+                        ExportFormsTable entity = new ExportFormsTable();
+                        entity.setExportFormID(rs.getString("ExportFormID"));
+                        entity.setCustomerID(rs.getString("CustomerID"));
+                        entity.setExportDate(rs.getDate("ExportDate"));
+                        entity.setTotalAmount(rs.getDouble("TotalAmount"));
+                        entity.setStatus(rs.getString("Status"));
+
+                        Object[] row = new Object[]{
+                            entity.getExportFormID(),
+                            entity.getCustomerID(),
+                            entity.getExportDate(),
+                            entity.getTotalAmount(),
+                            entity.getStatus()
+                        };
+                        tableModel.addRow(row);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Lỗi khi tìm kiếm dữ liệu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng ngày (yyyy-MM-dd).", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_button1ActionPerformed
 
     private void button4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button4ActionPerformed
@@ -501,11 +555,20 @@ public class Form_3 extends javax.swing.JPanel {
         add.setVisible(true);
     }//GEN-LAST:event_button4ActionPerformed
 
+    private void toDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_toDateActionPerformed
+
+    private void dateFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateFormActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dateFormActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.inventory.swing.Button btnXuatHoaDon;
     private com.inventory.swing.Button button1;
     private com.inventory.swing.Button button4;
+    private javax.swing.JFormattedTextField dateForm;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
@@ -514,7 +577,6 @@ public class Form_3 extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane spTable;
     private com.inventory.swing.Table tblXuatKho;
-    private com.inventory.swing.TextField textField1;
-    private com.inventory.swing.TextField textField3;
+    private javax.swing.JFormattedTextField toDate;
     // End of variables declaration//GEN-END:variables
 }
